@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACMC Library System", "ACMC Library System\ACMC Library System.csproj", "{ED1F2EBE-E4A0-4AF0-BE9B-986E978019E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBHelper", "DBHelper\DBHelper.csproj", "{E003C2E0-FAC1-4F33-AB17-2B3D9F404911}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainModels", "Domain\DomainModels.csproj", "{28825ED6-A1EE-486D-BC2F-51713015D5AD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{696781D8-8D73-445F-A795-82FE866D8544}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{90A20BA6-40B1-4C04-A92E-4842F669A447}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet.Config = NuGet.Config
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ED1F2EBE-E4A0-4AF0-BE9B-986E978019E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED1F2EBE-E4A0-4AF0-BE9B-986E978019E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED1F2EBE-E4A0-4AF0-BE9B-986E978019E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED1F2EBE-E4A0-4AF0-BE9B-986E978019E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E003C2E0-FAC1-4F33-AB17-2B3D9F404911}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E003C2E0-FAC1-4F33-AB17-2B3D9F404911}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E003C2E0-FAC1-4F33-AB17-2B3D9F404911}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E003C2E0-FAC1-4F33-AB17-2B3D9F404911}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28825ED6-A1EE-486D-BC2F-51713015D5AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28825ED6-A1EE-486D-BC2F-51713015D5AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28825ED6-A1EE-486D-BC2F-51713015D5AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28825ED6-A1EE-486D-BC2F-51713015D5AD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 4
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://gh0st.visualstudio.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ACMC\u0020Library\u0020System\\ACMC\u0020Library\u0020System.csproj
+		SccProjectName1 = ACMC\u0020Library\u0020System
+		SccLocalPath1 = ACMC\u0020Library\u0020System
+		SccProjectUniqueName2 = DBHelper\\DBHelper.csproj
+		SccProjectName2 = DBHelper
+		SccLocalPath2 = DBHelper
+		SccProjectUniqueName3 = Domain\\DomainModels.csproj
+		SccProjectName3 = Domain
+		SccLocalPath3 = Domain
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,34 @@
+﻿<metro:MetroWindow
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    x:Class="ACMC_Library_System.UI.SearchResultWindow"
+    WindowStyle="ToolWindow"
+    Title="Search Result"
+    Height="570" Width="370"
+    WindowStartupLocation="CenterScreen"
+    ShowMaxRestoreButton="False"
+    ShowInTaskbar="False"
+    ResizeMode="NoResize"
+    IsVisibleChanged="IniData"
+    ShowIconOnTitleBar="true">
+    <metro:MetroWindow.IconTemplate>
+        <DataTemplate>
+            <iconPacks:PackIconMaterial Kind="FileFind"
+                                        Foreground="{DynamicResource IdealForegroundColorBrush}"
+                                        Margin="1"
+                                        Padding="5"
+                                        Width="{TemplateBinding Width}"
+                                        Height="{TemplateBinding Height}" />
+        </DataTemplate>
+    </metro:MetroWindow.IconTemplate>
+    <Grid>
+        <ListBox x:Name="LbxSearchResult"
+                 ItemContainerStyle="{DynamicResource MetroListBoxItemStyle}"
+                 ItemTemplate="{DynamicResource MetroListBoxItemTemplate}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 Width="360"
+                 MouseDoubleClick="LbSearchResult_DbClick" />
+    </Grid>
+</metro:MetroWindow>
