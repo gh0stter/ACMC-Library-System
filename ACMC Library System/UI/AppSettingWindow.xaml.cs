@@ -162,11 +162,6 @@ namespace ACMC_Library_System.UI
                     case AppSettings.Catalog:
                         Catalog = settings[kvp.Key].Value = _catalog;
                         break;
-                    case AppSettings.AutoUpdate:
-                        bool autoUpdate;
-                        bool.TryParse(settings[kvp.Key].Value, out autoUpdate);
-                        AutoUpdate = autoUpdate;
-                        break;
                     case AppSettings.AutoBackupDb:
                         bool autoBackupDb;
                         bool.TryParse(settings[kvp.Key].Value, out autoBackupDb);
@@ -272,9 +267,6 @@ namespace ACMC_Library_System.UI
                                 break;
                             case AppSettings.Catalog:
                                 settings[kvp.Key].Value = Catalog;
-                                break;
-                            case AppSettings.AutoUpdate:
-                                settings[kvp.Key].Value = AutoUpdate.ToString();
                                 break;
                             case AppSettings.AutoBackupDb:
                                 settings[kvp.Key].Value = AutoBackDb.ToString();

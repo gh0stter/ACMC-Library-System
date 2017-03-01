@@ -82,6 +82,8 @@ namespace ACMC_Library_System.UI
 
         #endregion
 
+        public bool SetupSuccessfully = false;
+
         public SqlSetup()
         {
             InitializeComponent();
@@ -117,12 +119,20 @@ namespace ACMC_Library_System.UI
 #if DEBUG
             var connectionInfo = new SqlConnectionInfo
             {
-                SqlServer = @"192.168.80.138\MSSQLSERVER2014",
+                SqlServer = @"192.168.80.137\MSSQLSERVER2014",
                 IntegratedSecurity = false,
                 UserId = "sa",
                 Password = "lyzP@ssword1",
                 Catalog = "library"
             };
+            //var connectionInfo = new SqlConnectionInfo
+            //{
+            //    SqlServer = _sqlServer,
+            //    IntegratedSecurity = CbAuthType.SelectedIndex == 0,
+            //    UserId = _userName,
+            //    Password = TbPassword.Password,
+            //    Catalog = _catalog
+            //};
 #else
             var connectionInfo = new SqlConnectionInfo
             {
@@ -158,26 +168,33 @@ namespace ACMC_Library_System.UI
 #if DEBUG
                 var connectionInfo = new SqlConnectionInfo
                 {
-                    SqlServer = @"192.168.80.138\MSSQLSERVER2014",
+                    SqlServer = @"192.168.80.137\MSSQLSERVER2014",
                     IntegratedSecurity = false,
                     UserId = "sa",
                     Password = "lyzP@ssword1",
                     Catalog = "library"
                 };
+                //var connectionInfo = new SqlConnectionInfo
+                //{
+                //    SqlServer = _sqlServer,
+                //    IntegratedSecurity = CbAuthType.SelectedIndex == 0,
+                //    UserId = _userName,
+                //    Password = TbPassword.Password,
+                //    Catalog = _catalog
+                //};
 #else
-            var connectionInfo = new SqlConnectionInfo
-            {
-                SqlServer = _sqlServer,
-                IntegratedSecurity = CbAuthType.SelectedIndex == 0,
-                UserId = _userName,
-                Password = TbPassword.Password,
-                Catalog = _catalog
-            };
+                var connectionInfo = new SqlConnectionInfo
+                {
+                    SqlServer = _sqlServer,
+                    IntegratedSecurity = CbAuthType.SelectedIndex == 0,
+                    UserId = _userName,
+                    Password = TbPassword.Password,
+                    Catalog = _catalog
+                };
 #endif
                 var sqlHelper = new SqlServerHelper(connectionInfo);
                 if (await sqlHelper.TestSqlConnection())
                 {
-                    Cursor = Cursors.Arrow;
                     var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                     var settings = configFile.AppSettings.Settings;
 
@@ -214,6 +231,8 @@ namespace ACMC_Library_System.UI
                     configFile.Save(ConfigurationSaveMode.Modified);
                     ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
                     ConfigurationManager.RefreshSection(configFile.ConnectionStrings.SectionInformation.Name);
+                    SetupSuccessfully = true;
+                    Cursor = Cursors.Arrow;
                     Close();
                 }
                 else

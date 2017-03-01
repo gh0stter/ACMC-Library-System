@@ -39,7 +39,8 @@ namespace ACMC_Library_System.Supports
                 Password = _connectionInfo.Password,
                 MultipleActiveResultSets = true,
                 PersistSecurityInfo = true,
-                ConnectTimeout = ConnectionTimeout
+                ConnectTimeout = ConnectionTimeout,
+                ApplicationName = "EntityFramework"
             };
             await Task.Run(() =>
             {
@@ -74,7 +75,8 @@ namespace ACMC_Library_System.Supports
                     Password = _connectionInfo.Password,
                     MultipleActiveResultSets = true,
                     PersistSecurityInfo = true,
-                    ConnectTimeout = ConnectionTimeout
+                    ConnectTimeout = ConnectionTimeout,
+                    ApplicationName = "EntityFramework"
                 };
                 _connectionString = builder.ConnectionString;
                 return _connectionString;

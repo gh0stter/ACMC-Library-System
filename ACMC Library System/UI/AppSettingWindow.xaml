@@ -99,16 +99,10 @@
                         Click="BtnTest_Click" Height="35"/>
             </Grid>
         </GroupBox>
-        <GroupBox x:Name="Update" Header="General Setting" HorizontalAlignment="Left" Margin="10,260,0,0" VerticalAlignment="Top" Height="88" Width="500">
+        <GroupBox x:Name="Update" Header="General Setting" HorizontalAlignment="Left" Margin="10,260,0,0" VerticalAlignment="Top" Height="76" Width="500">
             <Grid>
-                <CheckBox x:Name="CbAutoUpdate"
-                          Margin="10,0,0,0" 
-                          IsEnabled="False"
-                          IsChecked="{Binding AutoUpdate}"
-                          HorizontalAlignment="Left" 
-                          VerticalAlignment="Top">Check application update automatically.</CheckBox>
                 <CheckBox x:Name="CbAutoBackUp" 
-                          Margin="10,23,0,0" 
+                          Margin="10,10,0,0" 
                           IsChecked="{Binding AutoBackDb}"
                           HorizontalAlignment="Left" 
                           VerticalAlignment="Top">Bakup database automatically.</CheckBox>

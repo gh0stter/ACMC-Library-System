@@ -11,7 +11,6 @@ namespace ACMC_Library_System.Entities
         public const string User = "User";
         public const string Password = "Password";
         public const string Catalog = "Catalog";
-        public const string AutoUpdate = "AutoUpdate";
         public const string AutoBackupDb = "AutoBackupDb";
         public static readonly Dictionary<int, string> SqlAuthType = new Dictionary<int, string>()
         {
@@ -26,7 +25,6 @@ namespace ACMC_Library_System.Entities
             { User, ""},
             { Password, ""},
             { Catalog, ""},
-            { AutoUpdate, "True" },
             { AutoBackupDb, "True" }
         };
     }

@@ -38,10 +38,10 @@ namespace ACMC_Library_System.UI
 
         #region private properties
 
-        private static bool _autoUpdate = true;
         private static bool _autoBackupDb = true;
         private double _percentage;
         private static bool _appInitialized;
+        private static bool _sqlConnected;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         #endregion
@@ -71,7 +71,9 @@ namespace ACMC_Library_System.UI
             }
         }
 
-        public bool UserCancleSetup => !_appInitialized;
+        public bool AppInitialized => _appInitialized;
+
+        public bool AppPreparationSuccessfully => _appInitialized && _sqlConnected;
 
         public string AppVersion
         {
@@ -100,6 +102,7 @@ namespace ACMC_Library_System.UI
             Logger.Info("App not initialized.");
             var sqlSetup = new SqlSetup();
             sqlSetup.ShowDialog();
+            _appInitialized = sqlSetup.SetupSuccessfully;
             return _appInitialized;
         }
 
@@ -109,14 +112,9 @@ namespace ACMC_Library_System.UI
             await Task.Run(() =>
             {
                 int taskSetp = 0;
-                const double taskCount = 12;
+                const double taskCount = 11;
                 using (var context = new LibraryDb())
                 {
-                    Percentage = ++taskSetp / taskCount * 100;
-                    if (_autoUpdate)
-                    {
-                        //todo run auto update
-                    }
                     Percentage = ++taskSetp / taskCount * 100;
                     if (_autoBackupDb)
                     {
@@ -152,6 +150,7 @@ namespace ACMC_Library_System.UI
                         item.Borrower = Cache.Users.FirstOrDefault(i => i.id == item.patronid);
                     }
                     Percentage = ++taskSetp / taskCount * 100;
+                    _sqlConnected = true;
                 }
             });
             stopWatch.Stop();
@@ -179,10 +178,6 @@ namespace ACMC_Library_System.UI
                     {
                         bool.TryParse(settings[kvp.Key].Value, out _appInitialized);
                     }
-                    if (kvp.Key == AppSettings.AutoUpdate)
-                    {
-                        bool.TryParse(settings[kvp.Key].Value, out _autoUpdate);
-                    }
                     if (kvp.Key == AppSettings.AutoBackupDb)
                     {
                         bool.TryParse(settings[kvp.Key].Value, out _autoBackupDb);
@@ -195,14 +190,6 @@ namespace ACMC_Library_System.UI
             {
                 Logger.Error(exception, "Unable to write settings to config file.");
                 throw;
-            }
-        }
-
-        private void Window_Closed(object sender, System.EventArgs e)
-        {
-            if (!_appInitialized)
-            {
-                Application.Current.Shutdown();
             }
         }
     }

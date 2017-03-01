@@ -9,7 +9,6 @@
         WindowStartupLocation="CenterScreen"
         Background="{x:Null}" 
         AllowsTransparency="False" 
-        Closed="Window_Closed" 
         Icon="../Resources/UI Icons/favicon.ico">
     <Window.Resources>
         <converter:ValueToProcessConverter x:Key="ValueToProcessConverter" />

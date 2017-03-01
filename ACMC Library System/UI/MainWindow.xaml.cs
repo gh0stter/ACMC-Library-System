@@ -405,12 +405,17 @@ namespace ACMC_Library_System.UI
         {
             //boot and prepare data before initialize the main window
             var boot = new BootStrap();
-            if (boot.UserCancleSetup)
+            if (!boot.AppInitialized)
             {
                 Application.Current.Shutdown();
                 return;
             }
             boot.ShowDialog();
+            if (!boot.AppPreparationSuccessfully)
+            {
+                Application.Current.Shutdown();
+                return;
+            }
             InitializeComponent();
             DataContext = this;
             Activate();
