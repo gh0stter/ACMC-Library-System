@@ -455,7 +455,7 @@
                                 CellStyle="{StaticResource GridCellTextCenterStyle}" />
                             <DataGridTextColumn Binding="{Binding Borrower.DisplayNameTitle}" Header="Borrower" Width="*"
                                 CellStyle="{StaticResource GridCellTextCenterStyle}" />
-                            <DataGridTextColumn Binding="{Binding due_date}" Header="Due Date" Width="100"
+                            <DataGridTextColumn Binding="{Binding due_date, StringFormat=\{0:yyyy/MM/dd\}}" Header="Due Date" Width="100"
                                 CellStyle="{StaticResource GridCellTextCenterStyle}" />
                             <DataGridTemplateColumn Header="Details" Width="70" CanUserResize="False">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -819,7 +819,7 @@
                                 <DataGridTextColumn Binding="{Binding title}" Header="Title" Width="*"
                                                     CellStyle="{StaticResource GridCellStyle}" />
                                 <DataGridTextColumn Binding="{Binding due_date, StringFormat=\{0:yyyy/MM/dd\}}"
-                                                    Header="Due Date" Width="90"
+                                                    Header="Due Date" Width="100"
                                                     CellStyle="{StaticResource GridCellStyle}">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="TextBlock">

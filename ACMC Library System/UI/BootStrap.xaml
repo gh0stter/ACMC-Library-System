@@ -33,7 +33,7 @@
                          BorderThickness="0" VerticalAlignment="Bottom" HorizontalAlignment="Center">
                 <ProgressBar.Template>
                     <ControlTemplate TargetType="ProgressBar">
-                        <Border Background="{TemplateBinding Value, Converter={StaticResource ValueToProcessConverter}, ConverterParameter=300}" />
+                        <Border Background="{TemplateBinding Value, Converter={StaticResource ValueToProcessConverter}, ConverterParameter=200}" />
                     </ControlTemplate>
                 </ProgressBar.Template>
             </ProgressBar>

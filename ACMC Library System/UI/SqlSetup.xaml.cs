@@ -119,7 +119,7 @@ namespace ACMC_Library_System.UI
 #if DEBUG
             var connectionInfo = new SqlConnectionInfo
             {
-                SqlServer = @"192.168.80.137\MSSQLSERVER2014",
+                SqlServer = @"192.168.80.141\MSSQLSERVER2014",
                 IntegratedSecurity = false,
                 UserId = "sa",
                 Password = "lyzP@ssword1",
@@ -168,7 +168,7 @@ namespace ACMC_Library_System.UI
 #if DEBUG
                 var connectionInfo = new SqlConnectionInfo
                 {
-                    SqlServer = @"192.168.80.137\MSSQLSERVER2014",
+                    SqlServer = @"192.168.80.141\MSSQLSERVER2014",
                     IntegratedSecurity = false,
                     UserId = "sa",
                     Password = "lyzP@ssword1",
