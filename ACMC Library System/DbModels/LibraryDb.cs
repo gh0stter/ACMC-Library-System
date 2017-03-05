@@ -1,13 +1,9 @@
+using System.Data.Entity;
 namespace ACMC_Library_System.DbModels
 {
-    using System;
-    using System.Data.Entity;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Linq;
-
-    public partial class LibraryDb : DbContext
+    public class LibraryDb : DbContext
     {
-        public LibraryDb() : base("name=Library")
+        public LibraryDb() : base(Properties.Settings.Default.ConnectionString)
         {
             Configuration.LazyLoadingEnabled = true;
             Configuration.ProxyCreationEnabled = true;

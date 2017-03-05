@@ -94,7 +94,7 @@ namespace ACMC_Library_System.UI
 
         private static bool AppCheck()
         {
-            AppConfigCheck();
+            _appInitialized = Properties.Settings.Default.Initialized;
             if (_appInitialized)
             {
                 return true;
@@ -113,16 +113,22 @@ namespace ACMC_Library_System.UI
             {
                 int taskSetp = 0;
                 const double taskCount = 11;
+                if (string.IsNullOrWhiteSpace(Properties.Settings.Default.ConnectionString))
+                {
+                    Properties.Settings.Default.Reset();
+                    Logger.Fatal("Empty connection string, user.config has been resetted.");
+                    throw new ApplicationException("Fatal Error, unable to read connection string, configuration has been reseted.");
+                }
                 using (var context = new LibraryDb())
                 {
                     Percentage = ++taskSetp / taskCount * 100;
                     if (_autoBackupDb)
                     {
-                        string dbName = context.Database.Connection.Database;
-                        string dbBackUpName = $"{dbName}_FullBackup_{DateTime.Now:yyyy_MM_dd}.bak";
-                        string sqlCommand = $@"BACKUP DATABASE [{dbName}] TO DISK = N'{dbBackUpName}' WITH NOFORMAT, NOINIT, NAME = N'{dbName}-Full Database Backup', SKIP, NOREWIND, NOUNLOAD, STATS = 10";
                         try
                         {
+                            string dbName = context.Database.Connection.Database;
+                            string dbBackUpName = $"{dbName}_FullBackup_{DateTime.Now:yyyy_MM_dd}.bak";
+                            string sqlCommand = $@"BACKUP DATABASE [{dbName}] TO DISK = N'{dbBackUpName}' WITH NOFORMAT, NOINIT, NAME = N'{dbName}-Full Database Backup', SKIP, NOREWIND, NOUNLOAD, STATS = 10";
                             context.Database.ExecuteSqlCommand(System.Data.Entity.TransactionalBehavior.DoNotEnsureTransaction, sqlCommand);
                         }
                         catch (Exception exception)
@@ -167,38 +173,6 @@ namespace ACMC_Library_System.UI
 #endif
             Logger.Info($"Loading time: {stopWatch.Elapsed.TotalMilliseconds} ms.");
             Close();
-        }
-
-        private static void AppConfigCheck()
-        {
-            try
-            {
-                var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                var settings = configFile.AppSettings.Settings;
-
-                foreach (var kvp in AppSettings.AppControlKeys)
-                {
-                    if (settings[kvp.Key] == null)
-                    {
-                        settings.Add(kvp.Key, kvp.Value);
-                    }
-                    if (kvp.Key == AppSettings.AppInitialized)
-                    {
-                        bool.TryParse(settings[kvp.Key].Value, out _appInitialized);
-                    }
-                    if (kvp.Key == AppSettings.AutoBackupDb)
-                    {
-                        bool.TryParse(settings[kvp.Key].Value, out _autoBackupDb);
-                    }
-                }
-                configFile.Save(ConfigurationSaveMode.Modified);
-                ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
-            }
-            catch (ConfigurationErrorsException exception)
-            {
-                Logger.Error(exception, "Unable to write settings to config file.");
-                throw;
-            }
         }
     }
 }

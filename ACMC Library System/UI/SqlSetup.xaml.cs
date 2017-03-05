@@ -213,42 +213,17 @@ namespace ACMC_Library_System.UI
                 var sqlHelper = new SqlServerHelper(connectionInfo);
                 if (await sqlHelper.TestSqlConnection())
                 {
-                    var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                    var settings = configFile.AppSettings.Settings;
+                    var settings = Properties.Settings.Default;
+                    settings.Reload();
+                    settings.Initialized = true;
+                    settings.SQLServer = SqlServer;
+                    settings.AuthType = ((KeyValuePair<int, string>) CbAuthType.SelectedItem).Key;
+                    settings.User = UserName;
+                    settings.Password = Encryption.Encrypt(TbPassword.Password, AppSettings.EncryptKey);
+                    settings.Catalog = Catalog;
+                    settings.ConnectionString = sqlHelper.GetConnectionString();
+                    settings.Save();
 
-                    foreach (var kvp in AppSettings.AppControlKeys)
-                    {
-                        if (settings[kvp.Key] == null)
-                        {
-                            settings.Add(kvp.Key, kvp.Value);
-                        }
-                        switch (kvp.Key)
-                        {
-                            case AppSettings.AppInitialized:
-                                settings[kvp.Key].Value = "True";
-                                break;
-                            case AppSettings.SqlServer:
-                                settings[kvp.Key].Value = SqlServer;
-                                break;
-                            case AppSettings.AuthType:
-                                settings[kvp.Key].Value = ((KeyValuePair<int, string>)CbAuthType.SelectedItem).Key.ToString();
-                                break;
-                            case AppSettings.User:
-                                settings[kvp.Key].Value = UserName;
-                                break;
-                            case AppSettings.Password:
-                                settings[kvp.Key].Value = Encryption.Encrypt(TbPassword.Password, AppSettings.EncryptKey);
-                                break;
-                            case AppSettings.Catalog:
-                                settings[kvp.Key].Value = Catalog;
-                                break;
-                        }
-                    }
-                    var connectionStringsSection = (ConnectionStringsSection)configFile.GetSection(configFile.ConnectionStrings.SectionInformation.Name);
-                    connectionStringsSection.ConnectionStrings["Library"].ConnectionString = sqlHelper.GetConnectionString();
-                    configFile.Save(ConfigurationSaveMode.Modified);
-                    ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
-                    ConfigurationManager.RefreshSection(configFile.ConnectionStrings.SectionInformation.Name);
                     SetupSuccessfully = true;
                     Cursor = Cursors.Arrow;
                     Close();
