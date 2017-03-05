@@ -33,9 +33,10 @@ namespace ACMC_Library_System.Supports
     /// </summary>
     public class ValueToProcessConverter : IValueConverter
     {
-        private const double Thickness = 10;
+        private const double Thickness = 5;
         private const double Padding = 0;
-        private const double StartValue = 30;
+        private const double Margin = 2;
+        private const double InitializingValue = 30;
         private const double MidRangeValue = 65;
         private const double FinalizeValue = 80;
         private const int FinalFontSize = 55;
@@ -55,7 +56,7 @@ namespace ACMC_Library_System.Supports
             StartBrush = new SolidColorBrush(Color.FromRgb(211, 72, 54));
             MidRangeBrush = new SolidColorBrush(Color.FromRgb(242, 95, 41));
             FinalizeBrush = new SolidColorBrush(Color.FromRgb(97, 191, 94));
-            TextTypeface = new Typeface(new FontFamily("MSYH"), new FontStyle(), new FontWeight(), new FontStretch());
+            TextTypeface = new Typeface(new FontFamily("MSYH"), new FontStyle(), FontWeights.Bold, new FontStretch());
         }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -68,7 +69,7 @@ namespace ACMC_Library_System.Supports
             double width = double.Parse((string)parameter);
             _radius = width / 2;
             _centerPoint = new Point(_radius, _radius);
-            return DrawBrush(arg, 100, _radius, _radius, Thickness, Padding);
+            return DrawBrush(arg, 100, _radius, _radius, Thickness, Padding, Margin);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -142,8 +143,9 @@ namespace ACMC_Library_System.Supports
         /// <param name="radiusY"></param>
         /// <param name="thickness"></param>
         /// <param name="padding"></param>
+        /// <param name="margin"></param>
         /// <returns></returns>
-        private Geometry GetGeometry(double value, double maxValue, double radiusX, double radiusY, double thickness, double padding)
+        private Geometry GetGeometry(double value, double maxValue, double radiusX, double radiusY, double thickness, double padding, double margin)
         {
             bool isLargeArc = false;
             double percent = value / maxValue;
@@ -153,8 +155,8 @@ namespace ACMC_Library_System.Supports
             {
                 isLargeArc = true;
             }
-            double bigR = radiusX;
-            double smallR = radiusX - thickness + padding;
+            double bigR = radiusX + thickness - margin;
+            double smallR = radiusX - thickness + margin + padding;
             var firstpoint = GetPointByAngel(_centerPoint, bigR, 0);
             var secondpoint = GetPointByAngel(_centerPoint, bigR, angel);
             var thirdpoint = GetPointByAngel(_centerPoint, smallR, 0);
@@ -162,13 +164,13 @@ namespace ACMC_Library_System.Supports
             return DrawingArcGeometry(firstpoint, secondpoint, thirdpoint, fourpoint, bigR, smallR, isLargeArc);
         }
 
-        private void DrawingGeometry(DrawingContext drawingContext, double value, double maxValue, double radiusX, double radiusY, double thickness, double padding)
+        private void DrawingGeometry(DrawingContext drawingContext, double value, double maxValue, double radiusX, double radiusY, double thickness, double padding, double margin)
         {
             if (Math.Abs(value - maxValue) > 0.000001)
             {
-                var brush = value < StartValue ? StartBrush : value < MidRangeValue ? MidRangeBrush : FinalizeBrush;
+                var brush = value < InitializingValue ? StartBrush : value < MidRangeValue ? MidRangeBrush : FinalizeBrush;
                 drawingContext.DrawEllipse(null, new Pen(new SolidColorBrush(BackGroundColor), thickness), _centerPoint, radiusX, radiusY);
-                drawingContext.DrawGeometry(brush, new Pen(), GetGeometry(value, maxValue, radiusX, radiusY, thickness, padding));
+                drawingContext.DrawGeometry(brush, new Pen(), GetGeometry(value, maxValue, radiusX, radiusY, thickness, padding, margin));
                 var formatWords = new FormattedText(_percentString, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, TextTypeface, FinalFontSize, brush);
                 var startPoint = new Point(_centerPoint.X - formatWords.Width / 2, _centerPoint.Y - formatWords.Height / 2);
                 drawingContext.DrawText(formatWords, startPoint);
@@ -193,13 +195,14 @@ namespace ACMC_Library_System.Supports
         /// <param name="radiusY"></param>
         /// <param name="thickness"></param>
         /// <param name="padding"></param>
+        /// <param name="margin"></param>
         /// <returns></returns>
-        private Visual DrawShape(double value, double maxValue, double radiusX, double radiusY, double thickness, double padding)
+        private Visual DrawShape(double value, double maxValue, double radiusX, double radiusY, double thickness, double padding, double margin)
         {
             var drawingWordsVisual = new DrawingVisual();
             var drawingContext = drawingWordsVisual.RenderOpen();
 
-            DrawingGeometry(drawingContext, value, maxValue, radiusX, radiusY, thickness, padding);
+            DrawingGeometry(drawingContext, value, maxValue, radiusX, radiusY, thickness, padding, margin);
 
             return drawingWordsVisual;
         }
@@ -213,13 +216,14 @@ namespace ACMC_Library_System.Supports
         /// <param name="radiusY"></param>
         /// <param name="thickness"></param>
         /// <param name="padding"></param>
+        /// <param name="margin"></param>
         /// <returns></returns>
-        private Brush DrawBrush(double value, double maxValue, double radiusX, double radiusY, double thickness, double padding)
+        private Brush DrawBrush(double value, double maxValue, double radiusX, double radiusY, double thickness, double padding, double margin)
         {
             var drawingGroup = new DrawingGroup();
             var drawingContext = drawingGroup.Open();
 
-            DrawingGeometry(drawingContext, value, maxValue, radiusX, radiusY, thickness, padding);
+            DrawingGeometry(drawingContext, value, maxValue, radiusX, radiusY, thickness, padding, margin);
 
             var brush = new DrawingBrush(drawingGroup);
 

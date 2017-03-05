@@ -121,7 +121,15 @@ namespace ACMC_Library_System.UI
                         string dbName = context.Database.Connection.Database;
                         string dbBackUpName = $"{dbName}_FullBackup_{DateTime.Now:yyyy_MM_dd}.bak";
                         string sqlCommand = $@"BACKUP DATABASE [{dbName}] TO DISK = N'{dbBackUpName}' WITH NOFORMAT, NOINIT, NAME = N'{dbName}-Full Database Backup', SKIP, NOREWIND, NOUNLOAD, STATS = 10";
-                        context.Database.ExecuteSqlCommand(System.Data.Entity.TransactionalBehavior.DoNotEnsureTransaction, sqlCommand);
+                        try
+                        {
+                            context.Database.ExecuteSqlCommand(System.Data.Entity.TransactionalBehavior.DoNotEnsureTransaction, sqlCommand);
+                        }
+                        catch (Exception exception)
+                        {
+                            //suppress error but log it
+                            Logger.Error(exception, "Unable to backup database.");
+                        }
                     }
                     Percentage = ++taskSetp / taskCount * 100;
                     Cache.ItemCategories = context.item_category.ToList();
