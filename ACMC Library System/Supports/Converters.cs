@@ -38,7 +38,7 @@ namespace ACMC_Library_System.Supports
         private const double StartValue = 30;
         private const double MidRangeValue = 65;
         private const double FinalizeValue = 80;
-        private const int FinalFontSize = 34;
+        private const int FinalFontSize = 55;
         private static readonly Color BackGroundColor;
         private static readonly SolidColorBrush StartBrush;
         private static readonly SolidColorBrush MidRangeBrush;
@@ -51,7 +51,7 @@ namespace ACMC_Library_System.Supports
 
         static ValueToProcessConverter()
         {
-            BackGroundColor = Color.FromRgb(225, 232, 237);
+            BackGroundColor = Color.FromRgb(255, 245, 245);
             StartBrush = new SolidColorBrush(Color.FromRgb(211, 72, 54));
             MidRangeBrush = new SolidColorBrush(Color.FromRgb(242, 95, 41));
             FinalizeBrush = new SolidColorBrush(Color.FromRgb(97, 191, 94));

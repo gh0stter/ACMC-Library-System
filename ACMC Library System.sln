@@ -13,8 +13,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{696781D8
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{90A20BA6-40B1-4C04-A92E-4842F669A447}"
 	ProjectSection(SolutionItems) = preProject
+		.tfignore = .tfignore
+		ACMC.cer = ACMC.cer
+		ACMC.pfx = ACMC.pfx
+		ACMC.pvk = ACMC.pvk
+		ACMC.spc = ACMC.spc
 		NuGet.Config = NuGet.Config
+		Readme.txt = Readme.txt
 	EndProjectSection
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Library Database", "Library Database\Library Database.sqlproj", "{3E705566-07BB-4EC8-B20E-D9C5FE7CF271}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,12 +42,18 @@ Global
 		{28825ED6-A1EE-486D-BC2F-51713015D5AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28825ED6-A1EE-486D-BC2F-51713015D5AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28825ED6-A1EE-486D-BC2F-51713015D5AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E705566-07BB-4EC8-B20E-D9C5FE7CF271}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E705566-07BB-4EC8-B20E-D9C5FE7CF271}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E705566-07BB-4EC8-B20E-D9C5FE7CF271}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{3E705566-07BB-4EC8-B20E-D9C5FE7CF271}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E705566-07BB-4EC8-B20E-D9C5FE7CF271}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E705566-07BB-4EC8-B20E-D9C5FE7CF271}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
+		SccNumberOfProjects = 5
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://gh0st.visualstudio.com/
 		SccLocalPath0 = .
@@ -52,5 +66,8 @@ Global
 		SccProjectUniqueName3 = Domain\\DomainModels.csproj
 		SccProjectName3 = Domain
 		SccLocalPath3 = Domain
+		SccProjectUniqueName4 = Library\u0020Database\\Library\u0020Database.sqlproj
+		SccProjectName4 = Library\u0020Database
+		SccLocalPath4 = Library\u0020Database
 	EndGlobalSection
 EndGlobal

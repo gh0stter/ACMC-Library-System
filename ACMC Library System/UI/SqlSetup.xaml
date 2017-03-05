@@ -95,7 +95,7 @@
     </metro:MetroWindow.IconTemplate>
     <Grid>
         <Label x:Name="Info" Content="Please enter SQL server details:" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top"/>
-        
+
         <Label Content="SQL Server Address: " HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="TbSqlServer" Text="{Binding SqlServer}" 
                  metro:ControlsHelper.MouseOverBorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
@@ -114,7 +114,7 @@
                   SelectedIndex="0" 
                   SelectionChanged="TbAuthType_SelectionChanged"/>
 
-            <Label Content="User Name: " HorizontalAlignment="Left" Margin="10,134,0,0" VerticalAlignment="Top"/>
+        <Label Content="User Name: " HorizontalAlignment="Left" Margin="10,134,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="TbUser"  Text="{Binding UserName}" IsEnabled="False" 
                  metro:ControlsHelper.MouseOverBorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
                  metro:ControlsHelper.FocusBorderBrush="#55acee"
@@ -125,13 +125,16 @@
                  metro:ControlsHelper.MouseOverBorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
                  metro:ControlsHelper.FocusBorderBrush="#55acee"
                  HorizontalAlignment="Left" Height="23" Margin="144,164,0,0" VerticalAlignment="Top" Width="340"/>
-        
+
         <Label Content="Catalog: " HorizontalAlignment="Left" Margin="10,196,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="TbCatalog"  Text="{Binding Catalog}"
                  metro:ControlsHelper.MouseOverBorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
                  metro:ControlsHelper.FocusBorderBrush="#55acee"
                  HorizontalAlignment="Left" Height="23" Margin="144,195,0,0" VerticalAlignment="Top" Width="340"/>
-        
+
+        <TextBlock FontSize="10" Foreground="#8899A6" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="12" Width="42" Margin="10,0,0,10">Version :</TextBlock>
+        <TextBlock FontSize="10" Foreground="#8899A6" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="52,0,0,10" Height="12" Width="60" Text="{Binding AppVersion, Mode=OneTime}" />
+
         <Button x:Name="BtnTest" Content="Test Connection" HorizontalAlignment="Left" Margin="162,227,0,0" VerticalAlignment="Top" Width="107" Click="BtnTest_Click" Height="35"/>
         <Button x:Name="BtnSave" Content="Save" HorizontalAlignment="Left" Margin="278,227,0,0" VerticalAlignment="Top" Click="BtnSave_Click" Height="35" Width="100" IsDefault="True"/>
         <Button x:Name="BtnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="383,227,0,0" VerticalAlignment="Top" Click="BtnCancel_Click" Height="35" Width="100"/>

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
+using System.Deployment.Application;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -80,6 +81,23 @@ namespace ACMC_Library_System.UI
             }
         }
 
+        public string AppVersion
+        {
+            get
+            {
+                string version;
+                try
+                {
+                    version = ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
+                }
+                catch (InvalidDeploymentException)
+                {
+                    version = "Unkown";
+                }
+                return version;
+            }
+        }
+
         #endregion
 
         public bool SetupSuccessfully = false;
@@ -117,22 +135,22 @@ namespace ACMC_Library_System.UI
             SetReadOnly(false);
             Cursor = Cursors.Wait;
 #if DEBUG
-            var connectionInfo = new SqlConnectionInfo
-            {
-                SqlServer = @"192.168.80.141\MSSQLSERVER2014",
-                IntegratedSecurity = false,
-                UserId = "sa",
-                Password = "lyzP@ssword1",
-                Catalog = "library"
-            };
             //var connectionInfo = new SqlConnectionInfo
             //{
-            //    SqlServer = _sqlServer,
-            //    IntegratedSecurity = CbAuthType.SelectedIndex == 0,
-            //    UserId = _userName,
-            //    Password = TbPassword.Password,
-            //    Catalog = _catalog
+            //    SqlServer = @"192.168.80.141\MSSQLSERVER2014",
+            //    IntegratedSecurity = false,
+            //    UserId = "sa",
+            //    Password = "lyzP@ssword1",
+            //    Catalog = "library"
             //};
+            var connectionInfo = new SqlConnectionInfo
+            {
+                SqlServer = _sqlServer,
+                IntegratedSecurity = CbAuthType.SelectedIndex == 0,
+                UserId = _userName,
+                Password = TbPassword.Password,
+                Catalog = _catalog
+            };
 #else
             var connectionInfo = new SqlConnectionInfo
             {
@@ -166,22 +184,22 @@ namespace ACMC_Library_System.UI
                 SetReadOnly(false);
                 Cursor = Cursors.Wait;
 #if DEBUG
-                var connectionInfo = new SqlConnectionInfo
-                {
-                    SqlServer = @"192.168.80.141\MSSQLSERVER2014",
-                    IntegratedSecurity = false,
-                    UserId = "sa",
-                    Password = "lyzP@ssword1",
-                    Catalog = "library"
-                };
                 //var connectionInfo = new SqlConnectionInfo
                 //{
-                //    SqlServer = _sqlServer,
-                //    IntegratedSecurity = CbAuthType.SelectedIndex == 0,
-                //    UserId = _userName,
-                //    Password = TbPassword.Password,
-                //    Catalog = _catalog
+                //    SqlServer = @"192.168.80.141\MSSQLSERVER2014",
+                //    IntegratedSecurity = false,
+                //    UserId = "sa",
+                //    Password = "lyzP@ssword1",
+                //    Catalog = "library"
                 //};
+                var connectionInfo = new SqlConnectionInfo
+                {
+                    SqlServer = _sqlServer,
+                    IntegratedSecurity = CbAuthType.SelectedIndex == 0,
+                    UserId = _userName,
+                    Password = TbPassword.Password,
+                    Catalog = _catalog
+                };
 #else
                 var connectionInfo = new SqlConnectionInfo
                 {

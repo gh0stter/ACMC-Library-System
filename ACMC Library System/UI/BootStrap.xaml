@@ -23,8 +23,9 @@
             <Label Foreground="#f5f5f5" FontSize="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,35,0,0" FontWeight="Bold">Library System</Label>
             <TextBlock Foreground="#f5f5f5" FontSize="7" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="141,77,0,0" Width="65">William Liu@2017</TextBlock>
 
-            <Label Foreground="#f5f5f5" FontSize="7" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,45,0" Height="19" Width="40">Version :</Label>
-            <Label Foreground="#f5f5f5" FontSize="7" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="160,321,0,0" Width="50" Height="19" Content="{Binding AppVersion}" />
+            <TextBlock Foreground="#f5f5f5" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="12" Width="42" Margin="0,0,0,0">Version :</TextBlock>
+            <TextBlock Foreground="#f5f5f5" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="52,0,0,0" Height="12" Width="50" Text="{Binding AppVersion, Mode=OneTime}" />
+            
             <ProgressBar Width="70" Height="70"
                          Minimum="0" Maximum="100" Margin="0,0,0,10"
                          Value="{Binding Percentage, Mode=OneWay}" 
@@ -33,7 +34,7 @@
                          BorderThickness="0" VerticalAlignment="Bottom" HorizontalAlignment="Center">
                 <ProgressBar.Template>
                     <ControlTemplate TargetType="ProgressBar">
-                        <Border Background="{TemplateBinding Value, Converter={StaticResource ValueToProcessConverter}, ConverterParameter=200}" />
+                        <Border Background="{TemplateBinding Value, Converter={StaticResource ValueToProcessConverter}, ConverterParameter=270}" />
                     </ControlTemplate>
                 </ProgressBar.Template>
             </ProgressBar>
