@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<nlog xmlns="http://www.nlog-project.org/schemas/NLog.xsd"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.nlog-project.org/schemas/NLog.xsd NLog.xsd"
+      autoReload="true"
+      throwExceptions="false"
+      internalLogLevel="Off" internalLogFile="c:\temp\nlog-internal.log">
+
+  <!-- optional, add some variables
+  https://github.com/nlog/NLog/wiki/Configuration-file#variables
+  -->
+  <variable name="logDir" value="${basedir}/logs"/>
+  
+  <targets>
+    <!-- 
+    add your targets here 
+    See https://github.com/nlog/NLog/wiki/Targets for possible targets.
+    See https://github.com/nlog/NLog/wiki/Layout-Renderers for the possible layout renderers.
+    -->
+    <target name="exportToXFileAsync" xsi:type="AsyncWrapper">
+      <target name="exportToXFile" xsi:type="File"
+              fileName="${logDir}/exporttox.txt"
+              layout="${longdate} ${level:uppercase=true} ${message} ${exception:format=tostring}"
+              archiveFileName="${logDir}/exporttox_archive.{#}.txt"
+              archiveEvery="Day"
+              archiveNumbering="Date"
+              archiveDateFormat="yyyyMMdd"
+              maxArchiveFiles="10"
+            />
+    </target>
+    <target name="hangfireFileAsync" xsi:type="AsyncWrapper">
+      <target name="hangfireFile" xsi:type="File"
+              fileName="${logDir}/hangfire.txt"
+              layout="${longdate} ${level:uppercase=true} ${message} ${exception:format=tostring}"
+              archiveFileName="${logDir}/hangfire_archive.{#}.txt"
+              archiveEvery="Day"
+              archiveNumbering="Date"
+              archiveDateFormat="yyyyMMdd"
+              maxArchiveFiles="10"
+            />
+    </target>
+    <target name="messagingFileAsync" xsi:type="AsyncWrapper">
+      <target name="messagingFile" xsi:type="File"
+              fileName="${logDir}/messaging.txt"
+              layout="${longdate} ${level:uppercase=true} ${message} ${exception:format=tostring}"
+              archiveFileName="${logDir}/messaging_archive.{#}.txt"
+              archiveEvery="Day"
+              archiveNumbering="Date"
+              archiveDateFormat="yyyyMMdd"
+              maxArchiveFiles="10"
+            />
+    </target>
+    <target name="exceptionsAsync" xsi:type="AsyncWrapper">
+      <target name="exceptions" xsi:type="File"
+              fileName="${logDir}/exceptions.txt"
+              layout="${longdate} ${level:uppercase=true} ${logger:shortName=true} ${message} ${exception:format=tostring}"
+              archiveFileName="${logDir}/exceptions_archive.{#}.txt"
+              archiveEvery="Day"
+              archiveNumbering="Date"
+              archiveDateFormat="yyyyMMdd"
+              maxArchiveFiles="10"
+            />
+    </target>
+    <target name="logfileAsync" xsi:type="AsyncWrapper">
+      <target name="logfile" xsi:type="File"
+              fileName="${logDir}/logfile.txt"
+              archiveFileName="${logDir}/logfile_archive.{#}.txt"
+              archiveEvery="Day"
+              archiveNumbering="Date"
+              archiveDateFormat="yyyyMMdd"
+              maxArchiveFiles="10"
+            />
+    </target>
+    <target name="debugfileAsync" xsi:type="AsyncWrapper">
+      <target name="debugfile" xsi:type="File"
+              fileName="${logDir}/debugfile.txt"
+              archiveFileName="${logDir}/debugfile_archive.{#}.txt"
+              archiveEvery="Day"
+              archiveNumbering="Date"
+              archiveDateFormat="yyyyMMdd"
+              maxArchiveFiles="10"
+            />
+    </target>
+    <target name="tracefileAsync" xsi:type="AsyncWrapper">
+      <target name="tracefile" xsi:type="File"
+              fileName="${logDir}/tracefile.txt"
+              archiveFileName="${logDir}/tracefile_archive.{#}.txt"
+              archiveEvery="Day"
+              archiveNumbering="Date"
+              archiveDateFormat="yyyyMMdd"
+              maxArchiveFiles="10"
+            />
+    </target>
+    <target name="nullLog" xsi:type="Null" formatMessage="false" layout="${longdate} ${level:uppercase=true} ${message} ${exception:format=tostring}" />
+  </targets>
+
+  <rules>
+    <logger name="*" minlevel="Error" writeTo="exceptionsAsync" />
+    <logger name="*" minlevel="Info" writeTo="logfileAsync" />
+  </rules>
+</nlog>
