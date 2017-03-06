@@ -339,7 +339,7 @@
                                VerticalAlignment="Top"
                                Margin="0,30,0,0" FontSize="24" TextAlignment="Center" Height="32"
                                HorizontalAlignment="Center" Width="260" />
-                    <TextBlock Text="You can start searching user's/item's ID, Barcode, Name etc, it will try to find it for you."
+                    <TextBlock Text="You can start searching member's/item's ID, Barcode, Name etc, it will try to find it for you."
                                VerticalAlignment="Top" 
                                Margin="0,65,0,0" FontSize="15" TextAlignment="Center" Height="20"
                                HorizontalAlignment="Center" Width="635" Foreground="#FFA0A0A0">
@@ -372,11 +372,11 @@
                             <ColumnDefinition Width="80" />
                         </Grid.ColumnDefinitions>
                         <Grid Column="0">
-                            <Rectangle x:Name="IconNavigateUserTab" 
+                            <Rectangle x:Name="IconNavigateMemberTab" 
                                Width="50" Height="50" Margin="0"  
                                VerticalAlignment="Center" HorizontalAlignment="Center"
-                               ToolTip="Navigate to User Tab"
-                               MouseLeftButtonUp="NavigateUserTabIconClick" 
+                               ToolTip="Navigate to Member Tab"
+                               MouseLeftButtonUp="NavigateMemberTabIconClick" 
                                Style="{StaticResource FunctionIconStyle}"
                                Cursor="Hand">
                                 <Rectangle.OpacityMask>
@@ -388,7 +388,7 @@
                             <Rectangle x:Name="IconNavigateItemTab" 
                                    Width="50" Height="50" Margin="0"  
                                    VerticalAlignment="Center" HorizontalAlignment="Center"
-                                   ToolTip="Navigate to User Tab"
+                                   ToolTip="Navigate to Member Tab"
                                    MouseLeftButtonUp="NavigateItemTabIconClick" 
                                    Style="{StaticResource FunctionIconStyle}"
                                    Cursor="Hand">
@@ -463,8 +463,8 @@
                                         <StackPanel Width="70" Orientation="Horizontal" HorizontalAlignment="Center">
                                             <Rectangle Width="20" Height="20"
                                                        VerticalAlignment="Center" HorizontalAlignment="Center"
-                                                       ToolTip="User Details"
-                                                       MouseLeftButtonUp="BtnItemShouldReturnNavToUser_Click" 
+                                                       ToolTip="Member Details"
+                                                       MouseLeftButtonUp="BtnItemShouldReturnNavToMember_Click" 
                                                        Style="{StaticResource GridIconStyle}"
                                                        Cursor="Hand" Margin="12.5,0">
                                                 <Rectangle.OpacityMask>
@@ -529,7 +529,7 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding action_datetime, StringFormat=\{0:yyyy/MM/dd H:mm\}}" Header="Time" Width="110"
                                 CellStyle="{StaticResource GridCellTextCenterStyle}" />
-                            <DataGridTextColumn Binding="{Binding UserName}" Header="User" Width="*"
+                            <DataGridTextColumn Binding="{Binding MemberName}" Header="Member" Width="*"
                                 CellStyle="{StaticResource GridCellTextCenterStyle}" />
                             <DataGridTextColumn Binding="{Binding ItemName}" Header="Item" Width="*"
                                 CellStyle="{StaticResource GridCellTextCenterStyle}" />
@@ -541,8 +541,8 @@
                                         <StackPanel Width="70" Orientation="Horizontal" HorizontalAlignment="Center">
                                             <Rectangle Width="20" Height="20"
                                                        VerticalAlignment="Center" HorizontalAlignment="Center"
-                                                       ToolTip="User Details"
-                                                       MouseLeftButtonUp="BtnHistoryNavToUser_Click" 
+                                                       ToolTip="Member Details"
+                                                       MouseLeftButtonUp="BtnHistoryNavToMember_Click" 
                                                        Style="{StaticResource GridIconStyle}"
                                                        Cursor="Hand" Margin="12.5,0">
                                                 <Rectangle.OpacityMask>
@@ -567,47 +567,47 @@
                     </DataGrid>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="TabUser" Header="User" BorderThickness="0,0,0,2"
+            <TabItem x:Name="TabMember" Header="Members" BorderThickness="0,0,0,2"
                      Style="{StaticResource SelectedTabStyle}">
                 <Grid>
-                    <TextBox x:Name="TbUserFilter" HorizontalAlignment="Left" VerticalAlignment="Top" Width="404"
+                    <TextBox x:Name="TbMemberFilter" HorizontalAlignment="Left" VerticalAlignment="Top" Width="404"
                              Margin="10,4,0,0"
-                             ToolTip="Search User"
+                             ToolTip="Search Member"
                              TextWrapping="NoWrap"
-                             TextChanged="UserFilterChanged"
+                             TextChanged="MemberFilterChanged"
                              metro:TextBoxHelper.ClearTextButton="True"
                              metro:ControlsHelper.MouseOverBorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
-                             metro:TextBoxHelper.Watermark="Search User" 
+                             metro:TextBoxHelper.Watermark="Search Member" 
                              Foreground="#FF575757" />
-                    <Rectangle x:Name="IconRefreshUserList" 
+                    <Rectangle x:Name="IconRefreshMemberList" 
                                Width="20" Height="20" Margin="419,7,0,0"  
                                VerticalAlignment="Top" HorizontalAlignment="Left"
                                ToolTip="Refresh Item List"
-                               MouseLeftButtonUp="UserGridRefreshIconClick" 
+                               MouseLeftButtonUp="MemberGridRefreshIconClick" 
                                Style="{StaticResource FunctionIconStyle}"
                                Cursor="Hand">
                         <Rectangle.OpacityMask>
                             <VisualBrush Visual="{iconPacks:PackIconMaterial refresh}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
-                    <StackPanel x:Name="SpNoUserDataMask" Orientation="Horizontal" Margin="10,10,642,0"
+                    <StackPanel x:Name="SpNoMemberDataMask" Orientation="Horizontal" Margin="10,10,642,0"
                                 VerticalAlignment="Top" Height="420" Visibility="Hidden" Background="White">
                         <TextBlock Text="No Data Available" Foreground="Black" FontSize="24"
                                    HorizontalAlignment="Center" VerticalAlignment="Center" Margin="25,0,24,0" />
                     </StackPanel>
-                    <DataGrid x:Name="DgUserGrid" IsReadOnly="True" AutoGenerateColumns="False"
+                    <DataGrid x:Name="DgMemberGrid" IsReadOnly="True" AutoGenerateColumns="False"
                               Margin="10,35,0,10" SelectionMode="Single"
                               Style="{StaticResource AzureDataGrid}"
-                              ItemsSource="{Binding UserList, Mode=OneWay}"
+                              ItemsSource="{Binding MemberList, Mode=OneWay}"
                               HorizontalContentAlignment="Stretch" ColumnWidth="*"
                               HorizontalAlignment="Left" Width="430"
                               BorderThickness="1" IsSynchronizedWithCurrentItem="True"
                               EnableColumnVirtualization="True"
                               ColumnHeaderStyle="{StaticResource DataGridHeaderColor}"
-                              SelectionChanged="UserGridSelectionChanged" 
-                              PreviewMouseDown="UserGridPreviewMouseDown" 
-                              PreviewKeyDown="UserGridPreviewKeyDown">
+                              SelectionChanged="MemberGridSelectionChanged" 
+                              PreviewMouseDown="MemberGridPreviewMouseDown" 
+                              PreviewKeyDown="MemberGridPreviewKeyDown">
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding id}" Header="ID" Width="50" />
                             <DataGridTextColumn Binding="{Binding barcode}" Header="Barcode" Width="85" />
@@ -620,7 +620,7 @@
                     <Border Height="150" Width="150" BorderThickness="1" BorderBrush="#55acee" Background="White"
                             Margin="450,45,0,0" VerticalAlignment="Top" Effect="{StaticResource z-depth1}"
                             HorizontalAlignment="Left">
-                        <Image Source="{Binding SelectedUser.picture}" 
+                        <Image Source="{Binding SelectedMember.picture}" 
                                SnapsToDevicePixels="True" Stretch="Uniform"
                                RenderOptions.BitmapScalingMode="HighQuality"
                                Margin="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
@@ -628,14 +628,14 @@
                     <Rectangle x:Name="IconDeletePhoto" 
                                Margin="582,47,0,0" Height="20" Width="16"
                                HorizontalAlignment="Left" VerticalAlignment="Top"
-                               ToolTip="Delete User Photo"
-                               MouseLeftButtonUp="DeleteUserPhotoClick" 
+                               ToolTip="Delete Member Photo"
+                               MouseLeftButtonUp="DeleteMemberPhotoClick" 
                                Style="{StaticResource WarningFunctionIconStyle}"
                                Cursor="Hand">
                         <Rectangle.Visibility>
                             <MultiBinding Converter="{StaticResource TrueTrueToVisibleConverter}">
-                                <Binding Path="SelectedUser.HasPhoto" />
-                                <Binding Path="IsUserEditMode"/>
+                                <Binding Path="SelectedMember.HasPhoto" />
+                                <Binding Path="IsMemberEditMode"/>
                             </MultiBinding>
                         </Rectangle.Visibility>
                         <Rectangle.OpacityMask>
@@ -648,41 +648,41 @@
                             HorizontalAlignment="Left"
                             Background="White" 
                             Height="30" Width="100"
-                            Visibility="{Binding IsUserEditMode, Converter={StaticResource BoolToVisibilityConvert}}"
+                            Visibility="{Binding IsMemberEditMode, Converter={StaticResource BoolToVisibilityConvert}}"
                             Click="BtnSelectPhoto_Click" 
                             Cursor="Hand"
                             Margin="475,200,0,0"/>
                     <!--==================================================================================-->
-                    <Rectangle x:Name="IconAddUser" 
-                               Margin="450,7,0,0" Height="20" Width="20"
+                    <Rectangle x:Name="IconAddMember" 
+                               Margin="450,7,0,0" Height="20" Width="25"
                                HorizontalAlignment="Left" VerticalAlignment="Top"
-                               ToolTip="Add New User"
-                               MouseLeftButtonUp="AddUserIconClick" 
+                               ToolTip="Add New Member"
+                               MouseLeftButtonUp="AddMemberIconClick" 
                                Style="{StaticResource FunctionIconStyle}"
                                Cursor="Hand">
                         <Rectangle.OpacityMask>
-                            <VisualBrush Visual="{iconPacks:PackIconMaterial AccountBoxOutline}" />
+                            <VisualBrush Visual="{iconPacks:PackIconMaterial AccountPlus}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
-                    <Rectangle Margin="475,7,0,0" Stroke="#FFC9C1C1" HorizontalAlignment="Left"
+                    <Rectangle Margin="478,7,0,0" Stroke="#FFC9C1C1" HorizontalAlignment="Left"
                                VerticalAlignment="Top" Width="1" Height="20" />
-                    <Rectangle x:Name="IconUserEditMode" Width="20" Height="20" Margin="481,7,0,0"
-                               ToolTip="Edit User" VerticalAlignment="Top" HorizontalAlignment="Left"
-                               MouseLeftButtonUp="UserEditModeIconClick"
+                    <Rectangle x:Name="IconMemberEditMode" Width="20" Height="20" Margin="484,7,0,0"
+                               ToolTip="Edit Member" VerticalAlignment="Top" HorizontalAlignment="Left"
+                               MouseLeftButtonUp="MemberEditModeIconClick"
                                Style="{StaticResource FunctionIconStyle}"
                                Cursor="Hand">
                         <Rectangle.OpacityMask>
                             <VisualBrush Visual="{iconPacks:PackIconMaterial AccountEdit}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
-                    <ToggleButton x:Name="ToggleUserEditMode" Margin="500,7,0,0" ToolTip="Edit This User" Width="40"
+                    <ToggleButton x:Name="ToggleMemberEditMode" Margin="503,7,0,0" ToolTip="Edit This Member" Width="40"
                                   Height="20" HorizontalAlignment="Left" VerticalAlignment="Top"
                                   Style="{StaticResource AnimatedSwitch}" Cursor="Hand"
-                                  Click="ToggleUserEditMode_Click"
-                                  IsChecked="{Binding IsUserEditMode, Mode=OneWay}" Effect="{StaticResource z-depth1}" />
+                                  Click="ToggleMemberEditMode_Click"
+                                  IsChecked="{Binding IsMemberEditMode, Mode=OneWay}" Effect="{StaticResource z-depth1}" />
                     <Rectangle Margin="450,35,10,0" Stroke="#FFC9C1C1" VerticalAlignment="Top" Height="1" />
                     <!--==================================================================================-->
-                    <Label Content="User ID :" Margin="620,45,0,0" Height="26" VerticalAlignment="Top"
+                    <Label Content="Member ID :" Margin="620,45,0,0" Height="26" VerticalAlignment="Top"
                            HorizontalContentAlignment="Right" HorizontalAlignment="Left" Width="120" />
                     <Label Content="Barcode :" Margin="905,45,0,0" Height="26" VerticalAlignment="Top"
                            HorizontalContentAlignment="Right" HorizontalAlignment="Left" Width="120" />
@@ -700,102 +700,102 @@
                            HorizontalContentAlignment="Right" HorizontalAlignment="Left" Width="120" />
                     <Label Content="Email :" Margin="620,245,0,0" VerticalAlignment="Top" Height="26"
                            HorizontalContentAlignment="Right" HorizontalAlignment="Left" Width="120" />
-                    <Label Content="Limit :" Margin="620,280,0,0" VerticalAlignment="Top" Height="26"
+                    <Label Content="Quota :" Margin="620,280,0,0" VerticalAlignment="Top" Height="26"
                            HorizontalContentAlignment="Right" HorizontalAlignment="Left" Width="120" />
-                    <Label Content="Current Holding :" Margin="905,280,0,0" VerticalAlignment="Top" Height="26"
+                    <Label Content="Total Fine ($) :" Margin="905,280,0,0" VerticalAlignment="Top" Height="26"
                            HorizontalContentAlignment="Right" HorizontalAlignment="Left" Width="120" />
                     <Label Content="Create Date :" Margin="620,315,0,0" VerticalAlignment="Top" Height="26"
                            HorizontalContentAlignment="Right" HorizontalAlignment="Left" Width="120" />
                     <Label Content="Expriy Date :" Margin="905,315,0,0" VerticalAlignment="Top" Height="26"
                            HorizontalContentAlignment="Right" Width="120" HorizontalAlignment="Left" />
 
-                    <TextBox x:Name="TbUserId" Height="25" Margin="745,45,0,0" VerticalAlignment="Top"
+                    <TextBox x:Name="TbMemberId" Height="25" Margin="745,45,0,0" VerticalAlignment="Top"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
-                             Text="{Binding SelectedUser.id}" IsReadOnly="True"
-                             IsEnabled="{Binding IsUserEditMode, Mode=OneWay}"
-                             HorizontalAlignment="Left" Width="150" />
-                    <TextBox x:Name="TbUserBarcode" Height="25" Margin="1030,45,0,0" VerticalAlignment="Top"
+                             Text="{Binding SelectedMember.id}" IsReadOnly="True"
+                             IsEnabled="{Binding IsMemberEditMode, Mode=OneWay}"
+                             HorizontalAlignment="Left" Width="170" />
+                    <TextBox x:Name="TbMemberBarcode" Height="25" Margin="1030,45,0,0" VerticalAlignment="Top"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
-                             Text="{Binding SelectedUser.barcode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             IsEnabled="{Binding IsUserEditMode, Mode=OneWay}"
+                             Text="{Binding SelectedMember.barcode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="{Binding IsMemberEditMode, Mode=OneWay}"
                              HorizontalAlignment="Left" Width="150" />
                     <TextBox x:Name="TbFirstNameCh" Height="25" Margin="745,80,0,0" VerticalAlignment="Top"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
-                             Text="{Binding SelectedUser.firstnames_ch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             IsEnabled="{Binding IsUserEditMode, Mode=OneWay}"
+                             Text="{Binding SelectedMember.firstnames_ch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="{Binding IsMemberEditMode, Mode=OneWay}"
                              HorizontalAlignment="Left" Width="170" />
                     <TextBox x:Name="TbLastNameCh" Height="25" Margin="1030,80,0,0" VerticalAlignment="Top"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
-                             Text="{Binding SelectedUser.surname_ch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             IsEnabled="{Binding IsUserEditMode, Mode=OneWay}"
+                             Text="{Binding SelectedMember.surname_ch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="{Binding IsMemberEditMode, Mode=OneWay}"
                              HorizontalAlignment="Left" Width="150" />
                     <TextBox x:Name="TbFirstNameEn"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
-                             Text="{Binding SelectedUser.firstnames_en, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             IsEnabled="{Binding IsUserEditMode, Mode=OneWay}"
+                             Text="{Binding SelectedMember.firstnames_en, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="{Binding IsMemberEditMode, Mode=OneWay}"
                              Height="25" Margin="745,115,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"
                              Width="170" />
                     <TextBox x:Name="TbLastNameEn"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
-                             Text="{Binding SelectedUser.surname_en, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             IsEnabled="{Binding IsUserEditMode, Mode=OneWay}"
+                             Text="{Binding SelectedMember.surname_en, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="{Binding IsMemberEditMode, Mode=OneWay}"
                              Height="25" Margin="1030,115,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"
                              Width="150" />
                     <TextBox x:Name="TbAddress"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
-                             Text="{Binding SelectedUser.address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             IsEnabled="{Binding IsUserEditMode, Mode=OneWay}"
+                             Text="{Binding SelectedMember.address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="{Binding IsMemberEditMode, Mode=OneWay}"
                              Margin="745,150,0,0" TextWrapping="Wrap" Height="50" VerticalAlignment="Top"
                              HorizontalAlignment="Left" Width="435" />
                     <TextBox x:Name="TbPhone"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
-                             Text="{Binding SelectedUser.phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             IsEnabled="{Binding IsUserEditMode, Mode=OneWay}"
+                             Text="{Binding SelectedMember.phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="{Binding IsMemberEditMode, Mode=OneWay}"
                              Height="25" Margin="745,210,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"
                              Width="435" />
                     <TextBox x:Name="TbEmail"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
-                             Text="{Binding SelectedUser.email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             IsEnabled="{Binding IsUserEditMode, Mode=OneWay}"
+                             Text="{Binding SelectedMember.email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="{Binding IsMemberEditMode, Mode=OneWay}"
                              Height="25" Margin="745,245,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"
                              Width="435" />
                     <TextBox x:Name="TbLimit"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
-                             Text="{Binding SelectedUser.limit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             IsEnabled="{Binding IsUserEditMode, Mode=OneWay}"
+                             Text="{Binding SelectedMember.limit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="{Binding IsMemberEditMode, Mode=OneWay}"
                              Height="24" Margin="745,281,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"
                              Width="150" />
-                    <TextBox x:Name="TbCurrentHolding"
+                    <TextBox x:Name="TbTotalFine"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
-                             Text="{Binding BorrowingItemsOfSelectedUser.Count, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                             IsEnabled="{Binding IsUserEditMode, Mode=OneWay}"
+                             Text="{Binding SelectedMember.TotalFine, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N1}"
+                             IsEnabled="{Binding IsMemberEditMode, Mode=OneWay}"
                              IsReadOnly="True"
                              Height="25" Margin="1030,280,0,0" VerticalAlignment="Top" Width="150"
                              HorizontalAlignment="Left" />
                     <DatePicker x:Name="DpCreateDate"
                                 metro:ControlsHelper.FocusBorderBrush="#55acee"
-                                IsEnabled="{Binding IsUserEditMode, Mode=OneWay}"
-                                SelectedDate="{Binding SelectedUser.created, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                IsEnabled="{Binding IsMemberEditMode, Mode=OneWay}"
+                                SelectedDate="{Binding SelectedMember.created, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 Height="25" Margin="745,315,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"
                                 Width="150" />
                     <DatePicker x:Name="DpExpiryDate"
                                 metro:ControlsHelper.FocusBorderBrush="#55acee"
-                                SelectedDate="{Binding SelectedUser.expiry, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                IsEnabled="{Binding IsUserEditMode, Mode=OneWay}"
+                                SelectedDate="{Binding SelectedMember.expiry, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                IsEnabled="{Binding IsMemberEditMode, Mode=OneWay}"
                                 Height="25" Margin="1030,315,0,0" VerticalAlignment="Top" Width="150"
                                 HorizontalAlignment="Left" />
                     <!--==================================================================================-->
                     <Grid Margin="450,353,10,0" Height="20" Background="#CC119EDA" VerticalAlignment="Top">
-                        <TextBlock Visibility="{Binding IsUserEditMode, Converter={StaticResource BoolToVisibilityConvert}}" 
-                                   Foreground="White"
+                        <TextBlock Visibility="{Binding IsMemberEditMode, Converter={StaticResource BoolToVisibilityConvert}}" 
+                                   Foreground="White" Cursor="Arrow"
                                    HorizontalAlignment="Center" VerticalAlignment="Center">Data Manipulations:</TextBlock>
-                        <TextBlock Visibility="{Binding IsUserEditMode, Converter={StaticResource InvertBoolVisibilityConvert}}" 
-                                   Foreground="White"
+                        <TextBlock Visibility="{Binding IsMemberEditMode, Converter={StaticResource InvertBoolVisibilityConvert}}" 
+                                   Foreground="White" Cursor="Arrow"
                                    HorizontalAlignment="Center" VerticalAlignment="Center">Borrowing Item(s):</TextBlock>
                     </Grid>
                     <!--==================================================================================-->
-                    <Grid x:Name="UserNormalMode" Margin="450,345,0,0" Height="322" Width="730" VerticalAlignment="Top" HorizontalAlignment="Left" 
-                          Visibility="{Binding IsUserEditMode, Converter={StaticResource InvertBoolVisibilityConvert}}">
+                    <Grid x:Name="MemberNormalMode" Margin="450,345,0,0" Height="322" Width="730" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                          Visibility="{Binding IsMemberEditMode, Converter={StaticResource InvertBoolVisibilityConvert}}">
                         <DataGrid x:Name="DgCurrentBorrowingItem"
                                   AutoGenerateColumns="False"
                                   BorderThickness="1"
@@ -809,7 +809,7 @@
                                   VerticalGridLinesBrush="White"
                                   IsReadOnly="True"
                                   SelectionMode="Single"
-                                  ItemsSource="{Binding SelectedUser.BorrowingItems, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                  ItemsSource="{Binding SelectedMember.BorrowingItems, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                   Margin="10,44,0,0">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Binding="{Binding id}" Header="Id" Width="50"
@@ -855,7 +855,7 @@
                                                 <Rectangle Width="24" Height="20"
                                                        VerticalAlignment="Center" HorizontalAlignment="Center"
                                                        ToolTip="Renew Item"
-                                                       MouseLeftButtonUp="BtnUserRenewItem_Click" 
+                                                       MouseLeftButtonUp="BtnMemberRenewItem_Click" 
                                                        Style="{StaticResource GridIconStyle}"
                                                        Cursor="Hand" Margin="0,0,5,0">
                                                     <Rectangle.OpacityMask>
@@ -878,17 +878,17 @@
                                 </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
-                        <Button x:Name="BtnUserBorrowItem" Margin="630,224,0,0" Content="Borrow Item"
+                        <Button x:Name="BtnMemberBorrowItem" Margin="630,224,0,0" Content="Borrow Item"
                                 Background="White"
                                 Height="30" Width="100"
                                 VerticalAlignment="Top" HorizontalAlignment="Left" 
                                 Cursor="Hand"
-                                IsEnabled="{Binding SelectedUser.CanBorrowItem}"
-                                Click="BtnUserBorrowItem_Click" />
+                                IsEnabled="{Binding SelectedMember.CanBorrowItem}"
+                                Click="BtnMemberBorrowItem_Click" />
                     </Grid>
-                    <Grid x:Name="UserEditingMode" Margin="450,345,0,0" Height="322" Width="730" VerticalAlignment="Top" HorizontalAlignment="Left"
-                          Visibility="{Binding IsUserEditMode, Converter={StaticResource BoolToVisibilityConvert}}">
-                        <Button x:Name="BtnSaveUser" 
+                    <Grid x:Name="MemberEditingMode" Margin="450,345,0,0" Height="322" Width="730" VerticalAlignment="Top" HorizontalAlignment="Left"
+                          Visibility="{Binding IsMemberEditMode, Converter={StaticResource BoolToVisibilityConvert}}">
+                        <Button x:Name="BtnSaveMember" 
                                 Content="Save Changes" 
                                 VerticalAlignment="Top"
                                 HorizontalAlignment="Right"
@@ -896,27 +896,27 @@
                                 Margin="0,44,105,0" 
                                 Cursor="Hand"
                                 Height="30" Width="100"
-                                Click="BtnSaveUser_Click" />
-                        <Button x:Name="BtnRenewUser" 
-                                Content="Renew User" 
+                                Click="BtnSaveMember_Click" />
+                        <Button x:Name="BtnRenewMember" 
+                                Content="Renew Member" 
                                 VerticalAlignment="Top"
                                 HorizontalAlignment="Right"
                                 Background="White" 
                                 Margin="0,44,0,0" 
                                 Cursor="Hand"
                                 Height="30" Width="100"
-                                Click="BtnRenewUser_Click"/>
-                        <Button x:Name="BtnCancelEdtingUser" Content="Cancel Editing" VerticalAlignment="Top"
+                                Click="BtnRenewMember_Click"/>
+                        <Button x:Name="BtnCancelEdtingMember" Content="Cancel Editing" VerticalAlignment="Top"
                                 HorizontalAlignment="Right"
                                 Background="White" 
                                 Cursor="Hand"
-                                Click="BtnCancelEditingUser_Click" 
+                                Click="BtnCancelEditingMember_Click" 
                                 Margin="0,84,105,0"
                                 Height="30" Width="100" />
-                        <Button x:Name="BtnDeleteUser" Content="Delete User" VerticalAlignment="Top"
+                        <Button x:Name="BtnDeleteMember" Content="Delete Member" VerticalAlignment="Top"
                                 HorizontalAlignment="Right"
                                 Background="#FFE74C3C" 
-                                Click="BtnDeleteUser_Click" 
+                                Click="BtnDeleteMember_Click" 
                                 Margin="0,84,0,0" Height="30"
                                 Cursor="Hand"
                                 Width="100" />
@@ -1177,9 +1177,10 @@
                     <!--==================================================================================-->
                     <Grid Margin="450,410,10,0" Height="20" Background="#CC119EDA" VerticalAlignment="Top">
                         <TextBlock Visibility="{Binding IsItemEditMode, Converter={StaticResource BoolToVisibilityConvert}}"
-                               Foreground="White"
-                               HorizontalAlignment="Center" VerticalAlignment="Center">Data Manipulations :</TextBlock>
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">
+                                   Foreground="White"
+                                   HorizontalAlignment="Center" 
+                                   VerticalAlignment="Center" Cursor="Arrow">Data Manipulations :</TextBlock>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Cursor="Arrow">
                             <TextBlock.Visibility>
                                 <MultiBinding Converter="{StaticResource FalseTrueToVisibleConverter}">
                                     <Binding Path="IsItemEditMode" />
@@ -1188,7 +1189,7 @@
                             </TextBlock.Visibility>
                             Borrower Details :
                         </TextBlock>
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Cursor="Arrow">
                             <TextBlock.Visibility>
                                 <MultiBinding Converter="{StaticResource FalseFalseToVisibleConverter}">
                                     <Binding Path="IsItemEditMode" />
@@ -1217,7 +1218,7 @@
                         <!--==================================================================================-->
                         <Label Content="Fine ($) :" Margin="435,0,0,0" Height="26" VerticalAlignment="Top"
                                HorizontalContentAlignment="Right" HorizontalAlignment="Left" Width="100" />
-                        <Label Content="User ID :" Margin="165,43,0,0" Height="26" VerticalAlignment="Top"
+                        <Label Content="Member ID :" Margin="165,43,0,0" Height="26" VerticalAlignment="Top"
                                HorizontalContentAlignment="Right" HorizontalAlignment="Left" Width="100" />
                         <Label Content="First Name CH :" Margin="165,88,0,0" Height="26" VerticalAlignment="Top"
                                HorizontalContentAlignment="Right" HorizontalAlignment="Left" Width="100" />
@@ -1268,12 +1269,12 @@
                                  Height="25" Margin="540,133,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"
                                  Width="190" />
 
-                        <Button x:Name="BtnViewUserDetail" Margin="405,173,0,0" Content="View User Detail"
+                        <Button x:Name="BtnViewMemberDetail" Margin="374,173,0,0" Content="View Member Detail"
                                 Background="White"
-                                Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="105"
+                                Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="135"
                                 Cursor="Hand"
                                 IsEnabled="{Binding HasBorrower}"
-                                Click="BtnViewUserDetail_Click" />
+                                Click="BtnViewMemberDetail_Click" />
                         <Button x:Name="BtnRenewBook" Margin="515,173,0,0" Content="Renew Item" Background="White"
                                 Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="105"
                                 Cursor="Hand"
@@ -1288,22 +1289,22 @@
                     <Grid x:Name="ItemNormalNoBorrowerMode" Margin="450,435,0,0" Height="233" Width="730" VerticalAlignment="Top" HorizontalAlignment="Left">
                         <Grid.Visibility>
                             <MultiBinding Converter="{StaticResource FalseFalseToVisibleConverter}">
-                                <Binding Path="IsItemEditMode"  UpdateSourceTrigger="PropertyChanged"/>
+                                <Binding Path="IsItemEditMode" UpdateSourceTrigger="PropertyChanged"/>
                                 <Binding Path="SelectedItem.HasBorrower" UpdateSourceTrigger="PropertyChanged"/>
                             </MultiBinding>
                         </Grid.Visibility>
                         <!--==================================================================================-->
-                        <Label Content="Issue this item to user" Height="30" VerticalAlignment="Top"
-                               HorizontalContentAlignment="Right" HorizontalAlignment="Center" Width="170" Margin="278,0,282,0" FontSize="15" />
-                        <TextBox x:Name="TbIssueToUserBarcode" Height="25" Width="462" Margin="0,35,0,0" 
+                        <Label Content="Issue this item to a Member" Height="30" VerticalAlignment="Top"
+                               HorizontalContentAlignment="Right" HorizontalAlignment="Center" Width="215" Margin="0" FontSize="15" />
+                        <TextBox x:Name="TbIssueToMemberBarcode" Height="25" Width="462" Margin="0,35,0,0" 
                                  VerticalAlignment="Top"
                                  HorizontalAlignment="Center"
                                  metro:TextBoxHelper.ClearTextButton="True"
                                  metro:ControlsHelper.MouseOverBorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
                                  metro:ControlsHelper.FocusBorderBrush="#55acee"
-                                 metro:TextBoxHelper.Watermark="User Barcode" 
+                                 metro:TextBoxHelper.Watermark="Member Barcode" 
                                  Foreground="#FF575757"/>
-                        <Button x:Name="BtnIssueToUser"
+                        <Button x:Name="BtnIssueToMember"
                                 Margin="0,70,0,0" 
                                 Content="Issue"
                                 Cursor="Hand"
@@ -1311,7 +1312,7 @@
                                 Height="30" Width="100"
                                 VerticalAlignment="Top" 
                                 HorizontalAlignment="Center"
-                                Click="BtnIssueToUser_Click" />
+                                Click="BtnIssueToMember_Click" />
                     </Grid>
                     <Grid x:Name="ItemEditingMode" Margin="450,435,0,0" Height="233" Width="730" VerticalAlignment="Top" HorizontalAlignment="Left"
                           Visibility="{Binding IsItemEditMode, Converter={StaticResource BoolToVisibilityConvert}}">

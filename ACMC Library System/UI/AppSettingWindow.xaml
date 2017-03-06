@@ -108,8 +108,10 @@
                           VerticalAlignment="Top">Bakup database automatically.</CheckBox>
             </Grid>
         </GroupBox>
-        <Label Margin="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="#8899A6" Height="25">Version:</Label>
-        <Label Height="25" Width="150" Margin="56,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="#8899A6" Content="{Binding AppVersion}"/>
+        
+        <TextBlock Foreground="#8899A6" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="12" Width="42" Margin="10,0,0,10">Version :</TextBlock>
+        <TextBlock Foreground="#8899A6" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="52,0,0,10" Height="12" Width="50" Text="{Binding AppVersion, Mode=OneTime}" />
+        
         <Button x:Name="BtnSave" Content="Save" HorizontalAlignment="Left" Margin="305,353,0,0" VerticalAlignment="Top" Click="BtnSave_Click" Height="35" Width="100" IsDefault="True"/>
         <Button x:Name="BtnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="410,353,0,0" VerticalAlignment="Top" Click="BtnCancel_Click" Height="35" Width="100"/>
     </Grid>

@@ -11,7 +11,7 @@ namespace ACMC_Library_System.Supports
         public static List<item_category> ItemCategories { get; set; }
         public static List<item_class> ItemClasses { get; set; }
         public static List<item_status> ItemStatuses { get; set; }
-        public static List<patron> Users { get; set; }
+        public static List<patron> Members { get; set; }
         public static List<item> Items { get; set; }
         public static List<action_history> ActionHistories { get; set; }
         public static List<item> ItemsShouldReturn { get; set; }
@@ -29,26 +29,26 @@ namespace ACMC_Library_System.Supports
                     ItemCategories = context.item_category.ToList();
                     ItemClasses = context.item_class.ToList();
                     ItemStatuses = context.item_status.ToList();
-                    Users = context.patron.ToList();
+                    Members = context.patron.ToList();
                     Items = context.item.ToList();
                     ActionHistories = context.action_history.OrderByDescending(i => i.id).Take(20).ToList();
                     foreach (var action in ActionHistories)
                     {
-                        action.UserName = Users.FirstOrDefault(i => i.id == action.patronid)?.DisplayNameTitle;
+                        action.MemberName = Members.FirstOrDefault(i => i.id == action.patronid)?.DisplayNameTitle;
                         action.ItemName = Items.FirstOrDefault(i => i.id == action.itemid)?.title;
                         action.ActionType = action.action_type1.verb;
                     }
                     ItemsShouldReturn = Items.Where(i => i.due_date < DateTime.Today).OrderByDescending(i => i.due_date).ToList();
                     foreach (var item in ItemsShouldReturn)
                     {
-                        item.Borrower = Users.FirstOrDefault(i => i.id == item.patronid);
+                        item.Borrower = Members.FirstOrDefault(i => i.id == item.patronid);
                     }
                 }
             });
         }
 
         /// <summary>
-        /// Refresh Main (user/item/history/itemsShouldReturn) cache from database
+        /// Refresh Main (member/item/history/itemsShouldReturn) cache from database
         /// </summary>
         /// <returns></returns>
         public static async Task RefreshMainCache()
@@ -57,19 +57,19 @@ namespace ACMC_Library_System.Supports
             {
                 using (var context = new LibraryDb())
                 {
-                    Users = context.patron.ToList();
+                    Members = context.patron.ToList();
                     Items = context.item.ToList();
                     ActionHistories = context.action_history.OrderByDescending(i => i.id).Take(20).ToList();
                     foreach (var action in ActionHistories)
                     {
-                        action.UserName = Users.FirstOrDefault(i => i.id == action.patronid)?.DisplayNameTitle;
+                        action.MemberName = Members.FirstOrDefault(i => i.id == action.patronid)?.DisplayNameTitle;
                         action.ItemName = Items.FirstOrDefault(i => i.id == action.itemid)?.title;
                         action.ActionType = action.action_type1.verb;
                     }
                     ItemsShouldReturn = Items.Where(i => i.due_date < DateTime.Today).OrderByDescending(i => i.due_date).ToList();
                     foreach (var item in ItemsShouldReturn)
                     {
-                        item.Borrower = Users.FirstOrDefault(i => i.id == item.patronid);
+                        item.Borrower = Members.FirstOrDefault(i => i.id == item.patronid);
                     }
                 }
             });

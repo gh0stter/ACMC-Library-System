@@ -81,7 +81,7 @@ namespace ACMC_Library_System.DbModels
 
         //following properties will not be in the database
         [NotMapped]
-        public bool AllowToDelete => id != BusinessRules.MainUserId && barcode != BusinessRules.MainUserBarcode;
+        public bool AllowToDelete => id != BusinessRules.MainMemberId && barcode != BusinessRules.MainMemberBarcode;
 
         [NotMapped]
         public string DisplayNameCh => surname_ch == null ? firstnames_ch : $"{surname_ch} {firstnames_ch}";
@@ -113,17 +113,43 @@ namespace ACMC_Library_System.DbModels
         public List<item> BorrowingItems { get; set; }
 
         /// <summary>
-        /// When user is holding a over due item, do not allow him/her to borrow more
+        /// When Member is expired or exceed item quota, do not allow him/her to borrow more
         /// </summary>
         [NotMapped]
-        public bool CanBorrowItem
+        public bool CanBorrowItem => (expiry != null && expiry > DateTime.Today) && (limit != null && limit > BorrowingItems?.Count);
+
+        [NotMapped]
+        public string UnableToBorrowItemReason
         {
             get
             {
-                return expiry > DateTime.Today &&
-                       (BorrowingItems == null || BorrowingItems.All(item => item.due_date > DateTime.Today) && limit > BorrowingItems.Count);
+                string reasion = string.Empty;
+                if (CanBorrowItem)
+                {
+                    return reasion;
+                }
+                if (expiry == null || expiry < DateTime.Today)
+                {
+                    reasion = "Member is expired, please renew membership first.";
+                }
+                if (BorrowingItems.Count < limit)
+                {
+                    return reasion;
+                }
+                if (string.IsNullOrEmpty(reasion))
+                {
+                    reasion = "Member does not have enough quota.";
+                }
+                else
+                {
+                    reasion += $"{Environment.NewLine}And this Member does not have enough quota.";
+                }
+                return reasion;
             }
         }
+
+        [NotMapped]
+        public double TotalFine => BorrowingItems == null || BorrowingItems.Count == 0 ? 0 : BorrowingItems.Sum(item => item.Fine);
 
         #endregion
     }

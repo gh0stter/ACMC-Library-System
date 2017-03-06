@@ -22,7 +22,7 @@ using Rectangle = System.Windows.Shapes.Rectangle;
 namespace ACMC_Library_System.UI
 {
     /// <summary>
-    ///     MainWindow.xaml 的交互逻辑
+    /// MainWindow.xaml 的交互逻辑
     /// </summary>
     public partial class MainWindow : MetroWindow, INotifyPropertyChanged
     {
@@ -44,14 +44,14 @@ namespace ACMC_Library_System.UI
             DefaultButtonFocus = MessageDialogResult.Negative
         };
 
-        private string _userFilter = string.Empty;
-        private patron _selectedUser = new patron();
+        private string _memberFilter = string.Empty;
+        private patron _selectedMember = new patron();
 
         private string _itemFilter = string.Empty;
         private item _selectedItem = new item();
 
-        private bool _isUserEditingMode;
-        private bool _isAddingNewUser;
+        private bool _isMemberEditingMode;
+        private bool _isAddingNewMember;
 
         private bool _isItemEditingMode;
         private bool _isAddingNewItem;
@@ -67,18 +67,18 @@ namespace ACMC_Library_System.UI
         public List<item_status> ItemStatuses => Cache.ItemStatuses;
 
         /// <summary>
-        /// Getter, get user list from database
+        /// Getter, get Member list from database
         /// </summary>
-        public List<patron> UserList
+        public List<patron> MemberList
         {
             get
             {
-                return _userFilter.Trim() == string.Empty
-                    ? Cache.Users
-                    : Cache.Users.Where(user => user.id.ToString().Contains(_userFilter) ||
-                                                user.barcode.IndexOf(_userFilter, StringComparison.OrdinalIgnoreCase) >= 0 ||
-                                                user.firstnames_ch?.IndexOf(_userFilter, StringComparison.OrdinalIgnoreCase) >= 0 ||
-                                                user.firstnames_en?.IndexOf(_userFilter, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+                return _memberFilter.Trim() == string.Empty
+                    ? Cache.Members
+                    : Cache.Members.Where(member => member.id.ToString().Contains(_memberFilter) ||
+                                                member.barcode.IndexOf(_memberFilter, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                                member.firstnames_ch?.IndexOf(_memberFilter, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                                member.firstnames_en?.IndexOf(_memberFilter, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
             }
         }
 
@@ -97,38 +97,38 @@ namespace ACMC_Library_System.UI
             }
         }
 
-        public patron SelectedUser
+        public patron SelectedMember
         {
-            get { return _selectedUser; }
+            get { return _selectedMember; }
             set
             {
-                if (value == null || AreSameUser(value, _selectedUser))
+                if (value == null || AreSameMember(value, _selectedMember))
                 {
                     return;
                 }
                 if (value.id == -1)
                 {
-                    _selectedUser = value;
+                    _selectedMember = value;
                 }
                 else
                 {
                     using (var context = new LibraryDb())
                     {
-                        _selectedUser = context.patron.First(user => user.id == value.id);
-                        _selectedUser.BorrowingItems = context.item.Where(item => item.patronid == _selectedUser.id).ToList();
+                        _selectedMember = context.patron.First(member => member.id == value.id);
+                        _selectedMember.BorrowingItems = context.item.Where(item => item.patronid == _selectedMember.id).ToList();
                     }
                 }
-                OnPropertyChanged("SelectedUser");
+                OnPropertyChanged("SelectedMember");
             }
         }
 
-        public bool IsUserEditMode
+        public bool IsMemberEditMode
         {
-            get { return _isUserEditingMode; }
+            get { return _isMemberEditingMode; }
             set
             {
-                _isUserEditingMode = value;
-                OnPropertyChanged("IsUserEditMode");
+                _isMemberEditingMode = value;
+                OnPropertyChanged("IsMemberEditMode");
             }
         }
 
@@ -150,7 +150,7 @@ namespace ACMC_Library_System.UI
                     using (var context = new LibraryDb())
                     {
                         _selectedItem = context.item.First(item => item.id == value.id);
-                        _selectedItem.Borrower = context.patron.FirstOrDefault(user => user.id == _selectedItem.patronid);
+                        _selectedItem.Borrower = context.patron.FirstOrDefault(member => member.id == _selectedItem.patronid);
                     }
                 }
                 OnPropertyChanged("SelectedItem");
@@ -184,7 +184,7 @@ namespace ACMC_Library_System.UI
                 var actions = Cache.ActionHistories.OrderByDescending(i => i.id).Take(20).ToList();
                 foreach (var action in actions)
                 {
-                    action.UserName = Cache.Users.FirstOrDefault(i => i.id == action.patronid)?.DisplayNameTitle;
+                    action.MemberName = Cache.Members.FirstOrDefault(i => i.id == action.patronid)?.DisplayNameTitle;
                     action.ItemName = Cache.Items.FirstOrDefault(i => i.id == action.itemid)?.title;
                     action.ActionType = action.action_type1.verb;
                 }
@@ -199,7 +199,7 @@ namespace ACMC_Library_System.UI
                 var items = Cache.Items.Where(i => i.due_date < DateTime.Today).OrderByDescending(i => i.due_date).Take(20).ToList();
                 foreach (var item in items)
                 {
-                    item.Borrower = Cache.Users.FirstOrDefault(i => i.id == item.patronid);
+                    item.Borrower = Cache.Members.FirstOrDefault(i => i.id == item.patronid);
                 }
                 return items;
             }
@@ -280,7 +280,7 @@ namespace ACMC_Library_System.UI
             return this.ShowMessageAsync("Warning", msg, MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
         }
 
-        private static bool AreSameUser(patron source, patron target)
+        private static bool AreSameMember(patron source, patron target)
         {
             return source.DisplayNameCh == target.DisplayNameCh &&
                    source.DisplayNameEn == target.DisplayNameEn &&
@@ -315,41 +315,41 @@ namespace ACMC_Library_System.UI
                    source.moreinfo == target.moreinfo;
         }
 
-        private static bool IsValidUser(patron user)
+        private static bool IsValidMember(patron member)
         {
-            return (!string.IsNullOrWhiteSpace(user.DisplayNameCh) || !string.IsNullOrWhiteSpace(user.DisplayNameEn)) && !string.IsNullOrWhiteSpace(user.barcode);
+            return (!string.IsNullOrWhiteSpace(member.DisplayNameCh) || !string.IsNullOrWhiteSpace(member.DisplayNameEn)) && !string.IsNullOrWhiteSpace(member.barcode);
         }
 
-        private static bool IsUserChanged(patron user)
+        private static bool IsMemberChanged(patron member)
         {
-            if (user.id == -1)
+            if (member.id == -1)
             {
                 return true;
             }
             using (var context = new LibraryDb())
             {
-                var userInDb = context.patron.First(u => u.id == user.id);
-                return !(userInDb.DisplayNameCh == user.DisplayNameCh &&
-                         userInDb.DisplayNameEn == user.DisplayNameEn &&
-                         userInDb.barcode == user.barcode &&
-                         userInDb.picture.NullSequenceEqual(user.picture) &&
-                         userInDb.limit == user.limit &&
-                         userInDb.address == user.address &&
-                         userInDb.phone == user.phone &&
-                         userInDb.email == user.email &&
-                         userInDb.created == user.created &&
-                         userInDb.expiry == user.expiry);
+                var memberInDb = context.patron.First(i => i.id == member.id);
+                return !(memberInDb.DisplayNameCh == member.DisplayNameCh &&
+                         memberInDb.DisplayNameEn == member.DisplayNameEn &&
+                         memberInDb.barcode == member.barcode &&
+                         memberInDb.picture.NullSequenceEqual(member.picture) &&
+                         memberInDb.limit == member.limit &&
+                         memberInDb.address == member.address &&
+                         memberInDb.phone == member.phone &&
+                         memberInDb.email == member.email &&
+                         memberInDb.created == member.created &&
+                         memberInDb.expiry == member.expiry);
             }
         }
 
         private static bool IsValidItem(item item)
         {
-            return (!string.IsNullOrWhiteSpace(item.barcode) &&
-                    !string.IsNullOrWhiteSpace(item.code) &&
-                    !string.IsNullOrEmpty(item.title) &&
-                    item.category != null &&
-                    item.item_subclass != null &&
-                    item.status != null);
+            return !string.IsNullOrWhiteSpace(item.barcode) &&
+                   !string.IsNullOrWhiteSpace(item.code) &&
+                   !string.IsNullOrEmpty(item.title) &&
+                   item.category != null &&
+                   item.item_subclass != null &&
+                   item.status != null;
         }
 
         private static bool IsItemChanged(item item)
@@ -381,18 +381,17 @@ namespace ACMC_Library_System.UI
             }
         }
 
-        private async void AddActionHistory(LibraryDb context, int userId, int itemId, action_type.ActionTypeEnum actionType)
+        private async void AddActionHistory(LibraryDb context, int memberId, int itemId, action_type.ActionTypeEnum actionType)
         {
             context.action_history.Add(new action_history
             {
-                patronid = userId,
+                patronid = memberId,
                 itemid = itemId,
                 action_type = (int)actionType,
                 action_datetime = DateTime.Now
             });
-            await Cache.RefreshMainCache();
-            RefreshGridSource(DgActionHistory);
-            RefreshGridSource(DgItemsShouldReturn);
+            await RefreshGridSource(DgActionHistory);
+            await RefreshGridSource(DgItemsShouldReturn);
         }
 
         #endregion
@@ -423,7 +422,7 @@ namespace ACMC_Library_System.UI
             TbSearch.Focus();
         }
 
-        //Tab selection change event, disable user/item editing
+        //Tab selection change event, disable member/item editing
         private void OnTabSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!(e.OriginalSource is TabControl))
@@ -432,29 +431,34 @@ namespace ACMC_Library_System.UI
             }
             if (((TabItem)e.AddedItems[0]).Name == "TabPeople" && ((TabItem)e.RemovedItems[0]).Name == "TabItem")
             {
-                SelectedUser = (patron)DgUserGrid.SelectedItem;
+                SelectedMember = (patron)DgMemberGrid.SelectedItem;
             }
             if (((TabItem)e.AddedItems[0]).Name == "TabItem" && ((TabItem)e.RemovedItems[0]).Name == "TabPeople")
             {
                 SelectedItem = (item)DgItemGrid.SelectedItem;
             }
-            IsUserEditMode = false;
+            IsMemberEditMode = false;
             IsItemEditMode = false;
-            _isAddingNewUser = false;
+            _isAddingNewMember = false;
             IsAddingNewItem = false;
         }
 
         /// <summary>
-        /// Refresh user/item grid data source
+        /// Refresh member/item grid data source
         /// </summary>
         /// <param name="targetGrid"></param>
-        private void RefreshGridSource(ItemsControl targetGrid)
+        /// <param name="refreshCache"></param>
+        private async Task RefreshGridSource(ItemsControl targetGrid, bool refreshCache = true)
         {
+            if (refreshCache)
+            {
+                await Cache.RefreshMainCache();
+            }
             switch (targetGrid.Name)
             {
-                case "DgUserGrid":
+                case "DgMemberGrid":
                     targetGrid.ItemsSource = null;
-                    targetGrid.ItemsSource = UserList;
+                    targetGrid.ItemsSource = MemberList;
                     break;
                 case "DgItemGrid":
                     targetGrid.ItemsSource = null;
@@ -518,19 +522,19 @@ namespace ACMC_Library_System.UI
                 {
                     using (var context = new LibraryDb())
                     {
-                        var userSearchResult = from user in context.patron
-                                               where user.id.ToString().Contains(searchString) ||
-                                                     user.firstnames_en.Contains(searchString) ||
-                                                     user.firstnames_ch.Contains(searchString) ||
-                                                     user.surname_en.Contains(searchString) ||
-                                                     user.surname_ch.Contains(searchString)
-                                               select user;
-                        foreach (var result in userSearchResult)
+                        var memberSearchResult = from member in context.patron
+                                                 where member.id.ToString().Contains(searchString) ||
+                                                       member.firstnames_en.Contains(searchString) ||
+                                                       member.firstnames_ch.Contains(searchString) ||
+                                                       member.surname_en.Contains(searchString) ||
+                                                       member.surname_ch.Contains(searchString)
+                                               select member;
+                        foreach (var result in memberSearchResult)
                         {
                             var temp = new SearchResult
                             {
-                                RecordType = SearchResultTypes.User,
-                                UserId = result.id,
+                                RecordType = SearchResultTypes.Member,
+                                MemberId = result.id,
                                 FirstNameCh = result.firstnames_ch,
                                 LastNameCh = result.surname_ch,
                                 FirstNameEn = result.firstnames_en,
@@ -586,10 +590,10 @@ namespace ACMC_Library_System.UI
                 {
                     switch (searchResults[0].RecordType)
                     {
-                        case SearchResultTypes.User:
-                            int userId = searchResults[0].UserId;
-                            TabUser.IsSelected = true;
-                            ScrollGridToIndex(DgUserGrid, UserList.FindIndex(user => user.id == userId));
+                        case SearchResultTypes.Member:
+                            int memberId = searchResults[0].MemberId;
+                            TabMember.IsSelected = true;
+                            ScrollGridToIndex(DgMemberGrid, MemberList.FindIndex(member => member.id == memberId));
                             break;
                         case SearchResultTypes.Item:
                             int itemId = searchResults[0].ItemId;
@@ -625,8 +629,8 @@ namespace ACMC_Library_System.UI
             }
         }
 
-        //Navigate to user detail from history
-        private async void BtnHistoryNavToUser_Click(object sender, RoutedEventArgs e)
+        //Navigate to member detail from history
+        private async void BtnHistoryNavToMember_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -635,17 +639,17 @@ namespace ACMC_Library_System.UI
                 {
                     throw new InvalidCastException("Cast -> null value.");
                 }
-                int index = UserList.FindIndex(user => user.id == history.patronid);
+                int index = MemberList.FindIndex(member => member.id == history.patronid);
                 if (index == -1)
                 {
-                    throw new EntryPointNotFoundException("Unable to find user.");
+                    throw new EntryPointNotFoundException("Unable to find Member.");
                 }
-                TabUser.IsSelected = true;
-                ScrollGridToIndex(DgUserGrid, index);
+                TabMember.IsSelected = true;
+                ScrollGridToIndex(DgMemberGrid, index);
             }
             catch (Exception exception)
             {
-                Logger.Error(exception, "Error on Navigating to User");
+                Logger.Error(exception, "Error on Navigating to Member");
                 await this.ShowMessageAsync("Error", exception.Message);
             }
         }
@@ -676,21 +680,21 @@ namespace ACMC_Library_System.UI
         }
 
         //Refresh history
-        private void HistoryGridRefreshIconClick(object sender, MouseButtonEventArgs e)
+        private async void HistoryGridRefreshIconClick(object sender, MouseButtonEventArgs e)
         {
-            RefreshGridSource(DgActionHistory);
+            await RefreshGridSource(DgActionHistory);
             ScrollGridToIndex(DgActionHistory, 0);
         }
 
         //Refresh items should return
-        private void ItemsShouldReturnGridRefreshIconClick(object sender, MouseButtonEventArgs e)
+        private async void ItemsShouldReturnGridRefreshIconClick(object sender, MouseButtonEventArgs e)
         {
-            RefreshGridSource(DgItemsShouldReturn);
+            await RefreshGridSource(DgItemsShouldReturn);
             ScrollGridToIndex(DgItemsShouldReturn, 0);
         }
 
-        //Navigate to user detail
-        private async void BtnItemShouldReturnNavToUser_Click(object sender, MouseButtonEventArgs e)
+        //Navigate to Member detail
+        private async void BtnItemShouldReturnNavToMember_Click(object sender, MouseButtonEventArgs e)
         {
             try
             {
@@ -699,17 +703,17 @@ namespace ACMC_Library_System.UI
                 {
                     throw new InvalidCastException("Cast -> null value.");
                 }
-                int index = UserList.FindIndex(user => user.id == record.patronid);
+                int index = MemberList.FindIndex(member => member.id == record.patronid);
                 if (index == -1)
                 {
-                    throw new EntryPointNotFoundException("Unable to find user.");
+                    throw new EntryPointNotFoundException("Unable to find Member.");
                 }
-                TabUser.IsSelected = true;
-                ScrollGridToIndex(DgUserGrid, index);
+                TabMember.IsSelected = true;
+                ScrollGridToIndex(DgMemberGrid, index);
             }
             catch (Exception exception)
             {
-                Logger.Error(exception, "Error on Navigating to user");
+                Logger.Error(exception, "Error on Navigating to Member");
                 await this.ShowMessageAsync("Error", exception.Message);
             }
         }
@@ -745,9 +749,9 @@ namespace ACMC_Library_System.UI
             OpenAppSettingsWindow();
         }
 
-        private void NavigateUserTabIconClick(object sender, MouseButtonEventArgs e)
+        private void NavigateMemberTabIconClick(object sender, MouseButtonEventArgs e)
         {
-            TabUser.IsSelected = true;
+            TabMember.IsSelected = true;
         }
 
         private void NavigateItemTabIconClick(object sender, MouseButtonEventArgs e)
@@ -762,14 +766,14 @@ namespace ACMC_Library_System.UI
 
         #endregion
 
-        #region User Tab Logics
+        #region Member Tab Logics
 
         /// <summary>
-        /// Save user to database
+        /// Save Member to database
         /// </summary>
-        private async void SaveUserHandler()
+        private async void SaveMemberHandler()
         {
-            if (_isAddingNewUser)
+            if (_isAddingNewMember)
             {
                 try
                 {
@@ -778,11 +782,11 @@ namespace ACMC_Library_System.UI
                         using (var transactionScope = new TransactionScope())
                         {
                             //might be can use context.patron.AddOrUpdate();
-                            if (SelectedUser.id == -1)
+                            if (SelectedMember.id == -1)
                             {
-                                if (IsValidUser(SelectedUser))
+                                if (IsValidMember(SelectedMember))
                                 {
-                                    context.patron.Add(SelectedUser);
+                                    context.patron.Add(SelectedMember);
                                 }
                                 else
                                 {
@@ -792,33 +796,30 @@ namespace ACMC_Library_System.UI
                             }
                             else
                             {
-                                throw new InvalidDataException("Invalid user.");
+                                throw new InvalidDataException("Invalid Member.");
                             }
                             context.SaveChanges();
                             transactionScope.Complete();
                         }
                     }
-                    await Cache.RefreshMainCache();
-                    RefreshGridSource(DgItemsShouldReturn);
                 }
                 catch (Exception e)
                 {
-                    Logger.Error(e, "Error on adding new user.");
-                    await this.ShowMessageAsync("Error", "Error on adding new user to the database, please contact administrator.");
-                    IsUserEditMode = false;
-                    RefreshGridSource(DgUserGrid);
-                    ScrollGridToIndex(DgUserGrid, 0);
-
+                    Logger.Error(e, "Error on adding new Member.");
+                    await this.ShowMessageAsync("Error", "Error on adding new Member to the database, please contact administrator.");
+                    IsMemberEditMode = false;
+                    await RefreshGridSource(DgMemberGrid);
+                    ScrollGridToIndex(DgMemberGrid, 0);
                     return;
                 }
-                RefreshGridSource(DgUserGrid);
-                ScrollGridToIndex(DgUserGrid, DgUserGrid.Items.Count - 1);
-                IsUserEditMode = false;
-                _isAddingNewUser = false;
+                await RefreshGridSource(DgMemberGrid);
+                ScrollGridToIndex(DgMemberGrid, DgMemberGrid.Items.Count - 1);
+                IsMemberEditMode = false;
+                _isAddingNewMember = false;
             }
             else
             {
-                if (IsUserChanged(SelectedUser))
+                if (IsMemberChanged(SelectedMember))
                 {
                     try
                     {
@@ -826,160 +827,161 @@ namespace ACMC_Library_System.UI
                         {
                             using (var transactionScope = new TransactionScope())
                             {
-                                var userInDb = context.patron.FirstOrDefault(user => user.id == SelectedUser.id);
-                                if (userInDb == null)
+                                var memberInDb = context.patron.FirstOrDefault(member => member.id == SelectedMember.id);
+                                if (memberInDb == null)
                                 {
-                                    throw new EntryPointNotFoundException("Unable to find selected user.");
+                                    throw new EntryPointNotFoundException("Unable to find selected Member.");
                                 }
-                                context.Entry(userInDb).CurrentValues.SetValues(SelectedUser);
+                                context.Entry(memberInDb).CurrentValues.SetValues(SelectedMember);
                                 context.SaveChanges();
                                 transactionScope.Complete();
                             }
                         }
-                        await Cache.RefreshMainCache();
-                        RefreshGridSource(DgItemsShouldReturn);
+
                     }
                     catch (Exception exception)
                     {
-                        Logger.Error(exception, "Error on Saving user.");
+                        Logger.Error(exception, "Error on Saving Member.");
                         await this.ShowMessageAsync("Error", exception.Message);
-                        ScrollGridToIndex(DgUserGrid, 0);
+                        ScrollGridToIndex(DgMemberGrid, 0);
                         return;
                     }
-                    IsUserEditMode = false;
-                    OnPropertyChanged("SelectedUser");
+                    await RefreshGridSource(DgItemsShouldReturn);
+                    await RefreshGridSource(DgMemberGrid, false);
+                    IsMemberEditMode = false;
+                    OnPropertyChanged("SelectedMember");
                 }
                 else
                 {
-                    IsUserEditMode = false;
+                    IsMemberEditMode = false;
                 }
             }
         }
 
         /// <summary>
-        /// Handle unsaved user
+        /// Handle unsaved Member
         /// </summary>
-        private async void UnsavedUserHandler()
+        private async void UnsavedMemberHandler()
         {
-            if (IsUserChanged(SelectedUser))
+            if (IsMemberChanged(SelectedMember))
             {
                 var result = await UnsavedDialog();
                 if (result != MessageDialogResult.Affirmative)
                 {
-                    IsUserEditMode = true;
+                    IsMemberEditMode = true;
                     return;
                 }
             }
             //cancel saving, restore last selection
-            if (SelectedUser.id == -1)
+            if (SelectedMember.id == -1)
             {
-                ScrollGridToIndex(DgUserGrid, 0);
+                ScrollGridToIndex(DgMemberGrid, 0);
             }
             else
             {
-                SelectedUser = DgUserGrid.Items.OfType<patron>().First(i => i.id == SelectedUser.id);
+                SelectedMember = MemberList.First(i => i.id == SelectedMember.id);
             }
-            _isAddingNewUser = false;
-            IsUserEditMode = false;
-            OnPropertyChanged("SelectedUser");
+            _isAddingNewMember = false;
+            IsMemberEditMode = false;
+            OnPropertyChanged("SelectedMember");
         }
 
-        //User filter text change event
-        private void UserFilterChanged(object sender, TextChangedEventArgs e)
+        //Member filter text change event
+        private void MemberFilterChanged(object sender, TextChangedEventArgs e)
         {
-            _userFilter = TbUserFilter.Text;
-            OnPropertyChanged("UserList");
-            SelectedUser = (patron)DgUserGrid.SelectedItem;
+            _memberFilter = TbMemberFilter.Text;
+            OnPropertyChanged("MemberList");
+            SelectedMember = (patron)DgMemberGrid.SelectedItem;
         }
 
-        //Refresh user grid
-        private void UserGridRefreshIconClick(object sender, MouseButtonEventArgs e)
+        //Refresh Member grid
+        private async void MemberGridRefreshIconClick(object sender, MouseButtonEventArgs e)
         {
-            RefreshGridSource(DgUserGrid);
-            ScrollGridToIndex(DgUserGrid, 0);
+            await RefreshGridSource(DgMemberGrid);
+            ScrollGridToIndex(DgMemberGrid, 0);
         }
 
         //User click on data grid
-        private async void UserGridPreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private async void MemberGridPreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (IsUserEditMode)
+            if (IsMemberEditMode)
             {
-                if (IsUserChanged(SelectedUser))
+                if (IsMemberChanged(SelectedMember))
                 {
                     e.Handled = true;
-                    await this.ShowMessageAsync("Warning", "Please save your changes before navigating to another user.");
+                    await this.ShowMessageAsync("Warning", "Please save your changes before navigating to another Member.");
                     return;
                 }
-                IsUserEditMode = false;
+                IsMemberEditMode = false;
             }
             e.Handled = false;
         }
 
         //User use keyboard to navigate on data grid
-        private async void UserGridPreviewKeyDown(object sender, KeyEventArgs e)
+        private async void MemberGridPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (IsUserEditMode)
+            if (IsMemberEditMode)
             {
-                if (IsUserChanged(SelectedUser))
+                if (IsMemberChanged(SelectedMember))
                 {
                     e.Handled = true;
-                    await this.ShowMessageAsync("Warning", "Please save your changes before navigating to another user.");
+                    await this.ShowMessageAsync("Warning", "Please save your changes before navigating to another Member.");
                     return;
                 }
-                IsUserEditMode = false;
+                IsMemberEditMode = false;
             }
             e.Handled = false;
         }
 
         //User grid selection change event
-        private void UserGridSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void MemberGridSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            SelectedUser = (patron)DgUserGrid.SelectedItem;
+            SelectedMember = (patron)DgMemberGrid.SelectedItem;
         }
 
-        //Add new user
-        private void AddUserIconClick(object sender, MouseButtonEventArgs e)
+        //Add new Member
+        private void AddMemberIconClick(object sender, MouseButtonEventArgs e)
         {
-            if (_isAddingNewUser)
+            if (_isAddingNewMember)
             {
                 return;
             }
-            DgUserGrid.SelectedItem = null;
-            var newUser = new patron
+            DgMemberGrid.SelectedItem = null;
+            var newMember = new patron
             {
                 id = -1,
-                limit = BusinessRules.DefaultLimitPerUser,
+                limit = BusinessRules.DefaultLimitPerMember,
                 created = DateTime.Today,
                 expiry = DateTime.Today.AddYears(1)
             };
-            SelectedUser = newUser;
-            IsUserEditMode = true;
-            _isAddingNewUser = true;
+            SelectedMember = newMember;
+            IsMemberEditMode = true;
+            _isAddingNewMember = true;
         }
 
         //Edit mode icon click
-        private void UserEditModeIconClick(object sender, MouseButtonEventArgs e)
+        private void MemberEditModeIconClick(object sender, MouseButtonEventArgs e)
         {
-            if (IsUserEditMode)
+            if (IsMemberEditMode)
             {
-                UnsavedUserHandler();
+                UnsavedMemberHandler();
             }
             else
             {
-                IsUserEditMode = true;
+                IsMemberEditMode = true;
             }
         }
 
         //Edit mode toggle icon click
-        private void ToggleUserEditMode_Click(object sender, RoutedEventArgs e)
+        private void ToggleMemberEditMode_Click(object sender, RoutedEventArgs e)
         {
-            if (IsUserEditMode)
+            if (IsMemberEditMode)
             {
-                UnsavedUserHandler();
+                UnsavedMemberHandler();
             }
             else
             {
-                IsUserEditMode = true;
+                IsMemberEditMode = true;
             }
         }
 
@@ -1009,12 +1011,12 @@ namespace ACMC_Library_System.UI
         }
 
         //Renew selected borrowed item
-        private async void BtnUserRenewItem_Click(object sender, RoutedEventArgs routedEventArgs)
+        private async void BtnMemberRenewItem_Click(object sender, RoutedEventArgs routedEventArgs)
         {
             try
             {
                 var tryToRenewItem = ((Rectangle)sender).DataContext as item;
-                int selectIndex = SelectedUser.BorrowingItems.IndexOf(tryToRenewItem);
+                int selectIndex = SelectedMember.BorrowingItems.IndexOf(tryToRenewItem);
                 if (tryToRenewItem == null)
                 {
                     throw new InvalidCastException("Cast -> null value.");
@@ -1029,15 +1031,15 @@ namespace ACMC_Library_System.UI
                             throw new EntryPointNotFoundException("Unable to find selected item.");
                         }
                         itemInDb.due_date = DateTime.Today.AddDays(BusinessRules.RenewPeriodInDay);
-                        AddActionHistory(context, SelectedUser.id, itemInDb.id, action_type.ActionTypeEnum.Renew);
+                        AddActionHistory(context, SelectedMember.id, itemInDb.id, action_type.ActionTypeEnum.Renew);
                         context.SaveChanges();
-                        SelectedUser.BorrowingItems = context.item.Where(item => item.patronid == SelectedUser.id).ToList();
+                        SelectedMember.BorrowingItems = context.item.Where(item => item.patronid == SelectedMember.id).ToList();
                         transactionScope.Complete();
                         DgCurrentBorrowingItem.Items.Refresh();
                     }
                 }
-                OnPropertyChanged("SelectedUser");
-                DgCurrentBorrowingItem.SelectedIndex = SelectedUser.BorrowingItems.Count > selectIndex ? selectIndex : SelectedUser.BorrowingItems.Count - 1;
+                OnPropertyChanged("SelectedMember");
+                DgCurrentBorrowingItem.SelectedIndex = SelectedMember.BorrowingItems.Count > selectIndex ? selectIndex : SelectedMember.BorrowingItems.Count - 1;
             }
             catch (Exception exception)
             {
@@ -1052,7 +1054,7 @@ namespace ACMC_Library_System.UI
             try
             {
                 var tryToReturnItem = ((Rectangle)sender).DataContext as item;
-                int selectIndex = SelectedUser.BorrowingItems.IndexOf(tryToReturnItem);
+                int selectIndex = SelectedMember.BorrowingItems.IndexOf(tryToReturnItem);
                 if (tryToReturnItem == null)
                 {
                     throw new InvalidCastException("Cast -> null value.");
@@ -1067,15 +1069,15 @@ namespace ACMC_Library_System.UI
                             throw new EntryPointNotFoundException("Unable to find selected item.");
                         }
                         itemInDb.patronid = null;
-                        AddActionHistory(context, SelectedUser.id, itemInDb.id, action_type.ActionTypeEnum.Return);
+                        AddActionHistory(context, SelectedMember.id, itemInDb.id, action_type.ActionTypeEnum.Return);
                         context.SaveChanges();
-                        SelectedUser.BorrowingItems = context.item.Where(item => item.patronid == SelectedUser.id).ToList();
+                        SelectedMember.BorrowingItems = context.item.Where(item => item.patronid == SelectedMember.id).ToList();
                         transactionScope.Complete();
                         DgCurrentBorrowingItem.Items.Refresh();
                     }
                 }
-                OnPropertyChanged("SelectedUser");
-                DgCurrentBorrowingItem.SelectedIndex = SelectedUser.BorrowingItems.Count > selectIndex ? selectIndex : SelectedUser.BorrowingItems.Count - 1;
+                OnPropertyChanged("SelectedMember");
+                DgCurrentBorrowingItem.SelectedIndex = SelectedMember.BorrowingItems.Count > selectIndex ? selectIndex : SelectedMember.BorrowingItems.Count - 1;
             }
             catch (Exception exception)
             {
@@ -1084,8 +1086,8 @@ namespace ACMC_Library_System.UI
             }
         }
 
-        //Borrow item to selected user
-        private async void BtnUserBorrowItem_Click(object sender, RoutedEventArgs e)
+        //Borrow item to selected Member
+        private async void BtnMemberBorrowItem_Click(object sender, RoutedEventArgs e)
         {
             string dialogResult = await this.ShowInputAsync("Borrow Item", "Please enter item Barcode");
             if (string.IsNullOrWhiteSpace(dialogResult))
@@ -1108,20 +1110,20 @@ namespace ACMC_Library_System.UI
                         await this.ShowMessageAsync("Error", "Unable to find item in database, please try again.");
                         return;
                     }
-                    var currenBorrower = context.patron.FirstOrDefault(user => user.id == itemInDb.patronid);
+                    var currenBorrower = context.patron.FirstOrDefault(member => member.id == itemInDb.patronid);
                     if (currenBorrower == null)
                     {
                         using (var transactionScope = new TransactionScope())
                         {
-                            itemInDb.patronid = SelectedUser.id;
+                            itemInDb.patronid = SelectedMember.id;
                             itemInDb.due_date = DateTime.Today.AddDays(BusinessRules.RenewPeriodInDay);
-                            SelectedUser.BorrowingItems.Add(itemInDb);
-                            AddActionHistory(context, SelectedUser.id, itemInDb.id, action_type.ActionTypeEnum.Lend);
+                            SelectedMember.BorrowingItems.Add(itemInDb);
+                            AddActionHistory(context, SelectedMember.id, itemInDb.id, action_type.ActionTypeEnum.Lend);
                             context.SaveChanges();
                             transactionScope.Complete();
                         }
                         DgCurrentBorrowingItem.Items.Refresh();
-                        OnPropertyChanged("SelectedUser");
+                        OnPropertyChanged("SelectedMember");
                     }
                     else
                     {
@@ -1147,16 +1149,16 @@ namespace ACMC_Library_System.UI
             }
         }
 
-        //Update user
-        private void BtnSaveUser_Click(object sender, RoutedEventArgs e)
+        //Same Member changes
+        private void BtnSaveMember_Click(object sender, RoutedEventArgs e)
         {
-            SaveUserHandler();
+            SaveMemberHandler();
         }
 
-        //Renew User
-        private async void BtnRenewUser_Click(object sender, RoutedEventArgs e)
+        //Renew Member
+        private async void BtnRenewMember_Click(object sender, RoutedEventArgs e)
         {
-            if (SelectedUser.id == -1)
+            if (SelectedMember.id == -1)
             {
                 return;
             }
@@ -1166,47 +1168,48 @@ namespace ACMC_Library_System.UI
                 {
                     using (var transactionScope = new TransactionScope())
                     {
-                        var userInDb = context.patron.FirstOrDefault(user => user.id == SelectedUser.id);
-                        if (userInDb == null)
+                        var memberInDb = context.patron.FirstOrDefault(member => member.id == SelectedMember.id);
+                        if (memberInDb == null)
                         {
-                            throw new EntryPointNotFoundException("Unable to find selected user.");
+                            throw new EntryPointNotFoundException("Unable to find selected Member.");
                         }
-                        userInDb.expiry = DateTime.Today.AddYears(1);
+                        memberInDb.expiry = DateTime.Today.AddYears(1);
                         context.SaveChanges();
                         transactionScope.Complete();
                     }
                 }
-                SelectedUser = UserList.First(i => i.id == SelectedUser.id);
+                await Cache.RefreshMainCache();
+                SelectedMember = MemberList.First(i => i.id == SelectedMember.id);
             }
             catch (Exception exception)
             {
-                Logger.Error(exception, "Error on Renewing user.");
+                Logger.Error(exception, "Error on Renewing Member.");
                 await this.ShowMessageAsync("Error", exception.Message);
             }
         }
 
-        //Cancle user editing
-        private void BtnCancelEditingUser_Click(object sender, RoutedEventArgs e)
+        //Cancle Member editing
+        private void BtnCancelEditingMember_Click(object sender, RoutedEventArgs e)
         {
-            UnsavedUserHandler();
+            UnsavedMemberHandler();
         }
 
-        //Delete User
-        private async void BtnDeleteUser_Click(object sender, RoutedEventArgs e)
+        //Delete selected Member
+        private async void BtnDeleteMember_Click(object sender, RoutedEventArgs e)
         {
-            if (_isAddingNewUser)
+            if (_isAddingNewMember)
             {
                 var result = await UnsavedDialog();
                 if (result == MessageDialogResult.Affirmative)
                 {
-                    IsUserEditMode = false;
-                    _isAddingNewUser = false;
-                    RefreshGridSource(DgUserGrid);
-                    ScrollGridToIndex(DgUserGrid, 0);
+                    IsMemberEditMode = false;
+                    _isAddingNewMember = false;
+                    await RefreshGridSource(DgMemberGrid);
+                    ScrollGridToIndex(DgMemberGrid, 0);
                 }
                 else
                 {
-                    IsUserEditMode = true;
+                    IsMemberEditMode = true;
                 }
             }
             else
@@ -1217,43 +1220,44 @@ namespace ACMC_Library_System.UI
                     {
                         using (var transactionScope = new TransactionScope())
                         {
-                            var userInDb = context.patron.FirstOrDefault(user => user.id == SelectedUser.id);
-                            if (userInDb == null)
+                            var memberInDb = context.patron.FirstOrDefault(member => member.id == SelectedMember.id);
+                            if (memberInDb == null)
                             {
-                                throw new EntryPointNotFoundException("Unable to find selected user.");
+                                throw new EntryPointNotFoundException("Unable to find selected Member.");
                             }
-                            if (!userInDb.AllowToDelete)
+                            if (!memberInDb.AllowToDelete)
                             {
-                                throw new InvalidOperationException("Cannot delete this user.");
+                                throw new InvalidOperationException("Cannot delete this Member.");
                             }
                             var result = await this.ShowMessageAsync("Delete Confirmation",
-                                                                     $"Are you sure you want to DELETE this user?{Environment.NewLine}This CANNOT be undone!",
+                                                                     $"Are you sure you want to DELETE this Member?{Environment.NewLine}This CANNOT be undone!",
                                                                      MessageDialogStyle.AffirmativeAndNegative,
                                                                      _binarySelectionDialogSettings);
                             if (result != MessageDialogResult.Affirmative)
                             {
                                 return;
                             }
-                            if (context.item.Any(item => item.patronid == userInDb.id))
+                            if (context.item.Any(item => item.patronid == memberInDb.id))
                             {
-                                await this.ShowMessageAsync("Warning", "Cannot delete this use, because this user still holding some books/items from library.");
+                                await this.ShowMessageAsync("Warning", "Cannot delete this use, because this Member still holding some books/items from library.");
                                 return;
                             }
-                            context.patron.Where(user => user.id == SelectedUser.id).Delete();
+                            context.patron.Where(member => member.id == SelectedMember.id).Delete();
                             context.SaveChanges();
                             transactionScope.Complete();
                         }
                     }
-                    IsUserEditMode = false;
-                    RefreshGridSource(DgUserGrid);
-                    ScrollGridToIndex(DgUserGrid, 0);
+                    IsMemberEditMode = false;
                 }
                 catch (Exception exception)
                 {
-                    Logger.Error(exception, "Error on Deleting user.");
+                    Logger.Error(exception, "Error on Deleting Member.");
                     await this.ShowMessageAsync("Error", exception.Message);
-                    RefreshGridSource(DgUserGrid);
-                    ScrollGridToIndex(DgUserGrid, 0);
+                }
+                finally
+                {
+                    await RefreshGridSource(DgMemberGrid);
+                    ScrollGridToIndex(DgMemberGrid, 0);
                 }
             }
         }
@@ -1273,15 +1277,15 @@ namespace ACMC_Library_System.UI
                 return;
             }
             string filePath = dialog.FileName;
-            SelectedUser.picture = GetImageBytes(filePath);
-            OnPropertyChanged("SelectedUser");
+            SelectedMember.picture = GetImageBytes(filePath);
+            OnPropertyChanged("SelectedMember");
         }
 
-        //Delete current user photo
-        private void DeleteUserPhotoClick(object sender, MouseButtonEventArgs e)
+        //Delete current Member photo
+        private void DeleteMemberPhotoClick(object sender, MouseButtonEventArgs e)
         {
-            SelectedUser.picture = null;
-            OnPropertyChanged("SelectedUser");
+            SelectedMember.picture = null;
+            OnPropertyChanged("SelectedMember");
         }
 
         #endregion
@@ -1322,18 +1326,17 @@ namespace ACMC_Library_System.UI
                             transactionScope.Complete();
                         }
                     }
-                    await Cache.RefreshMainCache();
-                    RefreshGridSource(DgItemsShouldReturn);
                 }
                 catch (Exception e)
                 {
                     Logger.Error(e, "Error on adding new item.");
                     await this.ShowMessageAsync("Error", "Error on adding new item to the database, please contact administrator.");
-                    RefreshGridSource(DgItemGrid);
+                    await RefreshGridSource(DgItemGrid);
                     ScrollGridToIndex(DgItemGrid, 0);
                     return;
                 }
-                RefreshGridSource(DgItemGrid);
+                await RefreshGridSource(DgItemsShouldReturn);
+                await RefreshGridSource(DgItemGrid, false);
                 IsItemEditMode = false;
                 IsAddingNewItem = false;
                 ScrollGridToIndex(DgItemGrid, DgItemGrid.Items.Count - 1);
@@ -1358,8 +1361,6 @@ namespace ACMC_Library_System.UI
                                 transactionScope.Complete();
                             }
                         }
-                        await Cache.RefreshMainCache();
-                        RefreshGridSource(DgItemsShouldReturn);
                     }
                     catch (Exception exception)
                     {
@@ -1368,8 +1369,15 @@ namespace ACMC_Library_System.UI
                         ScrollGridToIndex(DgItemGrid, 0);
                         return;
                     }
+                    await RefreshGridSource(DgItemsShouldReturn);
                     IsItemEditMode = false;
                     OnPropertyChanged("SelectedItem");
+                    if (SelectedMember.id != SelectedItem.patronid)
+                    {
+                        return;
+                    }
+                    SelectedMember.BorrowingItems = ItemList.Where(i => i.patronid == SelectedMember.id).ToList();
+                    OnPropertyChanged("SelectedMember");
                 }
                 else
                 {
@@ -1399,7 +1407,7 @@ namespace ACMC_Library_System.UI
             }
             else
             {
-                SelectedItem = DgItemGrid.Items.OfType<item>().First(i => i.id == SelectedItem.id);
+                SelectedItem = ItemList.First(i => i.id == SelectedItem.id);
             }
             IsAddingNewItem = false;
             IsItemEditMode = false;
@@ -1415,9 +1423,9 @@ namespace ACMC_Library_System.UI
         }
 
         //Refresh item grid
-        private void ItemGridRefreshIconClick(object sender, MouseButtonEventArgs e)
+        private async void ItemGridRefreshIconClick(object sender, MouseButtonEventArgs e)
         {
-            RefreshGridSource(DgItemGrid);
+            await RefreshGridSource(DgItemGrid);
             ScrollGridToIndex(DgItemGrid, 0);
         }
 
@@ -1502,11 +1510,11 @@ namespace ACMC_Library_System.UI
             }
         }
 
-        //Issue an item to user
-        private async void BtnIssueToUser_Click(object sender, RoutedEventArgs e)
+        //Issue an item to Member
+        private async void BtnIssueToMember_Click(object sender, RoutedEventArgs e)
         {
-            string enteredUserBarcode = TbIssueToUserBarcode.Text.Trim();
-            if (string.IsNullOrWhiteSpace(enteredUserBarcode))
+            string enteredMemberBarcode = TbIssueToMemberBarcode.Text.Trim();
+            if (string.IsNullOrWhiteSpace(enteredMemberBarcode))
             {
                 return;
             }
@@ -1515,59 +1523,62 @@ namespace ACMC_Library_System.UI
                 using (var context = new LibraryDb())
                 {
                     var itemInDb = context.item.First(i => i.id == SelectedItem.id);
-                    var userInDb = context.patron.FirstOrDefault(i => i.barcode.Equals(enteredUserBarcode, StringComparison.InvariantCultureIgnoreCase));
-                    if (userInDb == null)
+                    var memberInDb = MemberList.FirstOrDefault(i => i.barcode.Equals(enteredMemberBarcode, StringComparison.InvariantCultureIgnoreCase));
+                    if (memberInDb == null)
                     {
                         throw new EntryPointNotFoundException("Unable to find item in database.");
                     }
-                    if (!userInDb.CanBorrowItem)
+                    memberInDb.BorrowingItems = ItemList.Where(i => i.patronid == memberInDb.id).ToList();
+                    if (!memberInDb.CanBorrowItem)
                     {
-                        var result = await NavigateDialog($"{userInDb.DisplayNameTitle} Cannot borrow more items, click Ok navigate to user details.");
+                        var result = await NavigateDialog($"{memberInDb.DisplayNameTitle} Cannot borrow more items.{Environment.NewLine}" +
+                                                          $"Reason: {memberInDb.UnableToBorrowItemReason + Environment.NewLine}" +
+                                                          "click Ok navigate to member details.");
                         if (result != MessageDialogResult.Affirmative)
                         {
                             return;
                         }
-                        TabUser.IsSelected = true;
-                        int index = UserList.FindIndex(i => i.id == userInDb.id);
+                        TabMember.IsSelected = true;
+                        int index = MemberList.FindIndex(i => i.id == memberInDb.id);
                         if (index == -1)
                         {
                             throw new EntryPointNotFoundException("Unable to find item.");
                         }
-                        ScrollGridToIndex(DgUserGrid, index);
+                        ScrollGridToIndex(DgMemberGrid, index);
                         return;
                     }
                     using (var transactionScope = new TransactionScope())
                     {
-                        itemInDb.patronid = userInDb.id;
+                        itemInDb.patronid = memberInDb.id;
                         itemInDb.due_date = DateTime.Today.AddDays(BusinessRules.RenewPeriodInDay);
-                        AddActionHistory(context, userInDb.id, itemInDb.id, action_type.ActionTypeEnum.Lend);
+                        AddActionHistory(context, memberInDb.id, itemInDb.id, action_type.ActionTypeEnum.Lend);
                         context.SaveChanges();
                         transactionScope.Complete();
                     }
                     SelectedItem = itemInDb;
-                    TbIssueToUserBarcode.Text = string.Empty;
+                    TbIssueToMemberBarcode.Text = string.Empty;
                 }
             }
             catch (Exception exception)
             {
-                Logger.Error(exception, "Error on Issuing item to user.");
+                Logger.Error(exception, "Error on Issuing item to Member.");
                 await this.ShowMessageAsync("Error", exception.Message);
             }
 
         }
 
-        //Navigate to view user detail
-        private async void BtnViewUserDetail_Click(object sender, RoutedEventArgs e)
+        //Navigate to view Member detail
+        private async void BtnViewMemberDetail_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                int index = UserList.FindIndex(user => user.id == SelectedItem.Borrower.id);
+                int index = MemberList.FindIndex(member => member.id == SelectedItem.Borrower.id);
                 if (index == -1)
                 {
                     throw new EntryPointNotFoundException("Unable to find borrower.");
                 }
-                TabUser.IsSelected = true;
-                ScrollGridToIndex(DgUserGrid, index);
+                TabMember.IsSelected = true;
+                ScrollGridToIndex(DgMemberGrid, index);
             }
             catch (Exception exception)
             {
@@ -1596,6 +1607,14 @@ namespace ACMC_Library_System.UI
                         transactionScope.Complete();
                     }
                 }
+                await Cache.RefreshMainCache();
+                SelectedItem = (item)DgItemGrid.SelectedItem;
+                if (SelectedMember.id != SelectedItem.Borrower.id)
+                {
+                    return;
+                }
+                SelectedMember.BorrowingItems = ItemList.Where(i => i.patronid == SelectedMember.id).ToList();
+                OnPropertyChanged("SelectedMember");
             }
             catch (Exception exception)
             {
@@ -1609,6 +1628,7 @@ namespace ACMC_Library_System.UI
         {
             try
             {
+                int borrowerId = SelectedItem.Borrower.id;
                 using (var context = new LibraryDb())
                 {
                     using (var transactionScope = new TransactionScope())
@@ -1619,12 +1639,19 @@ namespace ACMC_Library_System.UI
                             throw new EntryPointNotFoundException("Unable to find item.");
                         }
                         itemInDb.patronid = null;
-                        AddActionHistory(context, SelectedItem.Borrower.id, itemInDb.id, action_type.ActionTypeEnum.Return);
+                        AddActionHistory(context, borrowerId, itemInDb.id, action_type.ActionTypeEnum.Return);
                         context.SaveChanges();
                         transactionScope.Complete();
                     }
                 }
+                await Cache.RefreshMainCache();
                 SelectedItem = (item)DgItemGrid.SelectedItem;
+                if (SelectedMember.id != borrowerId)
+                {
+                    return;
+                }
+                SelectedMember.BorrowingItems = ItemList.Where(i => i.patronid == SelectedMember.id).ToList();
+                OnPropertyChanged("SelectedMember");
             }
             catch (Exception exception)
             {
@@ -1655,7 +1682,7 @@ namespace ACMC_Library_System.UI
                 {
                     IsItemEditMode = false;
                     IsAddingNewItem = false;
-                    RefreshGridSource(DgItemGrid);
+                    await RefreshGridSource(DgItemGrid);
                     ScrollGridToIndex(DgItemGrid, 0);
                 }
                 else
@@ -1690,15 +1717,22 @@ namespace ACMC_Library_System.UI
                         }
                     }
                     IsItemEditMode = false;
-                    RefreshGridSource(DgItemGrid);
-                    ScrollGridToIndex(DgItemGrid, 0);
+                    
                 }
                 catch (Exception exception)
                 {
                     Logger.Error(exception, "Error on Deleting item.");
                     await this.ShowMessageAsync("Error", exception.Message);
-                    RefreshGridSource(DgItemGrid);
+                }
+                finally
+                {
+                    await RefreshGridSource(DgItemGrid);
                     ScrollGridToIndex(DgItemGrid, 0);
+                    if (SelectedMember.id == SelectedItem.patronid)
+                    {
+                        SelectedMember.BorrowingItems = ItemList.Where(i => i.patronid == SelectedMember.id).ToList();
+                        OnPropertyChanged("SelectedMember");
+                    }
                 }
             }
         }

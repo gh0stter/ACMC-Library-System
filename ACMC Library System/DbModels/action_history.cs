@@ -21,7 +21,7 @@ namespace ACMC_Library_System.DbModels
         #region Extended Property
 
         [NotMapped]
-        public string UserName { get; set; }
+        public string MemberName { get; set; }
 
         [NotMapped]
         public string ItemName { get; set; }

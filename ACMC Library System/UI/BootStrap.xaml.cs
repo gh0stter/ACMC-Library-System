@@ -144,7 +144,7 @@ namespace ACMC_Library_System.UI
                     Percentage = ++taskSetp / taskCount * 100;
                     Cache.ItemStatuses = context.item_status.ToList();
                     Percentage = ++taskSetp / taskCount * 100;
-                    Cache.Users = context.patron.ToList();
+                    Cache.Members = context.patron.ToList();
                     Percentage = ++taskSetp / taskCount * 100;
                     Cache.Items = context.item.ToList();
                     Percentage = ++taskSetp / taskCount * 100;
@@ -152,7 +152,7 @@ namespace ACMC_Library_System.UI
                     Percentage = ++taskSetp / taskCount * 100;
                     foreach (var action in Cache.ActionHistories)
                     {
-                        action.UserName = Cache.Users.FirstOrDefault(i => i.id == action.patronid)?.DisplayNameTitle;
+                        action.MemberName = Cache.Members.FirstOrDefault(i => i.id == action.patronid)?.DisplayNameTitle;
                         action.ItemName = Cache.Items.FirstOrDefault(i => i.id == action.itemid)?.title;
                         action.ActionType = action.action_type1.verb;
                     }
@@ -161,7 +161,7 @@ namespace ACMC_Library_System.UI
                     Percentage = ++taskSetp / taskCount * 100;
                     foreach (var item in Cache.ItemsShouldReturn)
                     {
-                        item.Borrower = Cache.Users.FirstOrDefault(i => i.id == item.patronid);
+                        item.Borrower = Cache.Members.FirstOrDefault(i => i.id == item.patronid);
                     }
                     Percentage = ++taskSetp / taskCount * 100;
                     _sqlConnected = true;

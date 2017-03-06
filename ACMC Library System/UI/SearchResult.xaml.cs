@@ -19,7 +19,7 @@ namespace ACMC_Library_System.UI
         {
             InitializeComponent();
             _searchResult = searchResult;
-            // make window on top when user restore application focus from other place
+            //make window on top when user restore application focus from other place
             Owner = Application.Current.MainWindow;
         }
 
@@ -52,11 +52,11 @@ namespace ACMC_Library_System.UI
                 }
                 switch (selectedResult.RecordType)
                 {
-                    case SearchResultTypes.User:
-                        mainWindow.TabUser.IsSelected = true;
-                        mainWindow.DgUserGrid.SelectedItem = mainWindow.DgUserGrid.Items.OfType<patron>().FirstOrDefault(i => i.id == selectedResult.UserId);
-                        mainWindow.DgUserGrid.UpdateLayout();
-                        mainWindow.DgUserGrid.ScrollIntoView(mainWindow.DgUserGrid.SelectedItem);
+                    case SearchResultTypes.Member:
+                        mainWindow.TabMember.IsSelected = true;
+                        mainWindow.DgMemberGrid.SelectedItem = mainWindow.DgMemberGrid.Items.OfType<patron>().FirstOrDefault(i => i.id == selectedResult.MemberId);
+                        mainWindow.DgMemberGrid.UpdateLayout();
+                        mainWindow.DgMemberGrid.ScrollIntoView(mainWindow.DgMemberGrid.SelectedItem);
                         Close();
                         break;
                     case SearchResultTypes.Item:
