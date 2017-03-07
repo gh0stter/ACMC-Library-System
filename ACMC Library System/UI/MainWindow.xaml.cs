@@ -381,7 +381,7 @@ namespace ACMC_Library_System.UI
             }
         }
 
-        private async void AddActionHistory(LibraryDb context, int memberId, int itemId, action_type.ActionTypeEnum actionType)
+        private async void AddActionHistory(LibraryDb context, int? memberId, int itemId, action_type.ActionTypeEnum actionType)
         {
             context.action_history.Add(new action_history
             {
@@ -390,6 +390,7 @@ namespace ACMC_Library_System.UI
                 action_type = (int)actionType,
                 action_datetime = DateTime.Now
             });
+            await Cache.RefreshMainCache();
             await RefreshGridSource(DgActionHistory);
             await RefreshGridSource(DgItemsShouldReturn);
         }
@@ -1572,17 +1573,17 @@ namespace ACMC_Library_System.UI
         {
             try
             {
-                int index = MemberList.FindIndex(member => member.id == SelectedItem.Borrower.id);
+                int index = MemberList.FindIndex(member => member.id == SelectedItem.patronid);
                 if (index == -1)
                 {
-                    throw new EntryPointNotFoundException("Unable to find borrower.");
+                    throw new EntryPointNotFoundException($"Unable to find Member ID: {SelectedItem.patronid} in the database.");
                 }
                 TabMember.IsSelected = true;
                 ScrollGridToIndex(DgMemberGrid, index);
             }
             catch (Exception exception)
             {
-                Logger.Error(exception, "Error on Viewing item borrower.");
+                Logger.Error(exception, "Error on Viewing item borrower detail.");
                 await this.ShowMessageAsync("Error", exception.Message);
             }
         }
@@ -1601,15 +1602,20 @@ namespace ACMC_Library_System.UI
                         {
                             throw new EntryPointNotFoundException("Unable to find item.");
                         }
+                        var memberInDb = context.patron.FirstOrDefault(member => member.id == itemInDb.patronid);
+                        if (memberInDb == null)
+                        {
+                            throw new ArgumentException($"This item is lent to a Member ID: {itemInDb.patronid} that no longer exist in the database, please return this item instead.");
+                        }
                         itemInDb.due_date = DateTime.Today.AddDays(BusinessRules.RenewPeriodInDay);
-                        AddActionHistory(context, SelectedItem.Borrower.id, itemInDb.id, action_type.ActionTypeEnum.Renew);
+                        SelectedItem.due_date = itemInDb.due_date;
+                        AddActionHistory(context, SelectedItem.patronid, itemInDb.id, action_type.ActionTypeEnum.Renew);
                         context.SaveChanges();
                         transactionScope.Complete();
                     }
                 }
-                await Cache.RefreshMainCache();
-                SelectedItem = (item)DgItemGrid.SelectedItem;
-                if (SelectedMember.id != SelectedItem.Borrower.id)
+                OnPropertyChanged("SelectedItem");
+                if (SelectedMember.id != SelectedItem.patronid)
                 {
                     return;
                 }
@@ -1628,7 +1634,7 @@ namespace ACMC_Library_System.UI
         {
             try
             {
-                int borrowerId = SelectedItem.Borrower.id;
+                var borrowerId = SelectedItem.patronid;
                 using (var context = new LibraryDb())
                 {
                     using (var transactionScope = new TransactionScope())
@@ -1639,13 +1645,13 @@ namespace ACMC_Library_System.UI
                             throw new EntryPointNotFoundException("Unable to find item.");
                         }
                         itemInDb.patronid = null;
+                        SelectedItem.patronid = null;
                         AddActionHistory(context, borrowerId, itemInDb.id, action_type.ActionTypeEnum.Return);
                         context.SaveChanges();
                         transactionScope.Complete();
                     }
                 }
-                await Cache.RefreshMainCache();
-                SelectedItem = (item)DgItemGrid.SelectedItem;
+                OnPropertyChanged("SelectedItem");
                 if (SelectedMember.id != borrowerId)
                 {
                     return;

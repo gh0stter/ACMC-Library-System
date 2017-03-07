@@ -1238,7 +1238,7 @@
                             HorizontalAlignment="Left" Width="190" TextAlignment="Right" />
                         <TextBox x:Name="TbBorrowerId" Height="25" Margin="270,43,0,0" VerticalAlignment="Top"
                                  metro:ControlsHelper.FocusBorderBrush="#55acee"
-                                 Text="{Binding SelectedItem.Borrower.id, Mode=OneWay}" 
+                                 Text="{Binding SelectedItem.patronid, Mode=OneWay}" 
                                  IsEnabled="False"
                                  HorizontalAlignment="Left" Width="160" />
                         <TextBox x:Name="TbBorrowerBarcode" Height="25" Margin="540,43,0,0" VerticalAlignment="Top"
