@@ -48,6 +48,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataModel\AppSettings.cs" />
     <Compile Include="DataModel\BusinessRules.cs" />
     <Compile Include="ViewModel\SearchResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

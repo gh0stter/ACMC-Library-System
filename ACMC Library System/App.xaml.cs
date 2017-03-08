@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using DomainModels.DataModel;
 using Microsoft.Shell;
 
 namespace ACMC_Library_System
@@ -19,10 +20,10 @@ namespace ACMC_Library_System
         {
             // Handle command line arguments of second instance
             // Bring window to foreground
-            //if (this.MainWindow.WindowState == WindowState.Minimized)
-            //{
-            //    this.MainWindow.WindowState = WindowState.Normal;
-            //}
+            if (MainWindow.WindowState == WindowState.Minimized)
+            {
+                MainWindow.WindowState = WindowState.Normal;
+            }
             MainWindow.Activate();
             return true;
         }
@@ -32,15 +33,25 @@ namespace ACMC_Library_System
         [STAThread]
         public static void Main()
         {
-            if (SingleInstance<App>.InitializeAsFirstInstance(Unique))
+            if (!SingleInstance<App>.InitializeAsFirstInstance(Unique))
             {
-                var application = new App();
-                application.InitializeComponent();
-                application.Run();
-
-                // Allow single instance code to perform cleanup operations
-                SingleInstance<App>.Cleanup();
+                return;
             }
+            var application = new App();
+
+            //ini business rules
+            var appSettings = ACMC_Library_System.Properties.Settings.Default;
+            BusinessRules.RenewPeriodInDay = appSettings.RenewPeriodInDay;
+            BusinessRules.DefaultQuotaPerMember = appSettings.DefaultQuotaPerMember;
+            BusinessRules.FinesPerWeek = appSettings.FinesPerWeek;
+            BusinessRules.LibMemberBarcode = appSettings.LibMemberBarcode;
+            BusinessRules.LibMemberId = appSettings.LibMemberId;
+
+            application.InitializeComponent();
+            application.Run();
+
+            // Allow single instance code to perform cleanup operations
+            SingleInstance<App>.Cleanup();
         }
     }
 }

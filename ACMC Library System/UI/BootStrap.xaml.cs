@@ -3,12 +3,10 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Configuration;
 using System.Deployment.Application;
 using System.Linq;
 using ACMC_Library_System.DbModels;
 using NLog;
-using ACMC_Library_System.Entities;
 using ACMC_Library_System.Supports;
 
 namespace ACMC_Library_System.UI

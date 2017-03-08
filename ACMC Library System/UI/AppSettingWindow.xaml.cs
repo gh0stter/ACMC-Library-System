@@ -5,9 +5,9 @@ using System.Deployment.Application;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using ACMC_Library_System.Entities;
 using ACMC_Library_System.Properties;
 using ACMC_Library_System.Supports;
+using DomainModels.DataModel;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using NLog;
@@ -110,6 +110,12 @@ namespace ACMC_Library_System.UI
                 return version;
             }
         }
+
+        public int RenewPeriodInDay => BusinessRules.RenewPeriodInDay;
+
+        public int DefaultQuotaPerMember => BusinessRules.DefaultQuotaPerMember;
+
+        public double FinesPerWeek => BusinessRules.FinesPerWeek;
 
         #endregion
 

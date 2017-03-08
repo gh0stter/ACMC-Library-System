@@ -363,7 +363,7 @@ namespace ACMC_Library_System.UI
                 var itemInDb = context.item.First(i => i.id == item.id);
                 return !(itemInDb.barcode == item.barcode &&
                          itemInDb.code == item.code &&
-                         itemInDb.Borrower == item.Borrower &&
+                         itemInDb.patronid == item.patronid &&
                          itemInDb.title == item.title &&
                          itemInDb.category == item.category &&
                          itemInDb.item_subclass == item.item_subclass &&
@@ -529,7 +529,7 @@ namespace ACMC_Library_System.UI
                                                        member.firstnames_ch.Contains(searchString) ||
                                                        member.surname_en.Contains(searchString) ||
                                                        member.surname_ch.Contains(searchString)
-                                               select member;
+                                                 select member;
                         foreach (var result in memberSearchResult)
                         {
                             var temp = new SearchResult
@@ -888,8 +888,17 @@ namespace ACMC_Library_System.UI
         }
 
         //Member filter text change event
-        private void MemberFilterChanged(object sender, TextChangedEventArgs e)
+        private async void MemberFilterChanged(object sender, TextChangedEventArgs e)
         {
+            if (IsMemberEditMode)
+            {
+                if (IsMemberChanged(SelectedMember))
+                {
+                    await this.ShowMessageAsync("Warning", "Please save your changes before searching member.");
+                    return;
+                }
+                IsMemberEditMode = false;
+            }
             _memberFilter = TbMemberFilter.Text;
             OnPropertyChanged("MemberList");
             SelectedMember = (patron)DgMemberGrid.SelectedItem;
@@ -898,6 +907,16 @@ namespace ACMC_Library_System.UI
         //Refresh Member grid
         private async void MemberGridRefreshIconClick(object sender, MouseButtonEventArgs e)
         {
+            if (IsMemberEditMode)
+            {
+                if (IsMemberChanged(SelectedMember))
+                {
+                    await this.ShowMessageAsync("Warning", "Please save your changes before refreshing grid.");
+                    return;
+                }
+                IsMemberEditMode = false;
+            }
+            TbMemberFilter.Clear();
             await RefreshGridSource(DgMemberGrid);
             ScrollGridToIndex(DgMemberGrid, 0);
         }
@@ -951,7 +970,7 @@ namespace ACMC_Library_System.UI
             var newMember = new patron
             {
                 id = -1,
-                limit = BusinessRules.DefaultLimitPerMember,
+                limit = BusinessRules.DefaultQuotaPerMember,
                 created = DateTime.Today,
                 expiry = DateTime.Today.AddYears(1)
             };
@@ -1111,8 +1130,8 @@ namespace ACMC_Library_System.UI
                         await this.ShowMessageAsync("Error", "Unable to find item in database, please try again.");
                         return;
                     }
-                    var currenBorrower = context.patron.FirstOrDefault(member => member.id == itemInDb.patronid);
-                    if (currenBorrower == null)
+                    var currentBorrower = context.patron.FirstOrDefault(member => member.id == itemInDb.patronid);
+                    if (currentBorrower == null)
                     {
                         using (var transactionScope = new TransactionScope())
                         {
@@ -1125,10 +1144,16 @@ namespace ACMC_Library_System.UI
                         }
                         DgCurrentBorrowingItem.Items.Refresh();
                         OnPropertyChanged("SelectedMember");
+                        if (SelectedItem.id != itemInDb.id)
+                        {
+                            return;
+                        }
+                        SelectedItem.patronid = SelectedMember.id;
+                        OnPropertyChanged("SelectedItem");
                     }
                     else
                     {
-                        var result = await NavigateDialog($"{currenBorrower.DisplayNameTitle} is holding this item currently, click OK navigate to item detail.");
+                        var result = await NavigateDialog($"{currentBorrower.DisplayNameTitle} is holding this item currently, click OK navigate to item detail.");
                         if (result != MessageDialogResult.Affirmative)
                         {
                             return;
@@ -1253,12 +1278,8 @@ namespace ACMC_Library_System.UI
                 catch (Exception exception)
                 {
                     Logger.Error(exception, "Error on Deleting Member.");
-                    await this.ShowMessageAsync("Error", exception.Message);
-                }
-                finally
-                {
                     await RefreshGridSource(DgMemberGrid);
-                    ScrollGridToIndex(DgMemberGrid, 0);
+                    await this.ShowMessageAsync("Error", exception.Message);
                 }
             }
         }
@@ -1416,8 +1437,18 @@ namespace ACMC_Library_System.UI
         }
 
         //Item filter text change event
-        private void ItemFilterChanged(object sender, TextChangedEventArgs e)
+        private async void ItemFilterChanged(object sender, TextChangedEventArgs e)
         {
+            if (IsItemEditMode)
+            {
+                if (IsItemChanged(SelectedItem))
+                {
+                    e.Handled = true;
+                    await this.ShowMessageAsync("Warning", "Please save your changes before searching item.");
+                    return;
+                }
+                IsItemEditMode = false;
+            }
             _itemFilter = TbItemFilter.Text;
             OnPropertyChanged("ItemList");
             SelectedItem = (item)DgItemGrid.SelectedItem;
@@ -1426,6 +1457,16 @@ namespace ACMC_Library_System.UI
         //Refresh item grid
         private async void ItemGridRefreshIconClick(object sender, MouseButtonEventArgs e)
         {
+            if (IsItemEditMode)
+            {
+                if (IsItemChanged(SelectedItem))
+                {
+                    await this.ShowMessageAsync("Warning", "Please save your changes before refreshing grid.");
+                    return;
+                }
+                IsItemEditMode = false;
+            }
+            TbItemFilter.Clear();
             await RefreshGridSource(DgItemGrid);
             ScrollGridToIndex(DgItemGrid, 0);
         }
@@ -1723,17 +1764,15 @@ namespace ACMC_Library_System.UI
                         }
                     }
                     IsItemEditMode = false;
-                    
                 }
                 catch (Exception exception)
                 {
                     Logger.Error(exception, "Error on Deleting item.");
+                    await RefreshGridSource(DgItemGrid);
                     await this.ShowMessageAsync("Error", exception.Message);
                 }
                 finally
                 {
-                    await RefreshGridSource(DgItemGrid);
-                    ScrollGridToIndex(DgItemGrid, 0);
                     if (SelectedMember.id == SelectedItem.patronid)
                     {
                         SelectedMember.BorrowingItems = ItemList.Where(i => i.patronid == SelectedMember.id).ToList();

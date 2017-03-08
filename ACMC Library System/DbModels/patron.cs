@@ -1,5 +1,6 @@
 using System.Linq;
 using DomainModels.DataModel;
+using ACMC_Library_System.Supports;
 
 namespace ACMC_Library_System.DbModels
 {
@@ -7,7 +8,6 @@ namespace ACMC_Library_System.DbModels
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     [Table("patron")]
     public partial class patron
@@ -81,7 +81,7 @@ namespace ACMC_Library_System.DbModels
 
         //following properties will not be in the database
         [NotMapped]
-        public bool AllowToDelete => id != BusinessRules.MainMemberId && barcode != BusinessRules.MainMemberBarcode;
+        public bool AllowToDelete => id != BusinessRules.LibMemberId && barcode != BusinessRules.LibMemberBarcode;
 
         [NotMapped]
         public string DisplayNameCh => surname_ch == null ? firstnames_ch : $"{surname_ch} {firstnames_ch}";

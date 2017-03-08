@@ -23,7 +23,7 @@
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
+    <UpdateMode>Background</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
@@ -35,7 +35,7 @@
     <ProductName>ACMC Library System</ProductName>
     <PublisherName>William Liu</PublisherName>
     <SuiteName>ACMC Library System</SuiteName>
-    <ApplicationRevision>16</ApplicationRevision>
+    <ApplicationRevision>18</ApplicationRevision>
     <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -158,7 +158,6 @@
     <Compile Include="DbModels\item_status.cs" />
     <Compile Include="DbModels\LibraryDb.cs" />
     <Compile Include="DbModels\patron.cs" />
-    <Compile Include="Entities\AppSettings.cs" />
     <Compile Include="Supports\Array.Extension.cs" />
     <Compile Include="Supports\Cache.cs" />
     <Compile Include="Supports\Converters.cs" />
@@ -321,7 +320,9 @@
       <Name>DomainModels</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Entities\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>RD /Q /S %25USERPROFILE%25\AppData\Local\L00P</PreBuildEvent>

@@ -4,7 +4,7 @@ namespace DomainModels.ViewModel
 {
     public enum SearchResultTypes
     {
-        User = 1,
+        Member = 1,
         Item = 2
     }
 
@@ -15,8 +15,8 @@ namespace DomainModels.ViewModel
         public string SecondDisplayInfo { get; set; }
         public SearchResultTypes RecordType { get; set; }
         public byte[] Img { get; set; }
-        //User part
-        public int UserId { get; set; }
+        //Member part
+        public int MemberId { get; set; }
         public string FirstNameCh { get; set; }
         public string LastNameCh { get; set; }
         public string FirstNameEn { get; set; }

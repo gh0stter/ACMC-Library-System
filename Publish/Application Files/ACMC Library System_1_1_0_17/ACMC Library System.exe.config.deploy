@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <configSections>
+    <!-- For more information on Entity Framework configuration, visit http://go.microsoft.com/fwlink/?LinkID=237468 -->
+    <section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false" />
+    <sectionGroup name="userSettings" type="System.Configuration.UserSettingsGroup, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" >
+      <section name="ACMC_Library_System.Properties.Settings" type="System.Configuration.ClientSettingsSection, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" allowExeDefinition="MachineToLocalUser" requirePermission="false" />
+    </sectionGroup>
+    <sectionGroup name="applicationSettings" type="System.Configuration.ApplicationSettingsGroup, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" >
+      <section name="ACMC_Library_System.Properties.Settings" type="System.Configuration.ClientSettingsSection, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false" />
+    </sectionGroup>
+  </configSections>
+  <startup>
+    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.6.1" />
+  </startup>
+  <entityFramework>
+    <defaultConnectionFactory type="System.Data.Entity.Infrastructure.LocalDbConnectionFactory, EntityFramework">
+      <parameters>
+        <parameter value="mssqllocaldb" />
+      </parameters>
+    </defaultConnectionFactory>
+    <providers>
+      <provider invariantName="System.Data.SqlClient" type="System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer" />
+    </providers>
+  </entityFramework>
+  <userSettings>
+    <ACMC_Library_System.Properties.Settings>
+      <setting name="Initialized" serializeAs="String">
+        <value>False</value>
+      </setting>
+      <setting name="SQLServer" serializeAs="String">
+        <value />
+      </setting>
+      <setting name="AuthType" serializeAs="String">
+        <value>0</value>
+      </setting>
+      <setting name="User" serializeAs="String">
+        <value />
+      </setting>
+      <setting name="Password" serializeAs="String">
+        <value />
+      </setting>
+      <setting name="Catalog" serializeAs="String">
+        <value>library</value>
+      </setting>
+      <setting name="AutoBackupDb" serializeAs="String">
+        <value>True</value>
+      </setting>
+      <setting name="ConnectionString" serializeAs="String">
+        <value />
+      </setting>
+    </ACMC_Library_System.Properties.Settings>
+  </userSettings>
+  <applicationSettings>
+    <ACMC_Library_System.Properties.Settings>
+      <setting name="RenewPeriodInDay" serializeAs="String">
+        <value>14</value>
+      </setting>
+      <setting name="FinesPerWeek" serializeAs="String">
+        <value>0.5</value>
+      </setting>
+      <setting name="LibMemberId" serializeAs="String">
+        <value>19</value>
+      </setting>
+      <setting name="LibMemberBarcode" serializeAs="String">
+        <value>M000001</value>
+      </setting>
+      <setting name="DefaultQuotaPerMember" serializeAs="String">
+        <value>2</value>
+      </setting>
+    </ACMC_Library_System.Properties.Settings>
+  </applicationSettings>
+</configuration>

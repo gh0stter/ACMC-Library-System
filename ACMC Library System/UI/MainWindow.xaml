@@ -666,7 +666,7 @@
                     </Rectangle>
                     <Rectangle Margin="478,7,0,0" Stroke="#FFC9C1C1" HorizontalAlignment="Left"
                                VerticalAlignment="Top" Width="1" Height="20" />
-                    <Rectangle x:Name="IconMemberEditMode" Width="20" Height="20" Margin="484,7,0,0"
+                    <Rectangle x:Name="IconMemberEditMode" Width="21" Height="21" Margin="484,7,0,0"
                                ToolTip="Edit Member" VerticalAlignment="Top" HorizontalAlignment="Left"
                                MouseLeftButtonUp="MemberEditModeIconClick"
                                Style="{StaticResource FunctionIconStyle}"
@@ -717,7 +717,7 @@
                     <TextBox x:Name="TbMemberBarcode" Height="25" Margin="1030,45,0,0" VerticalAlignment="Top"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
                              Text="{Binding SelectedMember.barcode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             IsEnabled="{Binding IsMemberEditMode, Mode=OneWay}"
+                             IsReadOnly="{Binding IsMemberEditMode, Mode=OneWay, Converter={StaticResource InvertBool}}"
                              HorizontalAlignment="Left" Width="150" />
                     <TextBox x:Name="TbFirstNameCh" Height="25" Margin="745,80,0,0" VerticalAlignment="Top"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
@@ -1021,7 +1021,6 @@
                              Height="25" Margin="790,45,0,0"
                              Text="{Binding SelectedItem.barcode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              IsReadOnly="{Binding IsAddingNewItem, Mode=OneWay, Converter={StaticResource InvertBool}}"
-                             IsEnabled="{Binding IsItemEditMode, Mode=OneWay}"
                              VerticalAlignment="Top" HorizontalAlignment="Left" Width="150" />
                     <TextBox x:Name="TbItemCode"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
