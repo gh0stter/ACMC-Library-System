@@ -102,19 +102,19 @@
         <GroupBox x:Name="Business" Header="Business Rules" HorizontalAlignment="Left" Margin="10,255,0,0" VerticalAlignment="Top" Height="140" Width="500">
             <Grid>
                 <Label Content="Default Renew Period (Day): " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="TbRenewPeriodInDay" Text="{Binding RenewPeriodInDay}" 
+                <TextBox x:Name="TbRenewPeriodInDay" Text="{Binding RenewPeriodInDay, Mode=OneTime}" 
                  controls:ControlsHelper.MouseOverBorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
                  metro:ControlsHelper.FocusBorderBrush="#55acee"
                  HorizontalAlignment="Left" Height="23" Margin="190,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="288" IsEnabled="False"/>
 
                 <Label Content="Fines Per Week ($): " HorizontalAlignment="Left" Margin="10,42,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="TbFinesPerWeek" Text="{Binding FinesPerWeek}" 
+                <TextBox x:Name="TbFinesPerWeek" Text="{Binding FinesPerWeek, Mode=OneTime}" 
                  controls:ControlsHelper.MouseOverBorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
                  metro:ControlsHelper.FocusBorderBrush="#55acee"
                  HorizontalAlignment="Left" Height="23" Margin="190,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="288" IsEnabled="False"/>
 
                 <Label Content="Default Quota Per Member: " HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="TbDefaultQuotaPerMember" Text="{Binding DefaultQuotaPerMember}" 
+                <TextBox x:Name="TbDefaultQuotaPerMember" Text="{Binding DefaultQuotaPerMember, Mode=OneTime}" 
                  controls:ControlsHelper.MouseOverBorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
                  metro:ControlsHelper.FocusBorderBrush="#55acee"
                  HorizontalAlignment="Left" Height="23" Margin="190,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="288" IsEnabled="False"/>
