@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Deployment.Application;
 using System.Linq;
+using System.Windows.Media;
 using ACMC_Library_System.DbModels;
 using NLog;
 using ACMC_Library_System.Supports;
@@ -59,6 +60,7 @@ namespace ACMC_Library_System.UI
         {
             InitializeComponent();
             DataContext = this;
+            VisualHelper.Dpi = VisualTreeHelper.GetDpi(this).PixelsPerDip;
             if (AppCheck())
             {
                 InitData();

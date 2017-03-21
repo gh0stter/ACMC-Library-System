@@ -171,14 +171,14 @@ namespace ACMC_Library_System.Supports
                 var brush = value < InitializingValue ? StartBrush : value < MidRangeValue ? MidRangeBrush : FinalizeBrush;
                 drawingContext.DrawEllipse(null, new Pen(new SolidColorBrush(BackGroundColor), thickness), _centerPoint, radiusX, radiusY);
                 drawingContext.DrawGeometry(brush, new Pen(), GetGeometry(value, maxValue, radiusX, radiusY, thickness, padding, margin));
-                var formatWords = new FormattedText(_percentString, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, TextTypeface, FinalFontSize, brush);
+                var formatWords = new FormattedText(_percentString, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, TextTypeface, FinalFontSize, brush, VisualHelper.Dpi);
                 var startPoint = new Point(_centerPoint.X - formatWords.Width / 2, _centerPoint.Y - formatWords.Height / 2);
                 drawingContext.DrawText(formatWords, startPoint);
             }
             else
             {
                 drawingContext.DrawEllipse(null, new Pen(FinalizeBrush, thickness), _centerPoint, radiusX, radiusY);
-                var formatWords = new FormattedText("100%", CultureInfo.CurrentCulture, FlowDirection.LeftToRight, TextTypeface, FinalFontSize, FinalizeBrush);
+                var formatWords = new FormattedText("100%", CultureInfo.CurrentCulture, FlowDirection.LeftToRight, TextTypeface, FinalFontSize, FinalizeBrush, VisualHelper.Dpi);
                 var startPoint = new Point(_centerPoint.X - formatWords.Width / 2, _centerPoint.Y - formatWords.Height / 2);
                 drawingContext.DrawText(formatWords, startPoint);
             }

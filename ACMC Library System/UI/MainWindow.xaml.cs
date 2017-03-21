@@ -28,7 +28,6 @@ namespace ACMC_Library_System.UI
     {
         #region Private Properties
 
-        private readonly WindowBlurEffect _blurWorker = new WindowBlurEffect();
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly string _currentDirectoryPath = Directory.GetCurrentDirectory();
         private const string NoPictureImgPath = @"\Resources\UI Icons\NoImg.png";
@@ -496,10 +495,10 @@ namespace ACMC_Library_System.UI
         /// </summary>
         private void OpenAppSettingsWindow()
         {
-            _blurWorker.ApplyEffect(this);
+            VisualHelper.ApplyBlurEffect(this);
             var appSettingWindow = new AppSettingWindow();
             appSettingWindow.ShowDialog();
-            _blurWorker.ClearEffect(this);
+            VisualHelper.ClearBlurEffect(this);
             Activate();
         }
 
@@ -605,12 +604,12 @@ namespace ACMC_Library_System.UI
                 }
                 else
                 {
-                    _blurWorker.ApplyEffect(this);
+                    VisualHelper.ApplyBlurEffect(this);
                     try
                     {
                         var searchResultWindow = new SearchResultWindow(searchResults);
                         searchResultWindow.ShowDialog();
-                        _blurWorker.ClearEffect(this);
+                        VisualHelper.ClearBlurEffect(this);
                     }
                     catch (Exception exception)
                     {
@@ -1114,8 +1113,7 @@ namespace ACMC_Library_System.UI
             {
                 return;
             }
-            int queryId;
-            if (!int.TryParse(dialogResult, out queryId))
+            if (!int.TryParse(dialogResult, out _))
             {
                 await this.ShowMessageAsync("Error", "Invalid barcode, please try again.");
                 return;
