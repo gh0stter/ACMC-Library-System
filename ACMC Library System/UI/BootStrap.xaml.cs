@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Deployment.Application;
 using System.Linq;
 using System.Windows.Media;
@@ -13,9 +12,9 @@ using ACMC_Library_System.Supports;
 namespace ACMC_Library_System.UI
 {
     /// <summary>
-    ///     Interaction logic for BootStrap.xaml
+    /// Interaction logic for BootStrap.xaml
     /// </summary>
-    public partial class BootStrap : Window, INotifyPropertyChanged
+    public partial class BootStrap : INotifyPropertyChanged
     {
         #region Public Properties
 
@@ -55,6 +54,11 @@ namespace ACMC_Library_System.UI
         }
 
         #endregion
+
+        private static Task<T> AsyncWrap<T>(T expression)
+        {
+            return Task.Run(() => expression);
+        }
 
         public BootStrap()
         {
@@ -109,10 +113,10 @@ namespace ACMC_Library_System.UI
         private async void InitData()
         {
             var stopWatch = Stopwatch.StartNew();
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 int taskSetp = 0;
-                const double taskCount = 11;
+                const double TaskCount = 11;
                 if (string.IsNullOrWhiteSpace(Properties.Settings.Default.ConnectionString))
                 {
                     Properties.Settings.Default.Reset();
@@ -121,7 +125,7 @@ namespace ACMC_Library_System.UI
                 }
                 using (var context = new LibraryDb())
                 {
-                    Percentage = ++taskSetp / taskCount * 100;
+                    Percentage = ++taskSetp / TaskCount * 100;
                     if (_autoBackupDb)
                     {
                         try
@@ -137,33 +141,35 @@ namespace ACMC_Library_System.UI
                             Logger.Error(exception, "Unable to backup database.");
                         }
                     }
-                    Percentage = ++taskSetp / taskCount * 100;
-                    Cache.ItemCategories = context.item_category.ToList();
-                    Percentage = ++taskSetp / taskCount * 100;
-                    Cache.ItemClasses = context.item_class.ToList();
-                    Percentage = ++taskSetp / taskCount * 100;
-                    Cache.ItemStatuses = context.item_status.ToList();
-                    Percentage = ++taskSetp / taskCount * 100;
-                    Cache.Members = context.patron.ToList();
-                    Percentage = ++taskSetp / taskCount * 100;
-                    Cache.Items = context.item.ToList();
-                    Percentage = ++taskSetp / taskCount * 100;
-                    Cache.ActionHistories = context.action_history.OrderByDescending(i => i.id).Take(20).ToList();
-                    Percentage = ++taskSetp / taskCount * 100;
-                    foreach (var action in Cache.ActionHistories)
-                    {
-                        action.MemberName = Cache.Members.FirstOrDefault(i => i.id == action.patronid)?.DisplayNameTitle;
-                        action.ItemName = Cache.Items.FirstOrDefault(i => i.id == action.itemid)?.title;
-                        action.ActionType = action.action_type1.verb;
-                    }
-                    Percentage = ++taskSetp / taskCount * 100;
-                    Cache.ItemsShouldReturn = context.item.Where(i => i.due_date < DateTime.Today).OrderByDescending(i => i.due_date).Take(20).ToList();
-                    Percentage = ++taskSetp / taskCount * 100;
-                    foreach (var item in Cache.ItemsShouldReturn)
-                    {
-                        item.Borrower = Cache.Members.FirstOrDefault(i => i.id == item.patronid);
-                    }
-                    Percentage = ++taskSetp / taskCount * 100;
+                    Percentage = ++taskSetp / TaskCount * 100;
+                    Cache.ItemCategories = await AsyncWrap(context.item_category.ToList());
+                    Percentage = ++taskSetp / TaskCount * 100;
+                    Cache.ItemClasses = await AsyncWrap(context.item_class.ToList());
+                    Percentage = ++taskSetp / TaskCount * 100;
+                    Cache.ItemStatuses = await AsyncWrap(context.item_status.ToList());
+                    Percentage = ++taskSetp / TaskCount * 100;
+                    Cache.Members = await AsyncWrap(context.patron.ToList());
+                    Percentage = ++taskSetp / TaskCount * 100;
+                    Cache.Items = await AsyncWrap(context.item.ToList());
+                    Percentage = ++taskSetp / TaskCount * 100;
+                    Cache.ActionHistories = await AsyncWrap(context.action_history.OrderByDescending(i => i.id).Take(20).ToList());
+                    Percentage = ++taskSetp / TaskCount * 100;
+                    Parallel.ForEach(Cache.ActionHistories,
+                                     action =>
+                                     {
+                                         action.MemberName = Cache.Members.FirstOrDefault(i => i.id == action.patronid)?.DisplayNameTitle;
+                                         action.ItemName = Cache.Items.FirstOrDefault(i => i.id == action.itemid)?.title;
+                                         action.ActionType = ((action_type.ActionTypeEnum)action.action_type).ToString();
+                                     });
+                    Percentage = ++taskSetp / TaskCount * 100;
+                    Cache.ItemsShouldReturn = await AsyncWrap(context.item.Where(i => i.due_date < DateTime.Today).OrderByDescending(i => i.due_date).Take(20).ToList());
+                    Percentage = ++taskSetp / TaskCount * 100;
+                    Parallel.ForEach(Cache.ItemsShouldReturn,
+                                     item =>
+                                     {
+                                         item.Borrower = Cache.Members.FirstOrDefault(i => i.id == item.patronid);
+                                     });
+                    Percentage = ++taskSetp / TaskCount * 100;
                     _sqlConnected = true;
                 }
             });

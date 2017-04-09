@@ -682,9 +682,9 @@
                                   IsChecked="{Binding IsMemberEditMode, Mode=OneWay}" Effect="{StaticResource z-depth1}" />
                     <Rectangle Margin="450,35,10,0" Stroke="#FFC9C1C1" VerticalAlignment="Top" Height="1" />
                     <!--==================================================================================-->
-                    <Label Content="Member ID :" Margin="620,45,0,0" Height="26" VerticalAlignment="Top"
-                           HorizontalContentAlignment="Right" HorizontalAlignment="Left" Width="120" />
-                    <Label Content="Barcode :" Margin="905,45,0,0" Height="26" VerticalAlignment="Top"
+                    <Label Content="Member ID :" Margin="920,45,0,0" Height="26" VerticalAlignment="Top"
+                           HorizontalContentAlignment="Right" HorizontalAlignment="Left" Width="105" />
+                    <Label Content="Barcode :" Margin="620,45,0,0" Height="26" VerticalAlignment="Top"
                            HorizontalContentAlignment="Right" HorizontalAlignment="Left" Width="120" />
                     <Label Content="First Name CH :" Margin="620,80,0,0" Height="26" VerticalAlignment="Top"
                            HorizontalContentAlignment="Right" HorizontalAlignment="Left" Width="120" />
@@ -709,16 +709,16 @@
                     <Label Content="Expriy Date :" Margin="905,315,0,0" VerticalAlignment="Top" Height="26"
                            HorizontalContentAlignment="Right" Width="120" HorizontalAlignment="Left" />
 
-                    <TextBox x:Name="TbMemberId" Height="25" Margin="745,45,0,0" VerticalAlignment="Top"
+                    <TextBox x:Name="TbMemberId" Height="25" Margin="1030,45,0,0" VerticalAlignment="Top"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
                              Text="{Binding SelectedMember.id}" IsReadOnly="True"
                              IsEnabled="{Binding IsMemberEditMode, Mode=OneWay}"
-                             HorizontalAlignment="Left" Width="170" />
-                    <TextBox x:Name="TbMemberBarcode" Height="25" Margin="1030,45,0,0" VerticalAlignment="Top"
+                             HorizontalAlignment="Left" Width="150" />
+                    <TextBox x:Name="TbMemberBarcode" Height="25" Margin="745,45,0,0" VerticalAlignment="Top"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
                              Text="{Binding SelectedMember.barcode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              IsReadOnly="{Binding IsMemberEditMode, Mode=OneWay, Converter={StaticResource InvertBool}}"
-                             HorizontalAlignment="Left" Width="150" />
+                             HorizontalAlignment="Left" Width="170" />
                     <TextBox x:Name="TbFirstNameCh" Height="25" Margin="745,80,0,0" VerticalAlignment="Top"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
                              Text="{Binding SelectedMember.firstnames_ch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -1003,25 +1003,25 @@
                                   Effect="{StaticResource z-depth1}" />
                     <Rectangle Margin="450,35,10,0" Stroke="#FFC9C1C1" VerticalAlignment="Top" Height="1" />
                     <!--==================================================================================-->
-                    <Label Content="Item ID :" Margin="450,45,0,0" Height="26" VerticalAlignment="Top" Width="95"
+                    <Label Content="Item ID :" Margin="710,45,0,0" Height="26" VerticalAlignment="Top" Width="70"
                            HorizontalContentAlignment="Right" HorizontalAlignment="Left" />
-                    <Label Content="Barcode :" Margin="705,45,0,0" Height="26" VerticalAlignment="Top" Width="80"
+                    <Label Content="Barcode :" Margin="465,45,0,0" Height="26" VerticalAlignment="Top" Width="80"
                            HorizontalContentAlignment="Right" HorizontalAlignment="Left" />
                     <Label Content="Code :" Margin="955,45,0,0" Height="26" VerticalAlignment="Top" Width="70"
                            HorizontalContentAlignment="Right" HorizontalAlignment="Left" />
 
                     <TextBox x:Name="TbItemId"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
-                             Height="25" Margin="550,45,0,0" IsReadOnly="True"
+                             Height="25" Margin="785,45,0,0" IsReadOnly="True"
                              Text="{Binding SelectedItem.id, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              IsEnabled="{Binding IsItemEditMode, Mode=OneWay}"
                              VerticalAlignment="Top" HorizontalAlignment="Left" Width="155" />
                     <TextBox x:Name="TbItemBarcode"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
-                             Height="25" Margin="790,45,0,0"
+                             Height="25" Margin="550,45,0,0"
                              Text="{Binding SelectedItem.barcode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              IsReadOnly="{Binding IsAddingNewItem, Mode=OneWay, Converter={StaticResource InvertBool}}"
-                             VerticalAlignment="Top" HorizontalAlignment="Left" Width="150" />
+                             VerticalAlignment="Top" HorizontalAlignment="Left" Width="155" />
                     <TextBox x:Name="TbItemCode"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
                              Height="25" Margin="1030,45,0,0"

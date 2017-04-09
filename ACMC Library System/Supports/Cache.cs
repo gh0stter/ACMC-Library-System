@@ -16,33 +16,40 @@ namespace ACMC_Library_System.Supports
         public static List<action_history> ActionHistories { get; set; }
         public static List<item> ItemsShouldReturn { get; set; }
 
+        private static Task<T> AsyncWrap<T>(T expression)
+        {
+            return Task.Run(() => expression);
+        }
+
         /// <summary>
         /// Refresh all cache data from database
         /// </summary>
         /// <returns></returns>
         public static async Task RefreshAllCache()
         {
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 using (var context = new LibraryDb())
                 {
-                    ItemCategories = context.item_category.ToList();
-                    ItemClasses = context.item_class.ToList();
-                    ItemStatuses = context.item_status.ToList();
-                    Members = context.patron.ToList();
-                    Items = context.item.ToList();
-                    ActionHistories = context.action_history.OrderByDescending(i => i.id).Take(20).ToList();
-                    foreach (var action in ActionHistories)
-                    {
-                        action.MemberName = Members.FirstOrDefault(i => i.id == action.patronid)?.DisplayNameTitle;
-                        action.ItemName = Items.FirstOrDefault(i => i.id == action.itemid)?.title;
-                        action.ActionType = action.action_type1.verb;
-                    }
+                    ItemCategories = await AsyncWrap(context.item_category.ToList());
+                    ItemClasses = await AsyncWrap(context.item_class.ToList());
+                    ItemStatuses = await AsyncWrap(context.item_status.ToList());
+                    Members = await AsyncWrap(context.patron.ToList());
+                    Items = await AsyncWrap(context.item.ToList());
+                    ActionHistories = await AsyncWrap(context.action_history.OrderByDescending(i => i.id).Take(20).ToList());
+                    Parallel.ForEach(ActionHistories,
+                                     action =>
+                                     {
+                                         action.MemberName = Members.FirstOrDefault(i => i.id == action.patronid)?.DisplayNameTitle;
+                                         action.ItemName = Items.FirstOrDefault(i => i.id == action.itemid)?.title;
+                                         action.ActionType = ((action_type.ActionTypeEnum)action.action_type).ToString();
+                                     });
                     ItemsShouldReturn = Items.Where(i => i.due_date < DateTime.Today).OrderByDescending(i => i.due_date).ToList();
-                    foreach (var item in ItemsShouldReturn)
-                    {
-                        item.Borrower = Members.FirstOrDefault(i => i.id == item.patronid);
-                    }
+                    Parallel.ForEach(ItemsShouldReturn,
+                                     item =>
+                                     {
+                                         item.Borrower = Members.FirstOrDefault(i => i.id == item.patronid);
+                                     });
                 }
             });
         }
@@ -53,24 +60,26 @@ namespace ACMC_Library_System.Supports
         /// <returns></returns>
         public static async Task RefreshMainCache()
         {
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 using (var context = new LibraryDb())
                 {
-                    Members = context.patron.ToList();
-                    Items = context.item.ToList();
-                    ActionHistories = context.action_history.OrderByDescending(i => i.id).Take(20).ToList();
-                    foreach (var action in ActionHistories)
-                    {
-                        action.MemberName = Members.FirstOrDefault(i => i.id == action.patronid)?.DisplayNameTitle;
-                        action.ItemName = Items.FirstOrDefault(i => i.id == action.itemid)?.title;
-                        action.ActionType = action.action_type1.verb;
-                    }
-                    ItemsShouldReturn = Items.Where(i => i.due_date < DateTime.Today).OrderByDescending(i => i.due_date).ToList();
-                    foreach (var item in ItemsShouldReturn)
-                    {
-                        item.Borrower = Members.FirstOrDefault(i => i.id == item.patronid);
-                    }
+                    Members = await AsyncWrap(context.patron.ToList());
+                    Items = await AsyncWrap(context.item.ToList());
+                    ActionHistories = await AsyncWrap(context.action_history.OrderByDescending(i => i.id).Take(20).ToList());
+                    Parallel.ForEach(ActionHistories,
+                                     action =>
+                                     {
+                                         action.MemberName = Members.FirstOrDefault(i => i.id == action.patronid)?.DisplayNameTitle;
+                                         action.ItemName = Items.FirstOrDefault(i => i.id == action.itemid)?.title;
+                                         action.ActionType = ((action_type.ActionTypeEnum)action.action_type).ToString();
+                                     });
+                    ItemsShouldReturn = await AsyncWrap(Items.Where(i => i.due_date < DateTime.Today).OrderByDescending(i => i.due_date).ToList());
+                    Parallel.ForEach(ItemsShouldReturn,
+                                     item =>
+                                     {
+                                         item.Borrower = Members.FirstOrDefault(i => i.id == item.patronid);
+                                     });
                 }
             });
         }

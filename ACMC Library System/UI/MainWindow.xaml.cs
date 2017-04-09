@@ -188,12 +188,13 @@ namespace ACMC_Library_System.UI
             get
             {
                 var actions = Cache.ActionHistories.OrderByDescending(i => i.id).Take(20).ToList();
-                foreach (var action in actions)
-                {
-                    action.MemberName = Cache.Members.FirstOrDefault(i => i.id == action.patronid)?.DisplayNameTitle;
-                    action.ItemName = Cache.Items.FirstOrDefault(i => i.id == action.itemid)?.title;
-                    action.ActionType = action.action_type1.verb;
-                }
+                Parallel.ForEach(actions,
+                                 action =>
+                                 {
+                                     action.MemberName = Cache.Members.FirstOrDefault(i => i.id == action.patronid)?.DisplayNameTitle;
+                                     action.ItemName = Cache.Items.FirstOrDefault(i => i.id == action.itemid)?.title;
+                                     action.ActionType = ((action_type.ActionTypeEnum)action.action_type).ToString();
+                                 });
                 return actions;
             }
         }
@@ -203,10 +204,11 @@ namespace ACMC_Library_System.UI
             get
             {
                 var items = Cache.Items.Where(i => i.due_date < DateTime.Today).OrderByDescending(i => i.due_date).Take(20).ToList();
-                foreach (var item in items)
-                {
-                    item.Borrower = Cache.Members.FirstOrDefault(i => i.id == item.patronid);
-                }
+                Parallel.ForEach(items,
+                                 item =>
+                                 {
+                                     item.Borrower = Cache.Members.FirstOrDefault(i => i.id == item.patronid);
+                                 });
                 return items;
             }
         }
@@ -533,13 +535,13 @@ namespace ACMC_Library_System.UI
                     using (var context = new LibraryDb())
                     {
                         memberSqlResults = (from member in context.patron
-                                         where member.id.ToString().Contains(searchString) ||
-                                               member.barcode.Contains(searchString) ||
-                                               member.firstnames_en.Contains(searchString) ||
-                                               member.firstnames_ch.Contains(searchString) ||
-                                               member.surname_en.Contains(searchString) ||
-                                               member.surname_ch.Contains(searchString)
-                                         select member).ToList();
+                                            where member.id.ToString().Contains(searchString) ||
+                                                  member.barcode.Contains(searchString) ||
+                                                  member.firstnames_en.Contains(searchString) ||
+                                                  member.firstnames_ch.Contains(searchString) ||
+                                                  member.surname_en.Contains(searchString) ||
+                                                  member.surname_ch.Contains(searchString)
+                                            select member).ToList();
                     }
                 });
                 var itemSearchTask = Task.Run(() =>
@@ -547,11 +549,11 @@ namespace ACMC_Library_System.UI
                     using (var context = new LibraryDb())
                     {
                         itemSqlResult = (from item in context.item
-                                      where item.id.ToString().Contains(searchString) ||
-                                            item.title.Contains(searchString) ||
-                                            item.isbn.Contains(searchString) ||
-                                            item.barcode.Contains(searchString)
-                                      select item).ToList();
+                                         where item.id.ToString().Contains(searchString) ||
+                                               item.title.Contains(searchString) ||
+                                               item.isbn.Contains(searchString) ||
+                                               item.barcode.Contains(searchString)
+                                         select item).ToList();
                     }
                 });
                 await Task.WhenAll(memberSearchTask, itemSearchTask);
