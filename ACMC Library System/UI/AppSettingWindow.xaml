@@ -8,7 +8,7 @@
                    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                    mc:Ignorable="d"
                    Title="App Settings" 
-                   Height="535" Width="525" 
+                   Height="573" Width="525" 
                    ResizeMode="NoResize"
                    ShowInTaskbar="False"
                    WindowStartupLocation="CenterScreen">
@@ -95,32 +95,38 @@
                          Margin="144,132,0,0" VerticalAlignment="Top" Width="334"/>
 
                 <Button x:Name="BtnTest" Content="Test Connection" 
-                        HorizontalAlignment="Left" Margin="371,163,0,0" VerticalAlignment="Top" Width="107" 
+                        HorizontalAlignment="Right" Margin="0,0,10,2" VerticalAlignment="Bottom" Width="110" 
                         Click="BtnTest_Click" Height="35"/>
             </Grid>
         </GroupBox>
-        <GroupBox x:Name="Business" Header="Business Rules" HorizontalAlignment="Left" Margin="10,255,0,0" VerticalAlignment="Top" Height="140" Width="500">
+        <GroupBox x:Name="Business" Header="Business Rules" HorizontalAlignment="Left" Margin="10,255,0,0" VerticalAlignment="Top" Height="170" Width="500">
             <Grid>
-                <Label Content="Default Renew Period (Day): " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="TbRenewPeriodInDay" Text="{Binding RenewPeriodInDay, Mode=OneTime}" 
+                <Label Content="Default Member Renew Period (Year): " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="TbMemberRenewPeriodInYear" Text="{Binding MemberRenewPeriodInYear, Mode=OneTime}" 
+                         controls:ControlsHelper.MouseOverBorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
+                         controls:ControlsHelper.FocusBorderBrush="#55acee"
+                         HorizontalAlignment="Left" Height="23" Margin="245,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="233" IsEnabled="False"/>
+
+                <Label Content="Default Item Renew Period (Day): " HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="TbItemRenewPeriodInDay" Text="{Binding ItemRenewPeriodInDay, Mode=OneTime}" 
                  controls:ControlsHelper.MouseOverBorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
                  metro:ControlsHelper.FocusBorderBrush="#55acee"
-                 HorizontalAlignment="Left" Height="23" Margin="190,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="288" IsEnabled="False"/>
+                 HorizontalAlignment="Left" Height="23" Margin="245,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="233" IsEnabled="False"/>
 
-                <Label Content="Fines Per Week ($): " HorizontalAlignment="Left" Margin="10,42,0,0" VerticalAlignment="Top"/>
+                <Label Content="Fines Per Week ($): " HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top"/>
                 <TextBox x:Name="TbFinesPerWeek" Text="{Binding FinesPerWeek, Mode=OneTime}" 
                  controls:ControlsHelper.MouseOverBorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
                  metro:ControlsHelper.FocusBorderBrush="#55acee"
-                 HorizontalAlignment="Left" Height="23" Margin="190,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="288" IsEnabled="False"/>
+                 HorizontalAlignment="Left" Height="23" Margin="245,72,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="233" IsEnabled="False"/>
 
-                <Label Content="Default Quota Per Member: " HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
+                <Label Content="Default Quota Per Member: " HorizontalAlignment="Left" Margin="10,104,0,0" VerticalAlignment="Top"/>
                 <TextBox x:Name="TbDefaultQuotaPerMember" Text="{Binding DefaultQuotaPerMember, Mode=OneTime}" 
                  controls:ControlsHelper.MouseOverBorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
                  metro:ControlsHelper.FocusBorderBrush="#55acee"
-                 HorizontalAlignment="Left" Height="23" Margin="190,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="288" IsEnabled="False"/>
+                 HorizontalAlignment="Left" Height="23" Margin="245,103,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="233" IsEnabled="False"/>
             </Grid>
         </GroupBox>
-        <GroupBox x:Name="Database" Header="Database Settings" HorizontalAlignment="Left" Margin="10,400,0,0" VerticalAlignment="Top" Height="60" Width="500">
+        <GroupBox x:Name="Database" Header="Database Settings" HorizontalAlignment="Left" Margin="9,430,0,0" VerticalAlignment="Top" Height="60" Width="500">
             <Grid>
                 <CheckBox x:Name="CbAutoBackUp" 
                           Margin="10,0,0,0" 
@@ -133,7 +139,7 @@
         <TextBlock Foreground="#8899A6" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="12" Width="42" Margin="10,0,0,10">Version :</TextBlock>
         <TextBlock Foreground="#8899A6" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="52,0,0,10" Height="12" Width="50" Text="{Binding AppVersion, Mode=OneTime}" />
 
-        <Button x:Name="BtnSave" Content="Save" HorizontalAlignment="Left" Margin="305,465,0,0" VerticalAlignment="Top" Click="BtnSave_Click" Height="35" Width="100" IsDefault="True"/>
-        <Button x:Name="BtnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="410,465,0,0" VerticalAlignment="Top" Click="BtnCancel_Click" Height="35" Width="100"/>
+        <Button x:Name="BtnSave" Content="Save" HorizontalAlignment="Right" Margin="0,0,120,10" VerticalAlignment="Bottom" Click="BtnSave_Click" Height="35" Width="100" IsDefault="True"/>
+        <Button x:Name="BtnCancel" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Click="BtnCancel_Click" Height="35" Width="100" HorizontalContentAlignment="Center"/>
     </Grid>
 </metro:MetroWindow>

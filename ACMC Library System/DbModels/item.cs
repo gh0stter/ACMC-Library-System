@@ -99,5 +99,30 @@ namespace ACMC_Library_System.DbModels
         public double Fine => due_date == null || due_date > DateTime.Today ? 0 : Math.Ceiling(DateTime.Today.Subtract(due_date.GetValueOrDefault()).Days / 7d) * BusinessRules.FinesPerWeek;
 
         #endregion
+
+        #region Extend Method
+
+        public void Return()
+        {
+            this.Borrower = null;
+            this.patronid = null;
+            this.due_date = null;
+            this.status = (int)item_status.StatusEnum.In;
+        }
+
+        public void Renew()
+        {
+            this.due_date = DateTime.Today.AddDays(BusinessRules.ItemRenewPeriodInDay);
+        }
+
+        public void IssueToMember(patron member)
+        {
+            this.Borrower = member;
+            this.patronid = member.id;
+            this.due_date = DateTime.Today.AddDays(BusinessRules.ItemRenewPeriodInDay);
+            this.status = (int)item_status.StatusEnum.Out;
+        }
+
+        #endregion
     }
 }

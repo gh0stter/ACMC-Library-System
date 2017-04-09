@@ -53,7 +53,7 @@ namespace ACMC_Library_System.UI
 
         public string UserName
         {
-            get { return _userName; }
+            get => _userName;
             set
             {
                 _userName = value;

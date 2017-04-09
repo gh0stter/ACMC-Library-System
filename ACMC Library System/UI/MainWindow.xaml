@@ -361,10 +361,10 @@
                             IsDefault="True"
                             Click="BtnSearch_Click" 
                             Cursor="Hand"
-                            VerticalAlignment="Top" HorizontalAlignment="Center"
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Center"
                             Width="170" Height="34" 
                             Background="White" />
-
                     <Grid Height="50" Width="240">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="80" />
@@ -865,7 +865,7 @@
                                                 <Rectangle Width="20" Height="20"
                                                        VerticalAlignment="Center" HorizontalAlignment="Center"
                                                        ToolTip="Return Item"
-                                                       MouseLeftButtonUp="BtnReturnItem_Click" 
+                                                       MouseLeftButtonUp="BtnMemberReturnItem_Click" 
                                                        Style="{StaticResource GridIconStyle}"
                                                        Cursor="Hand" Margin="0,0,5,0">
                                                     <Rectangle.OpacityMask>
@@ -1279,11 +1279,11 @@
                                 Cursor="Hand"
                                 IsEnabled="{Binding HasBorrower}"
                                 Click="BtnRenewItem_Click" />
-                        <Button x:Name="BtnReturnBook" Margin="625,173,0,0" Content="Return Item" Background="White"
+                        <Button x:Name="BtnReturnItem" Margin="625,173,0,0" Content="Return Item" Background="White"
                                 Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="105"
                                 Cursor="Hand"
                                 IsEnabled="{Binding HasBorrower}"
-                                Click="BtnReturnBook_Click" />
+                                Click="BtnReturnItem_Click" />
                     </Grid>
                     <Grid x:Name="ItemNormalNoBorrowerMode" Margin="450,435,0,0" Height="233" Width="730" VerticalAlignment="Top" HorizontalAlignment="Left">
                         <Grid.Visibility>

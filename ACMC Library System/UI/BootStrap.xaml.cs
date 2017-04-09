@@ -21,7 +21,7 @@ namespace ACMC_Library_System.UI
 
         public double Percentage
         {
-            get { return _percentage; }
+            get => _percentage;
             set
             {
                 if (Math.Abs(value - _percentage) < 0.0001)

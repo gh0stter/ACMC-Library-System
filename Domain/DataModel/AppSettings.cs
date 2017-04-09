@@ -12,7 +12,7 @@ namespace DomainModels.DataModel
         public const string Password = "Password";
         public const string Catalog = "Catalog";
         public const string AutoBackupDb = "AutoBackupDb";
-        public static readonly Dictionary<int, string> SqlAuthType = new Dictionary<int, string>()
+        public static readonly Dictionary<int, string> SqlAuthType = new Dictionary<int, string>
         {
             { 0, "Windows Authentication"},
             { 1, "SQL Authentication" }

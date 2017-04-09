@@ -41,7 +41,8 @@ namespace ACMC_Library_System
 
             //ini business rules
             var appSettings = ACMC_Library_System.Properties.Settings.Default;
-            BusinessRules.RenewPeriodInDay = appSettings.RenewPeriodInDay;
+            BusinessRules.MemberRenewPeriodInYEar = appSettings.MemberRenewPeriodInYear;
+            BusinessRules.ItemRenewPeriodInDay = appSettings.ItemRenewPeriodInDay;
             BusinessRules.DefaultQuotaPerMember = appSettings.DefaultQuotaPerMember;
             BusinessRules.FinesPerWeek = appSettings.FinesPerWeek;
             BusinessRules.LibMemberBarcode = appSettings.LibMemberBarcode;

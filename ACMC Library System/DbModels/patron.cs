@@ -152,5 +152,19 @@ namespace ACMC_Library_System.DbModels
         public double TotalFine => BorrowingItems == null || BorrowingItems.Count == 0 ? 0 : BorrowingItems.Sum(item => item.Fine);
 
         #endregion
+
+        #region Extend Method
+
+        public void Renew()
+        {
+            this.expiry = DateTime.Today.AddYears(BusinessRules.MemberRenewPeriodInYEar);
+        }
+
+        public void BorrowItem(item itemToBorrow)
+        {
+            this.BorrowingItems.Add(itemToBorrow);
+        }
+
+        #endregion
     }
 }

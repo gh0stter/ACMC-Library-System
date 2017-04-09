@@ -14,5 +14,18 @@ namespace ACMC_Library_System.DbModels
         [Required]
         [StringLength(100)]
         public string status_text { get; set; }
+
+        #region Extend property
+
+        public enum StatusEnum
+        {
+            In,
+            Out,
+            Lost,
+            OnOrder,
+            ForSale
+        }
+
+        #endregion
     }
 }

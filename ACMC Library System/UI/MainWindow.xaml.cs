@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using System.Transactions;
 using System.Windows;
 using System.Windows.Controls;
@@ -36,6 +38,11 @@ namespace ACMC_Library_System.UI
         private const string ItemCdImgPath = @"\Resources\UI Icons\CD.png";
         private const string ItemTapeImgPath = @"\Resources\UI Icons\Tape.png";
 
+        private readonly ExecutionDataflowBlockOptions _tplOption = new ExecutionDataflowBlockOptions
+        {
+            BoundedCapacity = 1000,
+            MaxDegreeOfParallelism = 8
+        };
         private readonly MetroDialogSettings _binarySelectionDialogSettings = new MetroDialogSettings
         {
             AffirmativeButtonText = "Yes",
@@ -98,7 +105,7 @@ namespace ACMC_Library_System.UI
 
         public patron SelectedMember
         {
-            get { return _selectedMember; }
+            get => _selectedMember;
             set
             {
                 if (value == null || AreSameMember(value, _selectedMember))
@@ -123,7 +130,7 @@ namespace ACMC_Library_System.UI
 
         public bool IsMemberEditMode
         {
-            get { return _isMemberEditingMode; }
+            get => _isMemberEditingMode;
             set
             {
                 _isMemberEditingMode = value;
@@ -133,7 +140,7 @@ namespace ACMC_Library_System.UI
 
         public item SelectedItem
         {
-            get { return _selectedItem; }
+            get => _selectedItem;
             set
             {
                 if (value == null || AreSameItem(value, _selectedItem))
@@ -158,7 +165,7 @@ namespace ACMC_Library_System.UI
 
         public bool IsItemEditMode
         {
-            get { return _isItemEditingMode; }
+            get => _isItemEditingMode;
             set
             {
                 _isItemEditingMode = value;
@@ -168,7 +175,7 @@ namespace ACMC_Library_System.UI
 
         public bool IsAddingNewItem
         {
-            get { return _isAddingNewItem; }
+            get => _isAddingNewItem;
             set
             {
                 _isAddingNewItem = value;
@@ -514,67 +521,91 @@ namespace ACMC_Library_System.UI
             }
             // show the search results
             PrSearchingProgress.Visibility = Visibility.Visible;
+            var memberSqlResults = new List<patron>();
+            var itemSqlResult = new List<item>();
+            var memberSearchResults = new ConcurrentBag<SearchResult>();
+            var itemSearchResults = new ConcurrentBag<SearchResult>();
             var searchResults = new List<SearchResult>();
             try
             {
-                //await Task.Delay(100);
-                await Task.Run(() =>
+                var memberSearchTask = Task.Run(() =>
                 {
                     using (var context = new LibraryDb())
                     {
-                        var memberSearchResult = from member in context.patron
-                                                 where member.id.ToString().Contains(searchString) ||
-                                                       member.firstnames_en.Contains(searchString) ||
-                                                       member.firstnames_ch.Contains(searchString) ||
-                                                       member.surname_en.Contains(searchString) ||
-                                                       member.surname_ch.Contains(searchString)
-                                                 select member;
-                        foreach (var result in memberSearchResult)
-                        {
-                            var temp = new SearchResult
-                            {
-                                RecordType = SearchResultTypes.Member,
-                                MemberId = result.id,
-                                FirstNameCh = result.firstnames_ch,
-                                LastNameCh = result.surname_ch,
-                                FirstNameEn = result.firstnames_en,
-                                LastNameEn = result.surname_en,
-                                Img = (result.picture == null || result.picture.Length == 0) ? GetImageBytes(_currentDirectoryPath + NoPictureImgPath) : result.picture
-                            };
-                            if (!string.IsNullOrWhiteSpace(result.DisplayNameCh))
-                            {
-                                temp.FirstDisplayInfo = result.DisplayNameCh;
-                            }
-                            if (!string.IsNullOrWhiteSpace(result.DisplayNameEn))
-                            {
-                                temp.SecondDisplayInfo = result.DisplayNameEn;
-                            }
-                            searchResults.Add(temp);
-                        }
-
-                        var itemSearchResult = from item in context.item
-                                               where item.id.ToString().Contains(searchString) ||
-                                                     item.title.Contains(searchString) ||
-                                                     item.isbn.Contains(searchString) ||
-                                                     item.barcode.Contains(searchString)
-                                               select item;
-                        foreach (var result in itemSearchResult)
-                        {
-                            var temp = new SearchResult
-                            {
-                                RecordType = SearchResultTypes.Item,
-                                Img = GetImageBytes(GetItemImgPath(result.item_subclass)),
-                                ItemId = result.id,
-                                Title = result.title,
-                                Barcode = result.barcode,
-                                Isbn = result.isbn
-                            };
-                            temp.FirstDisplayInfo = temp.Title;
-                            temp.SecondDisplayInfo = $"ID: {temp.ItemId} Barcode: {temp.Barcode}";
-                            searchResults.Add(temp);
-                        }
+                        memberSqlResults = (from member in context.patron
+                                         where member.id.ToString().Contains(searchString) ||
+                                               member.barcode.Contains(searchString) ||
+                                               member.firstnames_en.Contains(searchString) ||
+                                               member.firstnames_ch.Contains(searchString) ||
+                                               member.surname_en.Contains(searchString) ||
+                                               member.surname_ch.Contains(searchString)
+                                         select member).ToList();
                     }
                 });
+                var itemSearchTask = Task.Run(() =>
+                {
+                    using (var context = new LibraryDb())
+                    {
+                        itemSqlResult = (from item in context.item
+                                      where item.id.ToString().Contains(searchString) ||
+                                            item.title.Contains(searchString) ||
+                                            item.isbn.Contains(searchString) ||
+                                            item.barcode.Contains(searchString)
+                                      select item).ToList();
+                    }
+                });
+                await Task.WhenAll(memberSearchTask, itemSearchTask);
+                var mapMemberResultToSearchResult = new ActionBlock<patron>(member =>
+                {
+                    var temp = new SearchResult
+                    {
+                        RecordType = SearchResultTypes.Member,
+                        MemberId = member.id,
+                        FirstNameCh = member.firstnames_ch,
+                        LastNameCh = member.surname_ch,
+                        FirstNameEn = member.firstnames_en,
+                        LastNameEn = member.surname_en,
+                        Img = (member.picture == null || member.picture.Length == 0) ? GetImageBytes(_currentDirectoryPath + NoPictureImgPath) : member.picture
+                    };
+                    if (!string.IsNullOrWhiteSpace(member.DisplayNameCh))
+                    {
+                        temp.FirstDisplayInfo = member.DisplayNameCh;
+                    }
+                    if (!string.IsNullOrWhiteSpace(member.DisplayNameEn))
+                    {
+                        temp.SecondDisplayInfo = member.DisplayNameEn;
+                    }
+                    memberSearchResults.Add(temp);
+                }, _tplOption);
+                var mapItemResultToSearchResult = new ActionBlock<item>(item =>
+                {
+                    var temp = new SearchResult
+                    {
+                        RecordType = SearchResultTypes.Item,
+                        Img = GetImageBytes(GetItemImgPath(item.item_subclass)),
+                        ItemId = item.id,
+                        Title = item.title,
+                        Barcode = item.barcode,
+                        Isbn = item.isbn
+                    };
+                    temp.FirstDisplayInfo = temp.Title;
+                    temp.SecondDisplayInfo = $"ID: {temp.ItemId} Barcode: {temp.Barcode}";
+                    itemSearchResults.Add(temp);
+                }, _tplOption);
+                foreach (var member in memberSqlResults)
+                {
+                    await mapMemberResultToSearchResult.SendAsync(member);
+                }
+                foreach (var item in itemSqlResult)
+                {
+                    await mapItemResultToSearchResult.SendAsync(item);
+                }
+                mapMemberResultToSearchResult.Complete();
+                mapItemResultToSearchResult.Complete();
+                await mapMemberResultToSearchResult.Completion;
+                await mapItemResultToSearchResult.Completion;
+                searchResults.AddRange(memberSearchResults.OrderBy(i => i.MemberId));
+                searchResults.AddRange(itemSearchResults.OrderBy(i => i.ItemId));
             }
             catch (Exception ex)
             {
@@ -591,11 +622,13 @@ namespace ACMC_Library_System.UI
                     switch (searchResults[0].RecordType)
                     {
                         case SearchResultTypes.Member:
+                            TbMemberFilter.Text = string.Empty;
                             int memberId = searchResults[0].MemberId;
                             TabMember.IsSelected = true;
                             ScrollGridToIndex(DgMemberGrid, MemberList.FindIndex(member => member.id == memberId));
                             break;
                         case SearchResultTypes.Item:
+                            TbItemFilter.Text = string.Empty;
                             int itemId = searchResults[0].ItemId;
                             TabItem.IsSelected = true;
                             ScrollGridToIndex(DgItemGrid, ItemList.FindIndex(item => item.id == itemId));
@@ -1049,7 +1082,7 @@ namespace ACMC_Library_System.UI
                         {
                             throw new EntryPointNotFoundException("Unable to find selected item.");
                         }
-                        itemInDb.due_date = DateTime.Today.AddDays(BusinessRules.RenewPeriodInDay);
+                        itemInDb.Renew();
                         AddActionHistory(context, SelectedMember.id, itemInDb.id, action_type.ActionTypeEnum.Renew);
                         context.SaveChanges();
                         SelectedMember.BorrowingItems = context.item.Where(item => item.patronid == SelectedMember.id).ToList();
@@ -1068,7 +1101,7 @@ namespace ACMC_Library_System.UI
         }
 
         //Return selected borrowed item
-        private async void BtnReturnItem_Click(object sender, RoutedEventArgs routedEventArgs)
+        private async void BtnMemberReturnItem_Click(object sender, RoutedEventArgs routedEventArgs)
         {
             try
             {
@@ -1087,7 +1120,7 @@ namespace ACMC_Library_System.UI
                         {
                             throw new EntryPointNotFoundException("Unable to find selected item.");
                         }
-                        itemInDb.patronid = null;
+                        itemInDb.Return();
                         AddActionHistory(context, SelectedMember.id, itemInDb.id, action_type.ActionTypeEnum.Return);
                         context.SaveChanges();
                         SelectedMember.BorrowingItems = context.item.Where(item => item.patronid == SelectedMember.id).ToList();
@@ -1133,9 +1166,8 @@ namespace ACMC_Library_System.UI
                     {
                         using (var transactionScope = new TransactionScope())
                         {
-                            itemInDb.patronid = SelectedMember.id;
-                            itemInDb.due_date = DateTime.Today.AddDays(BusinessRules.RenewPeriodInDay);
-                            SelectedMember.BorrowingItems.Add(itemInDb);
+                            itemInDb.IssueToMember(SelectedMember);
+                            SelectedMember.BorrowItem(itemInDb);
                             AddActionHistory(context, SelectedMember.id, itemInDb.id, action_type.ActionTypeEnum.Lend);
                             context.SaveChanges();
                             transactionScope.Complete();
@@ -1197,7 +1229,7 @@ namespace ACMC_Library_System.UI
                         {
                             throw new EntryPointNotFoundException("Unable to find selected Member.");
                         }
-                        memberInDb.expiry = DateTime.Today.AddYears(1);
+                        memberInDb.Renew();
                         context.SaveChanges();
                         transactionScope.Complete();
                     }
@@ -1589,8 +1621,7 @@ namespace ACMC_Library_System.UI
                     }
                     using (var transactionScope = new TransactionScope())
                     {
-                        itemInDb.patronid = memberInDb.id;
-                        itemInDb.due_date = DateTime.Today.AddDays(BusinessRules.RenewPeriodInDay);
+                        itemInDb.IssueToMember(memberInDb);
                         AddActionHistory(context, memberInDb.id, itemInDb.id, action_type.ActionTypeEnum.Lend);
                         context.SaveChanges();
                         transactionScope.Complete();
@@ -1646,8 +1677,8 @@ namespace ACMC_Library_System.UI
                         {
                             throw new ArgumentException($"This item is lent to a Member ID: {itemInDb.patronid} that no longer exist in the database, please return this item instead.");
                         }
-                        itemInDb.due_date = DateTime.Today.AddDays(BusinessRules.RenewPeriodInDay);
-                        SelectedItem.due_date = itemInDb.due_date;
+                        itemInDb.Renew();
+                        SelectedItem.Renew();
                         AddActionHistory(context, SelectedItem.patronid, itemInDb.id, action_type.ActionTypeEnum.Renew);
                         context.SaveChanges();
                         transactionScope.Complete();
@@ -1669,7 +1700,7 @@ namespace ACMC_Library_System.UI
         }
 
         //Return current item
-        private async void BtnReturnBook_Click(object sender, RoutedEventArgs e)
+        private async void BtnReturnItem_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -1683,8 +1714,8 @@ namespace ACMC_Library_System.UI
                         {
                             throw new EntryPointNotFoundException("Unable to find item.");
                         }
-                        itemInDb.patronid = null;
-                        SelectedItem.patronid = null;
+                        itemInDb.Return();
+                        SelectedItem.Return();
                         AddActionHistory(context, borrowerId, itemInDb.id, action_type.ActionTypeEnum.Return);
                         context.SaveChanges();
                         transactionScope.Complete();

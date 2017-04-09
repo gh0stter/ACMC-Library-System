@@ -56,7 +56,7 @@ namespace ACMC_Library_System.UI
 
         public string UserName
         {
-            get { return _userName; }
+            get => _userName;
             set
             {
                 _userName = value;
@@ -86,7 +86,7 @@ namespace ACMC_Library_System.UI
 
         public bool AutoBackDb
         {
-            get { return _autoBackupDb; }
+            get => _autoBackupDb;
             set
             {
                 _autoBackupDb = value;
@@ -111,7 +111,9 @@ namespace ACMC_Library_System.UI
             }
         }
 
-        public int RenewPeriodInDay => BusinessRules.RenewPeriodInDay;
+        public int MemberRenewPeriodInYear => BusinessRules.MemberRenewPeriodInYEar;
+
+        public int ItemRenewPeriodInDay => BusinessRules.ItemRenewPeriodInDay;
 
         public int DefaultQuotaPerMember => BusinessRules.DefaultQuotaPerMember;
 
