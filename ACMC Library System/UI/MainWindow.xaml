@@ -342,12 +342,12 @@
                     <TextBlock Text="You can start searching member's/item's ID, Barcode, Name etc, it will try to find it for you."
                                VerticalAlignment="Top" 
                                Margin="0,65,0,0" FontSize="15" TextAlignment="Center" Height="20"
-                               HorizontalAlignment="Center" Width="635" Foreground="#FFA0A0A0">
+                               HorizontalAlignment="Center" Width="655" Foreground="#FFA0A0A0">
                         <TextBlock.OpacityMask>
                             <SolidColorBrush Color="#FFA0A0A0"/>
                         </TextBlock.OpacityMask>
                     </TextBlock>
-                    <TextBox x:Name="TbSearch"
+                    <supports:ClickSelectTextBox x:Name="TbSearch"
                              TabIndex="0"
                              TextAlignment="Center" 
                              Margin="185,90,185,0"
@@ -355,7 +355,7 @@
                              metro:ControlsHelper.MouseOverBorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
                              FontSize="18" Height="36" VerticalAlignment="Top" HorizontalAlignment="Center" Width="670"
-                             Padding="0,2,0,0" />
+                             Padding="0,2,0,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
                     <Button x:Name="BtnSearch" Content="Go" Margin="0,145,0,0" 
                             TabIndex="1" FontSize="18"
                             IsDefault="True"
@@ -714,11 +714,11 @@
                              Text="{Binding SelectedMember.id}" IsReadOnly="True"
                              IsEnabled="{Binding IsMemberEditMode, Mode=OneWay}"
                              HorizontalAlignment="Left" Width="150" />
-                    <TextBox x:Name="TbMemberBarcode" Height="25" Margin="745,45,0,0" VerticalAlignment="Top"
+                    <supports:ClickSelectTextBox x:Name="TbMemberBarcode" Height="25" Margin="745,45,0,0" VerticalAlignment="Top"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
                              Text="{Binding SelectedMember.barcode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              IsReadOnly="{Binding IsMemberEditMode, Mode=OneWay, Converter={StaticResource InvertBool}}"
-                             HorizontalAlignment="Left" Width="170" />
+                             HorizontalAlignment="Left" Width="170" VerticalContentAlignment="Center" />
                     <TextBox x:Name="TbFirstNameCh" Height="25" Margin="745,80,0,0" VerticalAlignment="Top"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
                              Text="{Binding SelectedMember.firstnames_ch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -1016,12 +1016,12 @@
                              Text="{Binding SelectedItem.id, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              IsEnabled="{Binding IsItemEditMode, Mode=OneWay}"
                              VerticalAlignment="Top" HorizontalAlignment="Left" Width="155" />
-                    <TextBox x:Name="TbItemBarcode"
+                    <supports:ClickSelectTextBox x:Name="TbItemBarcode"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
                              Height="25" Margin="550,45,0,0"
                              Text="{Binding SelectedItem.barcode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              IsReadOnly="{Binding IsAddingNewItem, Mode=OneWay, Converter={StaticResource InvertBool}}"
-                             VerticalAlignment="Top" HorizontalAlignment="Left" Width="155" />
+                             VerticalAlignment="Top" HorizontalAlignment="Left" Width="155" VerticalContentAlignment="Center" />
                     <TextBox x:Name="TbItemCode"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
                              Height="25" Margin="1030,45,0,0"
@@ -1295,14 +1295,14 @@
                         <!--==================================================================================-->
                         <Label Content="Issue this item to a Member" Height="30" VerticalAlignment="Top"
                                HorizontalContentAlignment="Right" HorizontalAlignment="Center" Width="215" Margin="0" FontSize="15" />
-                        <TextBox x:Name="TbIssueToMemberBarcode" Height="25" Width="462" Margin="0,35,0,0" 
+                        <supports:ClickSelectTextBox x:Name="TbIssueToMemberBarcode" Height="25" Width="462" Margin="0,35,0,0" 
                                  VerticalAlignment="Top"
                                  HorizontalAlignment="Center"
                                  metro:TextBoxHelper.ClearTextButton="True"
                                  metro:ControlsHelper.MouseOverBorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
                                  metro:ControlsHelper.FocusBorderBrush="#55acee"
                                  metro:TextBoxHelper.Watermark="Member Barcode" 
-                                 Foreground="#FF575757"/>
+                                 Foreground="#FF575757" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
                         <Button x:Name="BtnIssueToMember"
                                 Margin="0,70,0,0" 
                                 Content="Issue"

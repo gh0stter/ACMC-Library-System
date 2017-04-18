@@ -292,6 +292,7 @@ namespace ACMC_Library_System.UI
         {
             return source.DisplayNameCh == target.DisplayNameCh &&
                    source.DisplayNameEn == target.DisplayNameEn &&
+                   source.BorrowingItems == target.BorrowingItems &&
                    source.barcode == target.barcode &&
                    source.picture.NullSequenceEqual(target.picture) &&
                    source.limit == target.limit &&
@@ -306,7 +307,7 @@ namespace ACMC_Library_System.UI
         {
             return source.barcode == target.barcode &&
                    source.code == target.code &&
-                   source.Borrower == target.Borrower &&
+                   source.patronid == target.patronid &&
                    source.title == target.title &&
                    source.category == target.category &&
                    source.item_subclass == target.item_subclass &&
@@ -438,11 +439,11 @@ namespace ACMC_Library_System.UI
             {
                 return;
             }
-            if (((TabItem)e.AddedItems[0]).Name == "TabPeople" && ((TabItem)e.RemovedItems[0]).Name == "TabItem")
+            if (((TabItem)e.AddedItems[0]).Name == "TabMember" && ((TabItem)e.RemovedItems[0]).Name == "TabItem")
             {
                 SelectedMember = (patron)DgMemberGrid.SelectedItem;
             }
-            if (((TabItem)e.AddedItems[0]).Name == "TabItem" && ((TabItem)e.RemovedItems[0]).Name == "TabPeople")
+            if (((TabItem)e.AddedItems[0]).Name == "TabItem" && ((TabItem)e.RemovedItems[0]).Name == "TabMember")
             {
                 SelectedItem = (item)DgItemGrid.SelectedItem;
             }
@@ -1077,13 +1078,13 @@ namespace ACMC_Library_System.UI
                 }
                 using (var context = new LibraryDb())
                 {
+                    var itemInDb = context.item.FirstOrDefault(item => item.id == tryToRenewItem.id);
+                    if (itemInDb == null)
+                    {
+                        throw new EntryPointNotFoundException("Unable to find selected item.");
+                    }
                     using (var transactionScope = new TransactionScope())
                     {
-                        var itemInDb = context.item.FirstOrDefault(item => item.id == tryToRenewItem.id);
-                        if (itemInDb == null)
-                        {
-                            throw new EntryPointNotFoundException("Unable to find selected item.");
-                        }
                         itemInDb.Renew();
                         AddActionHistory(context, SelectedMember.id, itemInDb.id, action_type.ActionTypeEnum.Renew);
                         context.SaveChanges();
@@ -1091,6 +1092,12 @@ namespace ACMC_Library_System.UI
                         transactionScope.Complete();
                         DgCurrentBorrowingItem.Items.Refresh();
                     }
+                    if (SelectedItem.id != itemInDb.id)
+                    {
+                        return;
+                    }
+                    SelectedItem.Renew();
+                    OnPropertyChanged("SelectedItem");
                 }
                 OnPropertyChanged("SelectedMember");
                 DgCurrentBorrowingItem.SelectedIndex = SelectedMember.BorrowingItems.Count > selectIndex ? selectIndex : SelectedMember.BorrowingItems.Count - 1;
@@ -1115,13 +1122,13 @@ namespace ACMC_Library_System.UI
                 }
                 using (var context = new LibraryDb())
                 {
+                    var itemInDb = context.item.FirstOrDefault(item => item.id == tryToReturnItem.id);
+                    if (itemInDb == null)
+                    {
+                        throw new EntryPointNotFoundException("Unable to find selected item.");
+                    }
                     using (var transactionScope = new TransactionScope())
                     {
-                        var itemInDb = context.item.FirstOrDefault(item => item.id == tryToReturnItem.id);
-                        if (itemInDb == null)
-                        {
-                            throw new EntryPointNotFoundException("Unable to find selected item.");
-                        }
                         itemInDb.Return();
                         AddActionHistory(context, SelectedMember.id, itemInDb.id, action_type.ActionTypeEnum.Return);
                         context.SaveChanges();
@@ -1129,9 +1136,15 @@ namespace ACMC_Library_System.UI
                         transactionScope.Complete();
                         DgCurrentBorrowingItem.Items.Refresh();
                     }
+                    if (SelectedItem.id != itemInDb.id)
+                    {
+                        return;
+                    }
+                    SelectedItem.patronid = null;
+                    OnPropertyChanged("SelectedItem");
                 }
                 OnPropertyChanged("SelectedMember");
-                DgCurrentBorrowingItem.SelectedIndex = SelectedMember.BorrowingItems.Count > selectIndex ? selectIndex : SelectedMember.BorrowingItems.Count - 1;
+                DgCurrentBorrowingItem.SelectedIndex = SelectedMember.BorrowingItems.Count > selectIndex ? selectIndex : SelectedMember.BorrowingItems.Count - 1;                
             }
             catch (Exception exception)
             {
@@ -1630,6 +1643,13 @@ namespace ACMC_Library_System.UI
                     }
                     SelectedItem = itemInDb;
                     TbIssueToMemberBarcode.Text = string.Empty;
+                    if (SelectedMember.id != memberInDb.id)
+                    {
+                        return;
+                    }
+                    SelectedMember.BorrowingItems.Add(itemInDb);
+                    DgCurrentBorrowingItem.Items.Refresh();
+                    OnPropertyChanged("SelectedMember");
                 }
             }
             catch (Exception exception)

@@ -4,6 +4,7 @@
                    xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                   xmlns:supports="clr-namespace:ACMC_Library_System.Supports"
                    mc:Ignorable="d"
                    Height="300" Width="500"
                    Title="Library Database Setup"
@@ -97,10 +98,10 @@
         <Label x:Name="Info" Content="Please enter SQL server details:" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top"/>
 
         <Label Content="SQL Server Address: " HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="TbSqlServer" Text="{Binding SqlServer}" 
+        <supports:ClickSelectTextBox x:Name="TbSqlServer" Text="{Binding SqlServer}" 
                  metro:ControlsHelper.MouseOverBorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
                  metro:ControlsHelper.FocusBorderBrush="#55acee"
-                 HorizontalAlignment="Left" Height="23" Margin="144,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"/>
+                 HorizontalAlignment="Left" Height="23" Margin="144,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340" VerticalContentAlignment="Center"/>
 
         <Label Content="Authentication Type: " HorizontalAlignment="Left" Margin="10,103,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="CbAuthType" 

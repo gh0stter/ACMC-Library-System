@@ -35,7 +35,7 @@
     <ProductName>ACMC Library System</ProductName>
     <PublisherName>William Liu</PublisherName>
     <SuiteName>ACMC Library System</SuiteName>
-    <ApplicationRevision>19</ApplicationRevision>
+    <ApplicationRevision>20</ApplicationRevision>
     <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -161,6 +161,7 @@
     <Compile Include="DbModels\patron.cs" />
     <Compile Include="Supports\Array.Extension.cs" />
     <Compile Include="Supports\Cache.cs" />
+    <Compile Include="Supports\ClickSelectTextBox.cs" />
     <Compile Include="Supports\Converters.cs" />
     <Compile Include="Supports\Encryption.cs" />
     <Compile Include="Supports\SingleInstance.cs" />

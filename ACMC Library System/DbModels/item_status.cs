@@ -19,11 +19,11 @@ namespace ACMC_Library_System.DbModels
 
         public enum StatusEnum
         {
-            In,
-            Out,
-            Lost,
-            OnOrder,
-            ForSale
+            In = 1,
+            Out = 2,
+            Lost = 3,
+            OnOrder = 4,
+            ForSale = 5
         }
 
         #endregion
