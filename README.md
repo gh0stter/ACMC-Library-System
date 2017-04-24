@@ -1,3 +1,6 @@
+
+[![Build status](https://ci.appveyor.com/api/projects/status/u6s7mtcktt2gdfu1?svg=true)](https://ci.appveyor.com/project/gh0stter/acmc-library-system)
+[![MIT license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/gh0stter/CSharp-Extension-Library/blob/master/LICENSE)
 # ACMC Library System
 > A library management system for Auckland Chinese Methodist Church (ACMC)
 
