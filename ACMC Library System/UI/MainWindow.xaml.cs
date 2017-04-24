@@ -32,6 +32,7 @@ namespace ACMC_Library_System.UI
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly string _currentDirectoryPath = Directory.GetCurrentDirectory();
+        private const int NotificationFadeTimeInSecond = 5;
         private const string NoPictureImgPath = @"\Resources\UI Icons\NoImg.png";
         private const string ItemDefaultImgPath = @"\Resources\UI Icons\ItemIcon.png";
         private const string ItemBookImgPath = @"\Resources\UI Icons\Book.png";
@@ -467,21 +468,17 @@ namespace ACMC_Library_System.UI
             switch (targetGrid.Name)
             {
                 case "DgMemberGrid":
-                    targetGrid.ItemsSource = null;
-                    targetGrid.ItemsSource = MemberList;
+                    OnPropertyChanged("MemberList");
                     break;
                 case "DgItemGrid":
-                    targetGrid.ItemsSource = null;
-                    targetGrid.ItemsSource = ItemList;
+                    OnPropertyChanged("ItemList");
                     break;
                 case "DgActionHistory":
-                    targetGrid.ItemsSource = null;
-                    targetGrid.ItemsSource = ActionHistories;
+                    OnPropertyChanged("ActionHistories");
                     ScrollGridToIndex((DataGrid)targetGrid, 0);
                     break;
                 case "DgItemsShouldReturn":
-                    targetGrid.ItemsSource = null;
-                    targetGrid.ItemsSource = ItemsShouldReturn;
+                    OnPropertyChanged("ItemsShouldReturn");
                     ScrollGridToIndex((DataGrid)targetGrid, 0);
                     break;
             }
@@ -720,6 +717,7 @@ namespace ACMC_Library_System.UI
         {
             await RefreshGridSource(DgActionHistory);
             ScrollGridToIndex(DgActionHistory, 0);
+            NotificationBar.Infomation("Refresh successfully.", NotificationFadeTimeInSecond);
         }
 
         //Refresh items should return
@@ -727,6 +725,7 @@ namespace ACMC_Library_System.UI
         {
             await RefreshGridSource(DgItemsShouldReturn);
             ScrollGridToIndex(DgItemsShouldReturn, 0);
+            NotificationBar.Infomation("Refresh successfully.", NotificationFadeTimeInSecond);
         }
 
         //Navigate to Member detail
@@ -785,17 +784,17 @@ namespace ACMC_Library_System.UI
             OpenAppSettingsWindow();
         }
 
-        private void NavigateMemberTabIconClick(object sender, MouseButtonEventArgs e)
+        private void NavigateMemberTabIconClick(object sender, RoutedEventArgs e)
         {
             TabMember.IsSelected = true;
         }
 
-        private void NavigateItemTabIconClick(object sender, MouseButtonEventArgs e)
+        private void NavigateItemTabIconClick(object sender, RoutedEventArgs e)
         {
             TabItem.IsSelected = true;
         }
 
-        private void OpenAppSettingsIconClick(object sender, MouseButtonEventArgs e)
+        private void OpenAppSettingsIconClick(object sender, RoutedEventArgs e)
         {
             OpenAppSettingsWindow();
         }
@@ -852,6 +851,7 @@ namespace ACMC_Library_System.UI
                 ScrollGridToIndex(DgMemberGrid, DgMemberGrid.Items.Count - 1);
                 IsMemberEditMode = false;
                 _isAddingNewMember = false;
+                NotificationBar.Success("Member has been added.", NotificationFadeTimeInSecond);
             }
             else
             {
@@ -882,10 +882,13 @@ namespace ACMC_Library_System.UI
                         ScrollGridToIndex(DgMemberGrid, 0);
                         return;
                     }
+                    int currentItemIndex = MemberList.FindIndex(member => member.id == SelectedMember.id);
                     await RefreshGridSource(DgItemsShouldReturn);
                     await RefreshGridSource(DgMemberGrid, false);
+                    ScrollGridToIndex(DgMemberGrid, currentItemIndex);
                     IsMemberEditMode = false;
                     OnPropertyChanged("SelectedMember");
+                    NotificationBar.Success("Update successfully.", NotificationFadeTimeInSecond);
                 }
                 else
                 {
@@ -954,6 +957,7 @@ namespace ACMC_Library_System.UI
             TbMemberFilter.Clear();
             await RefreshGridSource(DgMemberGrid);
             ScrollGridToIndex(DgMemberGrid, 0);
+            NotificationBar.Infomation("Refresh successfully.", NotificationFadeTimeInSecond);
         }
 
         //User click on data grid
@@ -1092,12 +1096,11 @@ namespace ACMC_Library_System.UI
                         transactionScope.Complete();
                         DgCurrentBorrowingItem.Items.Refresh();
                     }
-                    if (SelectedItem.id != itemInDb.id)
+                    if (SelectedItem.id == itemInDb.id)
                     {
-                        return;
+                        SelectedItem.Renew();
+                        OnPropertyChanged("SelectedItem");
                     }
-                    SelectedItem.Renew();
-                    OnPropertyChanged("SelectedItem");
                 }
                 OnPropertyChanged("SelectedMember");
                 DgCurrentBorrowingItem.SelectedIndex = SelectedMember.BorrowingItems.Count > selectIndex ? selectIndex : SelectedMember.BorrowingItems.Count - 1;
@@ -1107,6 +1110,7 @@ namespace ACMC_Library_System.UI
                 Logger.Error(exception, "Error on Renewing item");
                 await this.ShowMessageAsync("Error", exception.Message);
             }
+            NotificationBar.Success("Item has been renewed.", NotificationFadeTimeInSecond);
         }
 
         //Return selected borrowed item
@@ -1134,23 +1138,22 @@ namespace ACMC_Library_System.UI
                         context.SaveChanges();
                         SelectedMember.BorrowingItems = context.item.Where(item => item.patronid == SelectedMember.id).ToList();
                         transactionScope.Complete();
-                        DgCurrentBorrowingItem.Items.Refresh();
                     }
-                    if (SelectedItem.id != itemInDb.id)
+                    if (SelectedItem.id == itemInDb.id)
                     {
-                        return;
+                        SelectedItem.patronid = null;
+                        OnPropertyChanged("SelectedItem");
                     }
-                    SelectedItem.patronid = null;
-                    OnPropertyChanged("SelectedItem");
                 }
                 OnPropertyChanged("SelectedMember");
-                DgCurrentBorrowingItem.SelectedIndex = SelectedMember.BorrowingItems.Count > selectIndex ? selectIndex : SelectedMember.BorrowingItems.Count - 1;                
+                DgCurrentBorrowingItem.SelectedIndex = SelectedMember.BorrowingItems.Count > selectIndex ? selectIndex : SelectedMember.BorrowingItems.Count - 1;
             }
             catch (Exception exception)
             {
                 Logger.Error(exception, "Error on Returning item");
                 await this.ShowMessageAsync("Error", exception.Message);
             }
+            NotificationBar.Success("Item has been returned.", NotificationFadeTimeInSecond);
         }
 
         //Borrow item to selected Member
@@ -1189,12 +1192,11 @@ namespace ACMC_Library_System.UI
                         }
                         DgCurrentBorrowingItem.Items.Refresh();
                         OnPropertyChanged("SelectedMember");
-                        if (SelectedItem.id != itemInDb.id)
+                        if (SelectedItem.id == itemInDb.id)
                         {
-                            return;
+                            SelectedItem.patronid = SelectedMember.id;
+                            OnPropertyChanged("SelectedItem");
                         }
-                        SelectedItem.patronid = SelectedMember.id;
-                        OnPropertyChanged("SelectedItem");
                     }
                     else
                     {
@@ -1218,6 +1220,7 @@ namespace ACMC_Library_System.UI
                 Logger.Error(exception, "Error on Borrowing item");
                 await this.ShowMessageAsync("Error", exception.Message);
             }
+            NotificationBar.Success("Item has been issued.", NotificationFadeTimeInSecond);
         }
 
         //Same Member changes
@@ -1257,6 +1260,7 @@ namespace ACMC_Library_System.UI
                 Logger.Error(exception, "Error on Renewing Member.");
                 await this.ShowMessageAsync("Error", exception.Message);
             }
+            NotificationBar.Success("Member has been renewed.", NotificationFadeTimeInSecond);
         }
 
         //Cancle Member editing
@@ -1326,6 +1330,7 @@ namespace ACMC_Library_System.UI
                     await RefreshGridSource(DgMemberGrid);
                     await this.ShowMessageAsync("Error", exception.Message);
                 }
+                NotificationBar.Warning("Member has been deleted.", NotificationFadeTimeInSecond);
             }
         }
 
@@ -1407,6 +1412,7 @@ namespace ACMC_Library_System.UI
                 IsItemEditMode = false;
                 IsAddingNewItem = false;
                 ScrollGridToIndex(DgItemGrid, DgItemGrid.Items.Count - 1);
+                NotificationBar.Success("Item has been added.", NotificationFadeTimeInSecond);
             }
             else
             {
@@ -1436,15 +1442,18 @@ namespace ACMC_Library_System.UI
                         ScrollGridToIndex(DgItemGrid, 0);
                         return;
                     }
+                    int currentItemIndex = ItemList.FindIndex(item => item.id == SelectedItem.id);
                     await RefreshGridSource(DgItemsShouldReturn);
+                    await RefreshGridSource(DgItemGrid, false);
+                    ScrollGridToIndex(DgItemGrid, currentItemIndex);
                     IsItemEditMode = false;
                     OnPropertyChanged("SelectedItem");
-                    if (SelectedMember.id != SelectedItem.patronid)
+                    if (SelectedMember.id == SelectedItem.patronid)
                     {
-                        return;
+                        SelectedMember.BorrowingItems = ItemList.Where(i => i.patronid == SelectedMember.id).ToList();
+                        OnPropertyChanged("SelectedMember");
                     }
-                    SelectedMember.BorrowingItems = ItemList.Where(i => i.patronid == SelectedMember.id).ToList();
-                    OnPropertyChanged("SelectedMember");
+                    NotificationBar.Success("Update successfully.", NotificationFadeTimeInSecond);
                 }
                 else
                 {
@@ -1514,6 +1523,7 @@ namespace ACMC_Library_System.UI
             TbItemFilter.Clear();
             await RefreshGridSource(DgItemGrid);
             ScrollGridToIndex(DgItemGrid, 0);
+            NotificationBar.Infomation("Refresh successfully.", NotificationFadeTimeInSecond);
         }
 
         //User click on data grid
@@ -1643,13 +1653,12 @@ namespace ACMC_Library_System.UI
                     }
                     SelectedItem = itemInDb;
                     TbIssueToMemberBarcode.Text = string.Empty;
-                    if (SelectedMember.id != memberInDb.id)
+                    if (SelectedMember.id == memberInDb.id)
                     {
-                        return;
+                        SelectedMember.BorrowingItems.Add(itemInDb);
+                        DgCurrentBorrowingItem.Items.Refresh();
+                        OnPropertyChanged("SelectedMember");
                     }
-                    SelectedMember.BorrowingItems.Add(itemInDb);
-                    DgCurrentBorrowingItem.Items.Refresh();
-                    OnPropertyChanged("SelectedMember");
                 }
             }
             catch (Exception exception)
@@ -1657,7 +1666,7 @@ namespace ACMC_Library_System.UI
                 Logger.Error(exception, "Error on Issuing item to Member.");
                 await this.ShowMessageAsync("Error", exception.Message);
             }
-
+            NotificationBar.Success("Item has been issued.", NotificationFadeTimeInSecond);
         }
 
         //Navigate to view Member detail
@@ -1707,18 +1716,18 @@ namespace ACMC_Library_System.UI
                     }
                 }
                 OnPropertyChanged("SelectedItem");
-                if (SelectedMember.id != SelectedItem.patronid)
+                if (SelectedMember.id == SelectedItem.patronid)
                 {
-                    return;
+                    SelectedMember.BorrowingItems = ItemList.Where(i => i.patronid == SelectedMember.id).ToList();
+                    OnPropertyChanged("SelectedMember");
                 }
-                SelectedMember.BorrowingItems = ItemList.Where(i => i.patronid == SelectedMember.id).ToList();
-                OnPropertyChanged("SelectedMember");
             }
             catch (Exception exception)
             {
                 Logger.Error(exception, "Error on Renewing item.");
                 await this.ShowMessageAsync("Error", exception.Message);
             }
+            NotificationBar.Success("Item has been renewed.", NotificationFadeTimeInSecond);
         }
 
         //Return current item
@@ -1746,16 +1755,16 @@ namespace ACMC_Library_System.UI
                 OnPropertyChanged("SelectedItem");
                 if (SelectedMember.id != borrowerId)
                 {
-                    return;
+                    SelectedMember.BorrowingItems = ItemList.Where(i => i.patronid == SelectedMember.id).ToList();
+                    OnPropertyChanged("SelectedMember");
                 }
-                SelectedMember.BorrowingItems = ItemList.Where(i => i.patronid == SelectedMember.id).ToList();
-                OnPropertyChanged("SelectedMember");
             }
             catch (Exception exception)
             {
                 Logger.Error(exception, "Error on Returning item.");
                 await this.ShowMessageAsync("Error", exception.Message);
             }
+            NotificationBar.Success("Item has been returned.", NotificationFadeTimeInSecond);
         }
 
         //Update item
@@ -1830,6 +1839,7 @@ namespace ACMC_Library_System.UI
                         OnPropertyChanged("SelectedMember");
                     }
                 }
+                NotificationBar.Warning("Item has been deleted.", NotificationFadeTimeInSecond);
             }
         }
 

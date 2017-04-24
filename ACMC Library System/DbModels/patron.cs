@@ -132,6 +132,10 @@ namespace ACMC_Library_System.DbModels
                 {
                     reasion = "Member is expired, please renew membership first.";
                 }
+                if (BorrowingItems == null)
+                {
+                    return "BorrowingItems is NULL.";
+                }
                 if (BorrowingItems.Count < limit)
                 {
                     return reasion;

@@ -13,7 +13,7 @@ namespace ACMC_Library_System.Supports
         {
             var blur = new BlurEffect {Radius = 10};
             _currentWindowColor = window.Background;
-            window.Background = new SolidColorBrush(Color.FromRgb(243, 243, 243));
+            window.Background = new SolidColorBrush(Color.FromRgb(199, 199, 199));
             window.Effect = blur;
         }
 

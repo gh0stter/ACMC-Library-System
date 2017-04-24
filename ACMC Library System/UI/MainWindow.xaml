@@ -2,6 +2,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:local="clr-namespace:ACMC_Library_System.UI"
     xmlns:supports="clr-namespace:ACMC_Library_System.Supports"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -13,7 +14,7 @@
     MinHeight="750" MinWidth="1200"
     WindowStartupLocation="CenterScreen"
     ShowIconOnTitleBar="true"
-    BorderBrush="#55acee"
+    BorderBrush="#55ACEE"
     BorderThickness="1,0,1,1"
     Icon="../Resources/UI Icons/favicon.ico"
     GlowBrush="{DynamicResource AccentColorBrush}" 
@@ -24,7 +25,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
                     <supports:InverseBooleanConverter x:Key="InvertBool" />
-                    <!--Bool to visibility converter-->
                     <supports:BooleanToVisibilityConverter x:Key="BoolToVisibilityConvert"/>
                     <supports:InvertBooleanToVisibilityConverter x:Key="InvertBoolVisibilityConvert"/>
                     <supports:TrueTrueToVisibleConverter x:Key="TrueTrueToVisibleConverter"/>
@@ -32,8 +32,21 @@
                     <supports:FalseFalseToVisibleConverter x:Key="FalseFalseToVisibleConverter"/>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
+            <!--General Styles-->
+            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MetroFlatButton}">
+                <Setter Property="Background" Value="#D5D5D5"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="BorderBrush" Value="#767676" />
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="False">
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
             <!--iOS style toggle button-->
-            <Style x:Key="AnimatedSwitch" TargetType="{x:Type ToggleButton}">
+            <Style x:Key="AppleToggle" TargetType="{x:Type ToggleButton}">
                 <Setter Property="Foreground" Value="Black" />
                 <Setter Property="Background" Value="#FAFAFB" />
                 <Setter Property="BorderBrush" Value="#EAEAEB" />
@@ -67,9 +80,9 @@
                                         <BeginStoryboard>
                                             <Storyboard>
                                                 <ColorAnimation Storyboard.TargetProperty="Background.Color"
-                                                                To="#52D468" Duration="0:0:0.2" />
+                                                                To="#5EB95E" Duration="0:0:0.2" />
                                                 <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
-                                                                To="#41C955" Duration="0:0:0.2" />
+                                                                To="#5EB95E" Duration="0:0:0.2" />
                                                 <DoubleAnimationUsingKeyFrames
                                                     Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
                                                     Storyboard.TargetName="ellipse">
@@ -102,119 +115,6 @@
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
-            </Style>
-            <!--General Styles-->
-            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                <Setter Property="Effect">
-                    <Setter.Value>
-                        <DropShadowEffect ShadowDepth="0" Color="#55acee" Opacity="0" BlurRadius="8"
-                                          RenderingBias="Quality" />
-                    </Setter.Value>
-                </Setter>
-                <Style.Triggers>
-                    <Trigger Property="IsFocused" Value="True">
-                        <Trigger.EnterActions>
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation To="1.0" Storyboard.TargetProperty="(Effect).Opacity"
-                                                     Duration="00:00:00" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </Trigger.EnterActions>
-                        <Trigger.ExitActions>
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation To="0.0" Storyboard.TargetProperty="(Effect).Opacity"
-                                                     Duration="00:00:00" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </Trigger.ExitActions>
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-            <Style TargetType="{x:Type DatePicker}" BasedOn="{StaticResource {x:Type DatePicker}}">
-                <Setter Property="Effect">
-                    <Setter.Value>
-                        <DropShadowEffect ShadowDepth="0" Color="#55acee" Opacity="0" BlurRadius="8" />
-                    </Setter.Value>
-                </Setter>
-                <Style.Triggers>
-                    <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                        <Trigger.EnterActions>
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation To="1.0" Storyboard.TargetProperty="(Effect).Opacity"
-                                                     Duration="00:00:00" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </Trigger.EnterActions>
-                        <Trigger.ExitActions>
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation To="0.0" Storyboard.TargetProperty="(Effect).Opacity"
-                                                     Duration="00:00:00" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </Trigger.ExitActions>
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-            <Style TargetType="{x:Type metro:NumericUpDown}">
-                <Setter Property="Effect">
-                    <Setter.Value>
-                        <DropShadowEffect ShadowDepth="0" Color="#55acee" Opacity="0" BlurRadius="8" />
-                    </Setter.Value>
-                </Setter>
-                <Style.Triggers>
-                    <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                        <Trigger.EnterActions>
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation To="1.0" Storyboard.TargetProperty="(Effect).Opacity"
-                                                     Duration="00:00:00" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </Trigger.EnterActions>
-                        <Trigger.ExitActions>
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation To="0.0" Storyboard.TargetProperty="(Effect).Opacity"
-                                                     Duration="00:00:00" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </Trigger.ExitActions>
-                        <!--remove default black border when focused-->
-                        <Setter Property="BorderThickness" Value="0,0,0,0" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-            <Style TargetType="{x:Type Button}">
-                <Setter Property="Effect">
-                    <Setter.Value>
-                        <DropShadowEffect ShadowDepth="0" Color="#55acee" Opacity="0" BlurRadius="8" />
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="Background" Value="White" />
-                <Style.Triggers>
-                    <Trigger Property="IsFocused" Value="True">
-                        <Trigger.EnterActions>
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation To="1.0" Storyboard.TargetProperty="Background.Opacity"
-                                                     Duration="00:00:00" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </Trigger.EnterActions>
-                        <Trigger.ExitActions>
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation To="0.0" Storyboard.TargetProperty="Background.Opacity"
-                                                     Duration="00:00:01" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </Trigger.ExitActions>
-                    </Trigger>
-                </Style.Triggers>
             </Style>
             <Style x:Key="GridIconStyle" TargetType="{x:Type Rectangle}">
                 <Setter Property="Fill" Value="White" />
@@ -254,14 +154,50 @@
             <Style x:Key="GridCellTextCenterStyle" BasedOn="{StaticResource MetroDataGridCell}" TargetType="DataGridCell">
                 <Setter Property="TextBlock.TextAlignment" Value="Center" />
             </Style>
+            <Style x:Key="MainNavTileStyle" TargetType="{x:Type metro:Tile}">
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="#8D8C8C" />
+                <Setter Property="Cursor" Value="Hand"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="BorderBrush" Value="#8D8C8C" />
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="False">
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="MainNavIconStyle" TargetType="{x:Type Rectangle}">
+                <Setter Property="Fill" Value="#8D8C8C" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=IsMouseOver}" Value="True">
+                        <Setter Property="Fill" Value="#CC119EDA" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=IsMouseOver}" Value="False">
+                        <Setter Property="Fill" Value="#8D8C8C" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
             <Style x:Key="FunctionIconStyle" TargetType="{x:Type Rectangle}">
-                <Setter Property="Fill" Value="#8899A6" />
+                <Setter Property="Fill" Value="#8D8C8C" />
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Fill" Value="#0084B4" />
                     </Trigger>
                     <Trigger Property="IsMouseOver" Value="False">
-                        <Setter Property="Fill" Value="#8899A6" />
+                        <Setter Property="Fill" Value="#8D8C8C" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="RefreshIconStyle" TargetType="{x:Type Rectangle}">
+                <Setter Property="Fill" Value="White" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Fill" Value="#292F33" />
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="False">
+                        <Setter Property="Fill" Value="White" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -329,6 +265,8 @@
     </metro:MetroWindow.IconTemplate>
     <!--Main UI-->
     <Grid x:Name="GridMain">
+        <!--Notification Area-->
+        <local:NotificationBar x:Name="NotificationBar" Width="350" Height="30"  VerticalAlignment="Top" HorizontalAlignment="Center"/>
         <metro:MetroAnimatedTabControl x:Name="TabControl" SelectionChanged="OnTabSelectionChanged">
             <TabItem x:Name="TabMain" Header="Summary" BorderThickness="0,0,0,2"
                      Style="{StaticResource SelectedTabStyle}">
@@ -356,62 +294,76 @@
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
                              FontSize="18" Height="36" VerticalAlignment="Top" HorizontalAlignment="Center" Width="670"
                              Padding="0,2,0,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
-                    <Button x:Name="BtnSearch" Content="Go" Margin="0,145,0,0" 
+                    <Button x:Name="BtnSearch" 
+                            Content="Go" Margin="0,145,0,0" 
                             TabIndex="1" FontSize="18"
                             IsDefault="True"
                             Click="BtnSearch_Click" 
                             Cursor="Hand"
                             VerticalAlignment="Top" 
                             HorizontalAlignment="Center"
-                            Width="170" Height="34" 
-                            Background="White" />
-                    <Grid Height="50" Width="240">
+                            Width="170" Height="34"/>
+                    <Grid Height="150" Width="450" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,200,0,0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="80" />
-                            <ColumnDefinition Width="80" />
-                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="150" />
                         </Grid.ColumnDefinitions>
                         <Grid Column="0">
-                            <Rectangle x:Name="IconNavigateMemberTab" 
-                               Width="50" Height="50" Margin="0"  
-                               VerticalAlignment="Center" HorizontalAlignment="Center"
-                               ToolTip="Navigate to Member Tab"
-                               MouseLeftButtonUp="NavigateMemberTabIconClick" 
-                               Style="{StaticResource FunctionIconStyle}"
-                               Cursor="Hand">
-                                <Rectangle.OpacityMask>
-                                    <VisualBrush Visual="{iconPacks:PackIconMaterial AccountBox}" />
-                                </Rectangle.OpacityMask>
-                            </Rectangle>
+                            <metro:Tile Height="150" Width="150" Margin="0"
+                                        Style="{StaticResource MainNavTileStyle}" 
+                                        Click="NavigateMemberTabIconClick">
+                                <Grid Height="150" Width="150"  MouseUp="NavigateMemberTabIconClick">
+                                    <Rectangle Height="50" Width="50" Style="{StaticResource MainNavIconStyle}" VerticalAlignment="Top" Margin="0,30,0,0">
+                                        <Rectangle.OpacityMask>
+                                            <VisualBrush Visual="{iconPacks:PackIconMaterial account}"/>
+                                        </Rectangle.OpacityMask>
+                                    </Rectangle>
+                                    <TextBlock VerticalAlignment="Bottom" 
+                                               HorizontalAlignment="Center"
+                                               FontSize="15"
+                                               Text="Members" 
+                                               Margin="41,0,41,40"/>
+                                </Grid>
+                            </metro:Tile>
                         </Grid>
                         <Grid Column="1">
-                            <Rectangle x:Name="IconNavigateItemTab" 
-                                   Width="50" Height="50" Margin="0"  
-                                   VerticalAlignment="Center" HorizontalAlignment="Center"
-                                   ToolTip="Navigate to Member Tab"
-                                   MouseLeftButtonUp="NavigateItemTabIconClick" 
-                                   Style="{StaticResource FunctionIconStyle}"
-                                   Cursor="Hand">
-                                <Rectangle.OpacityMask>
-                                    <VisualBrush Visual="{iconPacks:PackIconMaterial BookOpenVariant}" />
-                                </Rectangle.OpacityMask>
-                            </Rectangle>
+                            <metro:Tile Height="150" Width="150" Margin="0"
+                                        Style="{StaticResource MainNavTileStyle}"
+                                        Click="NavigateItemTabIconClick">
+                                <Grid Height="150" Width="150">
+                                    <Rectangle Height="50" Width="50" Style="{StaticResource MainNavIconStyle}" VerticalAlignment="Top" Margin="0,30,0,0">
+                                        <Rectangle.OpacityMask>
+                                            <VisualBrush Visual="{iconPacks:PackIconModern book}"/>
+                                        </Rectangle.OpacityMask>
+                                    </Rectangle>
+                                    <TextBlock VerticalAlignment="Bottom" 
+                                               HorizontalAlignment="Center"
+                                               FontSize="15"
+                                               Text="Items" 
+                                               Margin="41,0,41,40"/>
+                                </Grid>
+                            </metro:Tile>
                         </Grid>
                         <Grid Column="2">
-                            <Rectangle x:Name="IconOpenAppSettingss" 
-                                   Width="50" Height="50" Margin="0"    
-                                   VerticalAlignment="Center" HorizontalAlignment="Center"
-                                   ToolTip="Open App Settings"
-                                   MouseLeftButtonUp="OpenAppSettingsIconClick" 
-                                   Style="{StaticResource FunctionIconStyle}"
-                                   Cursor="Hand">
-                                <Rectangle.OpacityMask>
-                                    <VisualBrush Visual="{iconPacks:PackIconMaterial SettingsBox}" />
-                                </Rectangle.OpacityMask>
-                            </Rectangle>
+                            <metro:Tile Height="150" Width="150" Margin="0"
+                                        Style="{StaticResource MainNavTileStyle}"
+                                        Click="OpenAppSettingsIconClick">
+                                <Grid Height="150" Width="150">
+                                    <Rectangle Height="50" Width="50" Style="{StaticResource MainNavIconStyle}" VerticalAlignment="Top" Margin="0,30,0,0">
+                                        <Rectangle.OpacityMask>
+                                            <VisualBrush Visual="{iconPacks:PackIconMaterial settings}"/>
+                                        </Rectangle.OpacityMask>
+                                    </Rectangle>
+                                    <TextBlock VerticalAlignment="Bottom" 
+                                               HorizontalAlignment="Center"
+                                               FontSize="15"
+                                               Text="Settings" 
+                                               Margin="41,0,41,40"/>
+                                </Grid>
+                            </metro:Tile>
                         </Grid>
                     </Grid>
-
                     <Grid Margin="10,0,0,260" Height="20" Width="580" Background="#CC119EDA" HorizontalAlignment="Left" VerticalAlignment="Bottom">
                         <Rectangle x:Name="IconItemsShouldReturn" 
                                Height="17" Width="18"
@@ -424,12 +376,12 @@
                         </Rectangle>
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Items Should Return By Today</TextBlock>
                         <Rectangle x:Name="IconItemsShouldReturnRefresh" 
-                               Width="17" Height="17"
-                               VerticalAlignment="Center" HorizontalAlignment="Right"
-                               ToolTip="Refresh List"
-                               MouseLeftButtonUp="ItemsShouldReturnGridRefreshIconClick" 
-                               Fill="White"
-                               Cursor="Hand" Margin="0,2,5,1">
+                                   Width="17" Height="17"
+                                   VerticalAlignment="Center" HorizontalAlignment="Right"
+                                   ToolTip="Refresh List"
+                                   MouseLeftButtonUp="ItemsShouldReturnGridRefreshIconClick" 
+                                   Style="{StaticResource RefreshIconStyle}"
+                                   Cursor="Hand" Margin="0,2,5,1">
                             <Rectangle.OpacityMask>
                                 <VisualBrush Visual="{iconPacks:PackIconMaterial refresh}" />
                             </Rectangle.OpacityMask>
@@ -452,11 +404,11 @@
                         Margin="10,0,0,10">
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding title}" Header="Item" Width="*"
-                                CellStyle="{StaticResource GridCellTextCenterStyle}" />
+                                                CellStyle="{StaticResource GridCellTextCenterStyle}"/>
                             <DataGridTextColumn Binding="{Binding Borrower.DisplayNameTitle}" Header="Borrower" Width="*"
-                                CellStyle="{StaticResource GridCellTextCenterStyle}" />
+                                                CellStyle="{StaticResource GridCellTextCenterStyle}" />
                             <DataGridTextColumn Binding="{Binding due_date, StringFormat=\{0:yyyy/MM/dd\}}" Header="Due Date" Width="100"
-                                CellStyle="{StaticResource GridCellTextCenterStyle}" />
+                                                CellStyle="{StaticResource GridCellTextCenterStyle}" />
                             <DataGridTemplateColumn Header="Details" Width="70" CanUserResize="False">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -500,12 +452,12 @@
                         </Rectangle>
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">History</TextBlock>
                         <Rectangle x:Name="IconHistoryRefresh" 
-                               Width="17" Height="17"
-                               VerticalAlignment="Center" HorizontalAlignment="Right"
-                               ToolTip="Refresh History"
-                               MouseLeftButtonUp="HistoryGridRefreshIconClick" 
-                               Style="{StaticResource GridIconStyle}"
-                               Cursor="Hand" Margin="0,2,5,1">
+                                   Width="17" Height="17"
+                                   VerticalAlignment="Center" HorizontalAlignment="Right"
+                                   ToolTip="Refresh History"
+                                   MouseLeftButtonUp="HistoryGridRefreshIconClick" 
+                                   Style="{StaticResource RefreshIconStyle}"
+                                   Cursor="Hand" Margin="0,2,5,1">
                             <Rectangle.OpacityMask>
                                 <VisualBrush Visual="{iconPacks:PackIconMaterial refresh}" />
                             </Rectangle.OpacityMask>
@@ -646,12 +598,11 @@
                             Content="Select Photo" 
                             VerticalAlignment="Top"
                             HorizontalAlignment="Left"
-                            Background="White" 
-                            Height="30" Width="100"
+                            Height="30" Width="110"
                             Visibility="{Binding IsMemberEditMode, Converter={StaticResource BoolToVisibilityConvert}}"
                             Click="BtnSelectPhoto_Click" 
                             Cursor="Hand"
-                            Margin="475,200,0,0"/>
+                            Margin="470,200,0,0"/>
                     <!--==================================================================================-->
                     <Rectangle x:Name="IconAddMember" 
                                Margin="450,7,0,0" Height="20" Width="25"
@@ -677,7 +628,7 @@
                     </Rectangle>
                     <ToggleButton x:Name="ToggleMemberEditMode" Margin="503,7,0,0" ToolTip="Edit This Member" Width="40"
                                   Height="20" HorizontalAlignment="Left" VerticalAlignment="Top"
-                                  Style="{StaticResource AnimatedSwitch}" Cursor="Hand"
+                                  Style="{StaticResource AppleToggle}" Cursor="Hand"
                                   Click="ToggleMemberEditMode_Click"
                                   IsChecked="{Binding IsMemberEditMode, Mode=OneWay}" Effect="{StaticResource z-depth1}" />
                     <Rectangle Margin="450,35,10,0" Stroke="#FFC9C1C1" VerticalAlignment="Top" Height="1" />
@@ -709,16 +660,18 @@
                     <Label Content="Expriy Date :" Margin="905,315,0,0" VerticalAlignment="Top" Height="26"
                            HorizontalContentAlignment="Right" Width="120" HorizontalAlignment="Left" />
 
-                    <TextBox x:Name="TbMemberId" Height="25" Margin="1030,45,0,0" VerticalAlignment="Top"
-                             metro:ControlsHelper.FocusBorderBrush="#55acee"
-                             Text="{Binding SelectedMember.id}" IsReadOnly="True"
-                             IsEnabled="{Binding IsMemberEditMode, Mode=OneWay}"
-                             HorizontalAlignment="Left" Width="150" />
-                    <supports:ClickSelectTextBox x:Name="TbMemberBarcode" Height="25" Margin="745,45,0,0" VerticalAlignment="Top"
-                             metro:ControlsHelper.FocusBorderBrush="#55acee"
-                             Text="{Binding SelectedMember.barcode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             IsReadOnly="{Binding IsMemberEditMode, Mode=OneWay, Converter={StaticResource InvertBool}}"
-                             HorizontalAlignment="Left" Width="170" VerticalContentAlignment="Center" />
+                    <supports:ClickSelectTextBox x:Name="TbMemberId" 
+                                                 Height="25" Margin="1030,45,0,0" VerticalAlignment="Top"
+                                                 metro:ControlsHelper.FocusBorderBrush="#55acee"
+                                                 Text="{Binding SelectedMember.id}" IsReadOnly="True"
+                                                 IsEnabled="{Binding IsMemberEditMode, Mode=OneWay}"
+                                                 HorizontalAlignment="Left" Width="150" />
+                    <supports:ClickSelectTextBox x:Name="TbMemberBarcode" 
+                                                 Height="25" Margin="745,45,0,0" VerticalAlignment="Top"
+                                                 metro:ControlsHelper.FocusBorderBrush="#55acee"
+                                                 Text="{Binding SelectedMember.barcode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                 IsReadOnly="{Binding IsMemberEditMode, Mode=OneWay, Converter={StaticResource InvertBool}}"
+                                                 HorizontalAlignment="Left" Width="170" VerticalContentAlignment="Center" />
                     <TextBox x:Name="TbFirstNameCh" Height="25" Margin="745,80,0,0" VerticalAlignment="Top"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
                              Text="{Binding SelectedMember.firstnames_ch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -809,7 +762,7 @@
                                   VerticalGridLinesBrush="White"
                                   IsReadOnly="True"
                                   SelectionMode="Single"
-                                  ItemsSource="{Binding SelectedMember.BorrowingItems, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                  ItemsSource="{Binding SelectedMember.BorrowingItems, Mode=OneWay}"
                                   Margin="10,44,0,0">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Binding="{Binding id}" Header="Id" Width="50"
@@ -878,9 +831,10 @@
                                 </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
-                        <Button x:Name="BtnMemberBorrowItem" Margin="630,224,0,0" Content="Borrow Item"
-                                Background="White"
-                                Height="30" Width="100"
+                        <Button x:Name="BtnMemberBorrowItem" 
+                                Margin="615,224,0,0" 
+                                Content="Borrow Item"
+                                Height="30" Width="115"
                                 VerticalAlignment="Top" HorizontalAlignment="Left" 
                                 Cursor="Hand"
                                 IsEnabled="{Binding SelectedMember.CanBorrowItem}"
@@ -892,34 +846,31 @@
                                 Content="Save Changes" 
                                 VerticalAlignment="Top"
                                 HorizontalAlignment="Right"
-                                Background="White" 
-                                Margin="0,44,105,0" 
+                                Margin="0,44,135,0" 
                                 Cursor="Hand"
-                                Height="30" Width="100"
-                                Click="BtnSaveMember_Click" />
+                                Height="30" Width="130"
+                                Click="BtnSaveMember_Click"/>
                         <Button x:Name="BtnRenewMember" 
                                 Content="Renew Member" 
                                 VerticalAlignment="Top"
                                 HorizontalAlignment="Right"
-                                Background="White" 
                                 Margin="0,44,0,0" 
                                 Cursor="Hand"
-                                Height="30" Width="100"
+                                Height="30" Width="130"
                                 Click="BtnRenewMember_Click"/>
                         <Button x:Name="BtnCancelEdtingMember" Content="Cancel Editing" VerticalAlignment="Top"
                                 HorizontalAlignment="Right"
-                                Background="White" 
                                 Cursor="Hand"
                                 Click="BtnCancelEditingMember_Click" 
-                                Margin="0,84,105,0"
-                                Height="30" Width="100" />
+                                Margin="0,84,135,0"
+                                Height="30" Width="130" />
                         <Button x:Name="BtnDeleteMember" Content="Delete Member" VerticalAlignment="Top"
                                 HorizontalAlignment="Right"
                                 Background="#FFE74C3C" 
                                 Click="BtnDeleteMember_Click" 
                                 Margin="0,84,0,0" Height="30"
                                 Cursor="Hand"
-                                Width="100" />
+                                Width="130" />
                     </Grid>
                 </Grid>
             </TabItem>
@@ -997,7 +948,7 @@
                     <ToggleButton x:Name="ToggleItemEditMode" Margin="499,7,0,0" ToolTip="Edit This Item" Width="40"
                                   Height="20"
                                   HorizontalAlignment="Left" VerticalAlignment="Top"
-                                  Style="{StaticResource AnimatedSwitch}" Cursor="Hand"
+                                  Style="{StaticResource AppleToggle}" Cursor="Hand"
                                   Click="ToggleItemEditMode_Click"
                                   IsChecked="{Binding IsItemEditMode, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                   Effect="{StaticResource z-depth1}" />
@@ -1010,18 +961,18 @@
                     <Label Content="Code :" Margin="955,45,0,0" Height="26" VerticalAlignment="Top" Width="70"
                            HorizontalContentAlignment="Right" HorizontalAlignment="Left" />
 
-                    <TextBox x:Name="TbItemId"
-                             metro:ControlsHelper.FocusBorderBrush="#55acee"
-                             Height="25" Margin="785,45,0,0" IsReadOnly="True"
-                             Text="{Binding SelectedItem.id, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             IsEnabled="{Binding IsItemEditMode, Mode=OneWay}"
-                             VerticalAlignment="Top" HorizontalAlignment="Left" Width="155" />
+                    <supports:ClickSelectTextBox x:Name="TbItemId"
+                                                 metro:ControlsHelper.FocusBorderBrush="#55acee"
+                                                 Height="25" Margin="785,45,0,0" IsReadOnly="True"
+                                                 Text="{Binding SelectedItem.id, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                 IsEnabled="{Binding IsItemEditMode, Mode=OneWay}"
+                                                 VerticalAlignment="Top" HorizontalAlignment="Left" Width="155" />
                     <supports:ClickSelectTextBox x:Name="TbItemBarcode"
-                             metro:ControlsHelper.FocusBorderBrush="#55acee"
-                             Height="25" Margin="550,45,0,0"
-                             Text="{Binding SelectedItem.barcode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             IsReadOnly="{Binding IsAddingNewItem, Mode=OneWay, Converter={StaticResource InvertBool}}"
-                             VerticalAlignment="Top" HorizontalAlignment="Left" Width="155" VerticalContentAlignment="Center" />
+                                                 metro:ControlsHelper.FocusBorderBrush="#55acee"
+                                                 Height="25" Margin="550,45,0,0"
+                                                 Text="{Binding SelectedItem.barcode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                 IsReadOnly="{Binding IsAddingNewItem, Mode=OneWay, Converter={StaticResource InvertBool}}"
+                                                 VerticalAlignment="Top" HorizontalAlignment="Left" Width="155" VerticalContentAlignment="Center" />
                     <TextBox x:Name="TbItemCode"
                              metro:ControlsHelper.FocusBorderBrush="#55acee"
                              Height="25" Margin="1030,45,0,0"
@@ -1268,19 +1219,27 @@
                                  Height="25" Margin="540,133,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"
                                  Width="190" />
 
-                        <Button x:Name="BtnViewMemberDetail" Margin="374,173,0,0" Content="View Member Detail"
-                                Background="White"
-                                Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="135"
+                        <Button x:Name="BtnViewMemberDetail" 
+                                Margin="379,173,0,0" 
+                                Content="Member Detail"
+                                Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="130"
                                 Cursor="Hand"
                                 IsEnabled="{Binding HasBorrower}"
                                 Click="BtnViewMemberDetail_Click" />
-                        <Button x:Name="BtnRenewBook" Margin="515,173,0,0" Content="Renew Item" Background="White"
-                                Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="105"
+                        <Button x:Name="BtnRenewBook" Margin="515,173,0,0" 
+                                Content="Renew Item"
+                                Height="30" 
+                                VerticalAlignment="Top" 
+                                HorizontalAlignment="Left" 
+                                Width="105"
                                 Cursor="Hand"
                                 IsEnabled="{Binding HasBorrower}"
                                 Click="BtnRenewItem_Click" />
-                        <Button x:Name="BtnReturnItem" Margin="625,173,0,0" Content="Return Item" Background="White"
-                                Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="105"
+                        <Button x:Name="BtnReturnItem" 
+                                Margin="625,173,0,0" 
+                                Content="Return Item"
+                                Height="30" VerticalAlignment="Top" 
+                                HorizontalAlignment="Left" Width="105"
                                 Cursor="Hand"
                                 IsEnabled="{Binding HasBorrower}"
                                 Click="BtnReturnItem_Click" />
@@ -1307,7 +1266,6 @@
                                 Margin="0,70,0,0" 
                                 Content="Issue"
                                 Cursor="Hand"
-                                Background="White"
                                 Height="30" Width="100"
                                 VerticalAlignment="Top" 
                                 HorizontalAlignment="Center"
@@ -1318,16 +1276,15 @@
                         <Button x:Name="BtnSaveItem" Content="Save Changes" 
                                 VerticalAlignment="Top"
                                 HorizontalAlignment="Right"
-                                Background="White" 
-                                Margin="0,10,105,0" Height="30" Width="100"
+                                Margin="0,10,120,0" Height="30" Width="125"
                                 Cursor="Hand"
                                 Click="BtnSaveItem_Click" />
                         <Button x:Name="BtnCancelEditingItem" 
                                 Content="Cancel"
                                 VerticalAlignment="Top"
                                 HorizontalAlignment="Right"
-                                Background="White" 
-                                Margin="0,10,0,0" Height="30" Width="100"
+                                Margin="0,10,0,0" 
+                                Height="30" Width="115"
                                 Cursor="Hand"
                                 Click="BtnCancelEditingItem_Click"/>
                         <Button x:Name="BtnDeleteItem" 
@@ -1335,7 +1292,7 @@
                                 Background="#FFE74C3C"
                                 VerticalAlignment="Top"
                                 HorizontalAlignment="Right" 
-                                Margin="0,50,0,0" Height="30" Width="100" 
+                                Margin="0,50,0,0" Height="30" Width="115" 
                                 Cursor="Hand"
                                 Click="BtnDeleteItem_Click" />
                     </Grid>

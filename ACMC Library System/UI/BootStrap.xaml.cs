@@ -116,7 +116,7 @@ namespace ACMC_Library_System.UI
             await Task.Run(async () =>
             {
                 int taskSetp = 0;
-                const double TaskCount = 11;
+                const double TaskCount = 10;
                 if (string.IsNullOrWhiteSpace(Properties.Settings.Default.ConnectionString))
                 {
                     Properties.Settings.Default.Reset();
@@ -125,7 +125,6 @@ namespace ACMC_Library_System.UI
                 }
                 using (var context = new LibraryDb())
                 {
-                    Percentage = ++taskSetp / TaskCount * 100;
                     if (_autoBackupDb)
                     {
                         try

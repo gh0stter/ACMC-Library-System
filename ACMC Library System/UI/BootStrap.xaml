@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:converter="clr-namespace:ACMC_Library_System.Supports"
-        Title="StartUp" Width="550" Height="340"
+        Title="StartUp" Width="700" Height="400"
         Foreground="{x:Null}" 
         WindowStyle="None" 
         ResizeMode="NoResize" 
@@ -15,23 +15,21 @@
     </Window.Resources>
     <Grid Background="#f5f5f5">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="210" />
-            <ColumnDefinition Width="340" />
+            <ColumnDefinition Width="10*" />
+            <ColumnDefinition Width="16*" />
         </Grid.ColumnDefinitions>
-        <Grid Column="0" Background="#55acee">
-            <TextBlock Foreground="#f5f5f5" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,28,0,0" Width="37">ACMC</TextBlock>
-            <TextBlock Foreground="#f5f5f5" FontSize="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,40,0,0" FontWeight="Bold">Library System</TextBlock>
-            <TextBlock Foreground="#f5f5f5" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="106,77,0,0" Width="90">William Liu @2017</TextBlock>
-
-            <TextBlock Foreground="#f5f5f5" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="12" Width="42" Margin="5,0,0,5">Version :</TextBlock>
-            <TextBlock Foreground="#f5f5f5" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="47,0,0,5" Height="12" Width="50" Text="{Binding AppVersion, Mode=OneTime}" />
-
-            <ProgressBar Width="70" Height="70"
+        <Grid Column="0" Background="#55ACEE">
+            <TextBlock Foreground="#f5f5f5" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,20,0,0" Width="55" Height="20">ACMC</TextBlock>
+            <TextBlock Foreground="#f5f5f5" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10,40,0,0" FontWeight="Bold" Width="200" Height="35">Library System</TextBlock>
+            <TextBlock Foreground="#f5f5f5" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,75,0,0" Width="110" Height="15">William Liu @2017</TextBlock>
+            
+            <ProgressBar Width="100" Height="100"
                          Minimum="0" Maximum="100" Margin="0,0,0,25"
                          Value="{Binding Percentage, Mode=OneWay}" 
                          Background="{x:Null}"
                          BorderBrush="{x:Null}" 
-                         BorderThickness="0" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+                         BorderThickness="0" 
+                         VerticalAlignment="Bottom" HorizontalAlignment="Center">
                 <ProgressBar.Template>
                     <ControlTemplate TargetType="ProgressBar">
                         <Border Background="{TemplateBinding Value, Converter={StaticResource ValueToProcessConverter}, ConverterParameter=270}" />
@@ -41,9 +39,12 @@
         </Grid>
         <Grid Column="1">
             <Image Source="../Resources/UI Icons/loading.png" Margin="0,10,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="150" Height="150"></Image>
-            <Label Foreground="#ababab" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" FontWeight="Bold">Romans 10:17</Label>
+            <Label Foreground="#ababab" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" FontWeight="Bold" Width="120" Height="30">Romans 10:17</Label>
             <Rectangle Height="1" Width="150" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="#ababab" Margin="0,30,0,0"/>
-            <TextBlock Foreground="#ababab" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,70,0,0" FontWeight="Bold" TextAlignment="Center"><Run Text="So faith comes from hearing,"/><LineBreak/><Run Text="and hearing through the word of Christ."/></TextBlock>
+            <TextBlock Foreground="#ababab" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="60,220,61,135" FontWeight="Bold" TextAlignment="Center" Height="45" Width="310"><Run Text="So faith comes from hearing,"/><LineBreak/><Run Text="and hearing through the word of Christ."/></TextBlock>
+
+            <TextBlock Foreground="#8D8C8C" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="15" Width="51" Margin="0,0,65,10">Version :</TextBlock>
+            <TextBlock Foreground="#8D8C8C" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Height="15" Width="50" Text="{Binding AppVersion, Mode=OneTime}" />
         </Grid>
     </Grid>
 </Window>

@@ -1,0 +1,6 @@
+\packages
+\Publish
+\Database Backup
+*.DotSettings
+\Database Backup\ACMC Library backup.bak
+\Library Database\Library Database.jfm
