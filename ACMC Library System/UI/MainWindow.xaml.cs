@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Deployment.Application;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -16,9 +17,9 @@ using ACMC_Library_System.Supports;
 using DomainModels.DataModel;
 using DomainModels.ViewModel;
 using EntityFramework.Extensions;
-using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using NLog;
+using Octokit;
 using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace ACMC_Library_System.UI
@@ -26,7 +27,7 @@ namespace ACMC_Library_System.UI
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : MetroWindow, INotifyPropertyChanged
+    public partial class MainWindow : INotifyPropertyChanged
     {
         #region Private Properties
 
@@ -405,6 +406,37 @@ namespace ACMC_Library_System.UI
             await RefreshGridSource(DgItemsShouldReturn);
         }
 
+        /// <summary>
+        /// Check application release log from GitHub and check with InstalledVersion in user.config
+        /// If they are different, show release note and update InstalledVersion
+        /// </summary>
+        private async void CheckAppReleaseNote()
+        {
+            var github = new GitHubClient(new ProductHeaderValue("ACMC-Library-System"));
+            var releases = await github.Repository.Release.GetAll("gh0stter", "ACMC-Library-System");
+            var latestRelease = releases[0];
+            string installedVersion = Properties.Settings.Default.InstalledVersion;
+            if (installedVersion == latestRelease.TagName)
+            {
+                return;
+            }
+            string currentInstalledVersion;
+            try
+            {
+                currentInstalledVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
+            }
+            catch (InvalidDeploymentException)
+            {
+                currentInstalledVersion = "Unkown";
+            }
+            Properties.Settings.Default.InstalledVersion = currentInstalledVersion;
+            Properties.Settings.Default.Save();
+            VisualHelper.ApplyBlurEffect(this);
+            var releaseNoteWindow = new ReleaseNotes(latestRelease);
+            releaseNoteWindow.ShowDialog();
+            VisualHelper.ClearBlurEffect(this);
+        }
+
         #endregion
 
         #region UI Logics
@@ -417,13 +449,13 @@ namespace ACMC_Library_System.UI
             var boot = new BootStrap();
             if (!boot.AppInitialized)
             {
-                Application.Current.Shutdown();
+                System.Windows.Application.Current.Shutdown();
                 return;
             }
             boot.ShowDialog();
             if (!boot.AppPreparationSuccessfully)
             {
-                Application.Current.Shutdown();
+                System.Windows.Application.Current.Shutdown();
                 return;
             }
             InitializeComponent();
@@ -431,6 +463,7 @@ namespace ACMC_Library_System.UI
             Activate();
             // focus search box in the first run
             TbSearch.Focus();
+            CheckAppReleaseNote();
         }
 
         //Tab selection change event, disable member/item editing

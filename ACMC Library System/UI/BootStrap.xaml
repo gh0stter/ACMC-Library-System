@@ -22,7 +22,7 @@
             <TextBlock Foreground="#f5f5f5" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,20,0,0" Width="55" Height="20">ACMC</TextBlock>
             <TextBlock Foreground="#f5f5f5" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10,40,0,0" FontWeight="Bold" Width="200" Height="35">Library System</TextBlock>
             <TextBlock Foreground="#f5f5f5" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,75,0,0" Width="110" Height="15">William Liu @2017</TextBlock>
-            
+
             <ProgressBar Width="100" Height="100"
                          Minimum="0" Maximum="100" Margin="0,0,0,25"
                          Value="{Binding Percentage, Mode=OneWay}" 
@@ -39,12 +39,12 @@
         </Grid>
         <Grid Column="1">
             <Image Source="../Resources/UI Icons/loading.png" Margin="0,10,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="150" Height="150"></Image>
-            <Label Foreground="#ababab" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" FontWeight="Bold" Width="120" Height="30">Romans 10:17</Label>
-            <Rectangle Height="1" Width="150" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="#ababab" Margin="0,30,0,0"/>
-            <TextBlock Foreground="#ababab" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="60,220,61,135" FontWeight="Bold" TextAlignment="Center" Height="45" Width="310"><Run Text="So faith comes from hearing,"/><LineBreak/><Run Text="and hearing through the word of Christ."/></TextBlock>
+            <TextBlock Foreground="#767676" FontSize="17" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="153,189,153,191" FontWeight="Bold" Width="125" Height="20">Romans 10:17</TextBlock>
+            <Rectangle Height="2" Width="311" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="#767676" Margin="60,214,60,184"/>
+            <TextBlock Foreground="#767676" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="60,220,61,135" FontWeight="Bold" TextAlignment="Center" Height="45" Width="310"><Run Text="So faith comes from hearing,"/><LineBreak/><Run Text="and hearing through the word of Christ."/></TextBlock>
 
-            <TextBlock Foreground="#8D8C8C" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="15" Width="51" Margin="0,0,65,10">Version :</TextBlock>
-            <TextBlock Foreground="#8D8C8C" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Height="15" Width="50" Text="{Binding AppVersion, Mode=OneTime}" />
+            <TextBlock Foreground="#767676" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="15" Width="51" Margin="0,0,65,10">Version :</TextBlock>
+            <TextBlock Foreground="#767676" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Height="15" Width="50" Text="{Binding AppVersion, Mode=OneTime}" />
         </Grid>
     </Grid>
 </Window>

@@ -87,6 +87,11 @@ namespace ACMC_Library_System.UI
                 try
                 {
                     version = ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
+                    if (string.IsNullOrEmpty(Properties.Settings.Default.InstalledVersion))
+                    {
+                        Properties.Settings.Default.InstalledVersion = version;
+                        Properties.Settings.Default.Save();
+                    }
                 }
                 catch (InvalidDeploymentException)
                 {

@@ -134,24 +134,6 @@ namespace ACMC_Library_System.UI
         {
             SetReadOnly(false);
             Cursor = Cursors.Wait;
-#if DEBUG
-            var connectionInfo = new SqlConnectionInfo
-            {
-                SqlServer = @"192.168.80.136",
-                IntegratedSecurity = false,
-                UserId = "sa",
-                Password = "lyzP@ssword1",
-                Catalog = "library"
-            };
-            //var connectionInfo = new SqlConnectionInfo
-            //{
-            //    SqlServer = _sqlServer,
-            //    IntegratedSecurity = CbAuthType.SelectedIndex == 0,
-            //    UserId = _userName,
-            //    Password = TbPassword.Password,
-            //    Catalog = _catalog
-            //};
-#else
             var connectionInfo = new SqlConnectionInfo
             {
                 SqlServer = _sqlServer,
@@ -160,7 +142,6 @@ namespace ACMC_Library_System.UI
                 Password = TbPassword.Password,
                 Catalog = _catalog
             };
-#endif
             var sqlHelper = new SqlServerHelper(connectionInfo);
             Logger.Info($"Current ConnectionString: {sqlHelper.GetConnectionString()}");
             if (await sqlHelper.TestSqlConnection())
@@ -183,24 +164,6 @@ namespace ACMC_Library_System.UI
             {
                 SetReadOnly(false);
                 Cursor = Cursors.Wait;
-#if DEBUG
-                var connectionInfo = new SqlConnectionInfo
-                {
-                    SqlServer = @"192.168.80.136",
-                    IntegratedSecurity = false,
-                    UserId = "sa",
-                    Password = "lyzP@ssword1",
-                    Catalog = "library"
-                };
-                //var connectionInfo = new SqlConnectionInfo
-                //{
-                //    SqlServer = _sqlServer,
-                //    IntegratedSecurity = CbAuthType.SelectedIndex == 0,
-                //    UserId = _userName,
-                //    Password = TbPassword.Password,
-                //    Catalog = _catalog
-                //};
-#else
                 var connectionInfo = new SqlConnectionInfo
                 {
                     SqlServer = _sqlServer,
@@ -209,7 +172,6 @@ namespace ACMC_Library_System.UI
                     Password = TbPassword.Password,
                     Catalog = _catalog
                 };
-#endif
                 var sqlHelper = new SqlServerHelper(connectionInfo);
                 if (await sqlHelper.TestSqlConnection())
                 {
@@ -222,6 +184,7 @@ namespace ACMC_Library_System.UI
                     settings.Password = Encryption.Encrypt(TbPassword.Password, AppSettings.EncryptKey);
                     settings.Catalog = Catalog;
                     settings.ConnectionString = sqlHelper.GetConnectionString();
+                    settings.InstalledVersion = AppVersion;
                     settings.Save();
 
                     SetupSuccessfully = true;

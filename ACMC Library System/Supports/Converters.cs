@@ -33,9 +33,9 @@ namespace ACMC_Library_System.Supports
     /// </summary>
     public class ValueToProcessConverter : IValueConverter
     {
-        private const double Thickness = 5;
-        private const double Padding = 0;
-        private const double Margin = 2;
+        private const double Thickness = 3;
+        private const double Padding = 5;
+        private const double Margin = -5;
         private const double InitializingValue = 30;
         private const double MidRangeValue = 65;
         private const double FinalizeValue = 80;
@@ -52,7 +52,7 @@ namespace ACMC_Library_System.Supports
 
         static ValueToProcessConverter()
         {
-            BackGroundColor = Color.FromRgb(255, 245, 245);
+            BackGroundColor = Color.FromRgb(250, 246, 236);
             StartBrush = new SolidColorBrush(Color.FromRgb(211, 72, 54));
             MidRangeBrush = new SolidColorBrush(Color.FromRgb(242, 95, 41));
             FinalizeBrush = new SolidColorBrush(Color.FromRgb(97, 191, 94));
@@ -155,8 +155,8 @@ namespace ACMC_Library_System.Supports
             {
                 isLargeArc = true;
             }
-            double bigR = radiusX + thickness - margin;
-            double smallR = radiusX - thickness + margin + padding;
+            double bigR = radiusX + thickness + padding;
+            double smallR = radiusX - thickness + margin;
             var firstpoint = GetPointByAngel(_centerPoint, bigR, 0);
             var secondpoint = GetPointByAngel(_centerPoint, bigR, angel);
             var thirdpoint = GetPointByAngel(_centerPoint, smallR, 0);
