@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 using System.Deployment.Application;
 using System.Linq;
 using System.Windows.Media;
+using System.ServiceProcess;
 using ACMC_Library_System.DbModels;
-using NLog;
 using ACMC_Library_System.Supports;
+using NLog;
 
 namespace ACMC_Library_System.UI
 {
@@ -32,11 +33,23 @@ namespace ACMC_Library_System.UI
             }
         }
 
+        public string LoadingInfo
+        {
+            get => _loadingInfo;
+            set
+            {
+                _loadingInfo = value;
+                OnPropertyChanged("LoadingInfo");
+            }
+        }
+
         #endregion
 
         #region private properties
 
-        private static bool _autoBackupDb = true;
+        private const string _sqlServerName = "MSSQLSERVER";
+        private const string _sqlServerExpressName = "MSSQL$SQLEXPRESS";
+        private string _loadingInfo = string.Empty;
         private double _percentage;
         private static bool _appInitialized;
         private static bool _sqlConnected;
@@ -95,7 +108,7 @@ namespace ACMC_Library_System.UI
                 }
                 catch (InvalidDeploymentException)
                 {
-                    version = "Unkown";
+                    version = "Unknown";
                 }
                 return version;
             }
@@ -125,15 +138,37 @@ namespace ACMC_Library_System.UI
                 if (string.IsNullOrWhiteSpace(Properties.Settings.Default.ConnectionString))
                 {
                     Properties.Settings.Default.Reset();
-                    Logger.Fatal("Empty connection string, user.config has been resetted.");
+                    Logger.Fatal("Empty connection string, user.config has been reset.");
                     throw new ApplicationException("Fatal Error, unable to read connection string, configuration has been reseted.");
                 }
-                using (var context = new LibraryDb())
+                //Check if local machine has SQL server installed
+                string sqlServerAddress = Properties.Settings.Default.SQLServer.ToLowerInvariant();
+                if (sqlServerAddress.Contains("localhost") || sqlServerAddress.Contains("127.0.0.1"))
                 {
-                    if (_autoBackupDb)
+                    var sqlService = ServiceController.GetServices().FirstOrDefault(service => string.Equals(service.ServiceName, _sqlServerName, StringComparison.InvariantCultureIgnoreCase) ||
+                                                                                               string.Equals(service.ServiceName, _sqlServerExpressName, StringComparison.InvariantCultureIgnoreCase));
+                    if (sqlService != null && sqlService.Status != ServiceControllerStatus.Running)
                     {
                         try
                         {
+                            LoadingInfo = "A local SQL Server service has been detected but currently is not running, attempt to start the service...";
+                            sqlService.Start();
+                            sqlService.WaitForStatus(ServiceControllerStatus.Running);
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.Fatal(e, "Unable to start SQL Server service.");
+                            throw new ApplicationException("Fatal Error, unable to start SQL Server service, please contact administrator.");
+                        }
+                    }
+                }
+                using (var context = new LibraryDb())
+                {
+                    if (Properties.Settings.Default.AutoBackupDb)
+                    {
+                        try
+                        {
+                            LoadingInfo = "Running database backup...";
                             string dbName = context.Database.Connection.Database;
                             string dbBackUpName = $"{dbName}_FullBackup_{DateTime.Now:yyyy_MM_dd}.bak";
                             string sqlCommand = $@"BACKUP DATABASE [{dbName}] TO DISK = N'{dbBackUpName}' WITH NOFORMAT, NOINIT, NAME = N'{dbName}-Full Database Backup', SKIP, NOREWIND, NOUNLOAD, STATS = 10";
@@ -146,17 +181,24 @@ namespace ACMC_Library_System.UI
                         }
                     }
                     Percentage = ++taskSetp / TaskCount * 100;
+                    LoadingInfo = "Loading Category information...";
                     Cache.ItemCategories = await AsyncWrap(context.item_category.ToList());
                     Percentage = ++taskSetp / TaskCount * 100;
+                    LoadingInfo = "Loading Class information...";
                     Cache.ItemClasses = await AsyncWrap(context.item_class.ToList());
                     Percentage = ++taskSetp / TaskCount * 100;
+                    LoadingInfo = "Loading Statues information...";
                     Cache.ItemStatuses = await AsyncWrap(context.item_status.ToList());
                     Percentage = ++taskSetp / TaskCount * 100;
+                    LoadingInfo = "Loading Member information...";
                     Cache.Members = await AsyncWrap(context.patron.ToList());
                     Percentage = ++taskSetp / TaskCount * 100;
+                    LoadingInfo = "Loading Item information...";
                     Cache.Items = await AsyncWrap(context.item.ToList());
                     Percentage = ++taskSetp / TaskCount * 100;
+                    LoadingInfo = "Loading History information...";
                     Cache.ActionHistories = await AsyncWrap(context.action_history.OrderByDescending(i => i.id).Take(20).ToList());
+                    LoadingInfo = "Preparing Member/Item information...";
                     Percentage = ++taskSetp / TaskCount * 100;
                     Parallel.ForEach(Cache.ActionHistories,
                                      action =>
@@ -166,6 +208,7 @@ namespace ACMC_Library_System.UI
                                          action.ActionType = ((action_type.ActionTypeEnum)action.action_type).ToString();
                                      });
                     Percentage = ++taskSetp / TaskCount * 100;
+                    LoadingInfo = "Loading Return information...";
                     Cache.ItemsShouldReturn = await AsyncWrap(context.item.Where(i => i.due_date < DateTime.Today).OrderByDescending(i => i.due_date).Take(20).ToList());
                     Percentage = ++taskSetp / TaskCount * 100;
                     Parallel.ForEach(Cache.ItemsShouldReturn,
@@ -174,6 +217,7 @@ namespace ACMC_Library_System.UI
                                          item.Borrower = Cache.Members.FirstOrDefault(i => i.id == item.patronid);
                                      });
                     Percentage = ++taskSetp / TaskCount * 100;
+                    LoadingInfo = string.Empty;
                     _sqlConnected = true;
                 }
             });

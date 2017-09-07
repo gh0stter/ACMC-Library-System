@@ -24,7 +24,7 @@
             <TextBlock Foreground="#f5f5f5" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,75,0,0" Width="110" Height="15">William Liu @2017</TextBlock>
 
             <ProgressBar Width="100" Height="100"
-                         Minimum="0" Maximum="100" Margin="0,0,0,25"
+                         Minimum="0" Maximum="100" Margin="84,0,85,40"
                          Value="{Binding Percentage, Mode=OneWay}" 
                          Background="{x:Null}"
                          BorderBrush="{x:Null}" 
@@ -36,6 +36,7 @@
                     </ControlTemplate>
                 </ProgressBar.Template>
             </ProgressBar>
+            <TextBlock Foreground="#f5f5f5" FontSize="10" Margin="10,365,10,10" Text="{Binding LoadingInfo, Mode=OneWay}" TextWrapping="Wrap" Width="250" Height="25"/>
         </Grid>
         <Grid Column="1">
             <Image Source="../Resources/UI Icons/loading.png" Margin="0,10,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="150" Height="150"></Image>
@@ -43,8 +44,8 @@
             <Rectangle Height="2" Width="311" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="#767676" Margin="60,214,60,184"/>
             <TextBlock Foreground="#767676" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="60,220,61,135" FontWeight="Bold" TextAlignment="Center" Height="45" Width="310"><Run Text="So faith comes from hearing,"/><LineBreak/><Run Text="and hearing through the word of Christ."/></TextBlock>
 
-            <TextBlock Foreground="#767676" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="15" Width="51" Margin="0,0,65,10">Version :</TextBlock>
-            <TextBlock Foreground="#767676" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Height="15" Width="50" Text="{Binding AppVersion, Mode=OneTime}" />
+            <TextBlock Foreground="#767676" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="15" Width="51" Margin="0,0,80,10">Version :</TextBlock>
+            <TextBlock Foreground="#767676" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Height="15" Width="65" Text="{Binding AppVersion, Mode=OneTime}" />
         </Grid>
     </Grid>
 </Window>

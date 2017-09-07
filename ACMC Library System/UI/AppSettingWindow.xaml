@@ -132,7 +132,7 @@
                           Margin="10,0,0,0" 
                           IsChecked="{Binding AutoBackDb}"
                           HorizontalAlignment="Left" 
-                          VerticalAlignment="Top">Bakup database automatically.</CheckBox>
+                          VerticalAlignment="Top">Backup database automatically.</CheckBox>
             </Grid>
         </GroupBox>
 

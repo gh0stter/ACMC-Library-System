@@ -17,8 +17,7 @@ namespace ACMC_Library_System.Supports
         private static void SelectivelyIgnoreMouseButton(object sender,MouseButtonEventArgs e)
         {
             TextBox targeTextBox;
-            var eventBox = e.Source as TextBox;
-            if (eventBox != null)
+            if (e.Source is TextBox eventBox)
             {
                 targeTextBox = eventBox;
             }
@@ -40,7 +39,7 @@ namespace ACMC_Library_System.Supports
             {
                 return;
             }
-            // If the text box is not yet focussed, give it the focus and
+            // If the text box is not yet focused, give it the focus and
             // stop further processing of this click event.
             targeTextBox.Focus();
             e.Handled = true;

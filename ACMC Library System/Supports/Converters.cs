@@ -7,8 +7,9 @@ using System.Windows.Media;
 
 namespace ACMC_Library_System.Supports
 {
+    /// <inheritdoc />
     /// <summary>
-    /// Invert bool converter
+    /// Invert boolean converter
     /// </summary>
     [ValueConversion(typeof(bool), typeof(bool))]
     public class InverseBooleanConverter : IValueConverter
@@ -28,6 +29,7 @@ namespace ACMC_Library_System.Supports
         }
     }
 
+    /// <inheritdoc />
     /// <summary>
     /// Circular Progress Bar Converter
     /// </summary>
@@ -78,7 +80,7 @@ namespace ACMC_Library_System.Supports
         }
 
         /// <summary>
-        /// 根据角度获取坐标
+        /// Get point base on the current angel
         /// </summary>
         /// <param name="centerPoint"></param>
         /// <param name="r"></param>
@@ -96,7 +98,7 @@ namespace ACMC_Library_System.Supports
         }
 
         /// <summary>
-        /// 根据4个坐标画出扇形
+        /// Draw fan-shaped base on the 4 points
         /// </summary>
         /// <param name="bigFirstPoint"></param>
         /// <param name="bigSecondPoint"></param>
@@ -135,7 +137,7 @@ namespace ACMC_Library_System.Supports
         }
 
         /// <summary>
-        /// 根据当前值和最大值获取扇形
+        /// Get fan-shaped base on the current value and the maximum
         /// </summary>
         /// <param name="value"></param>
         /// <param name="maxValue"></param>
@@ -187,7 +189,7 @@ namespace ACMC_Library_System.Supports
         }
 
         /// <summary>
-        /// 根据当前值和最大值画出进度条
+        /// Draw process bar base on the current value and the maximum value
         /// </summary>
         /// <param name="value"></param>
         /// <param name="maxValue"></param>
@@ -208,7 +210,7 @@ namespace ACMC_Library_System.Supports
         }
 
         /// <summary>
-        /// 根据当前值和最大值画出进度条
+        /// Draw process bar base on the current value and the maximum value
         /// </summary>
         /// <param name="value"></param>
         /// <param name="maxValue"></param>
@@ -231,6 +233,7 @@ namespace ACMC_Library_System.Supports
         }
     }
 
+    /// <inheritdoc />
     /// <summary>
     /// Bool to visibility converter
     /// </summary>
@@ -253,6 +256,7 @@ namespace ACMC_Library_System.Supports
         }
     }
 
+    /// <inheritdoc />
     /// <summary>
     /// Invert bool to visibility converter
     /// </summary>
@@ -275,8 +279,9 @@ namespace ACMC_Library_System.Supports
         }
     }
 
+    /// <inheritdoc />
     /// <summary>
-    /// True-True to visible converter, order matters, only accept two condictions
+    /// True-True to visible converter, order matters, only accept two conditions
     /// </summary>
     public class TrueTrueToVisibleConverter : IMultiValueConverter
     {
@@ -298,8 +303,9 @@ namespace ACMC_Library_System.Supports
         }
     }
 
+    /// <inheritdoc />
     /// <summary>
-    /// False-True to visible converter, order matters, only accept two condictions
+    /// False-True to visible converter, order matters, only accept two conditions
     /// </summary>
     public class FalseTrueToVisibleConverter : IMultiValueConverter
     {
@@ -329,8 +335,9 @@ namespace ACMC_Library_System.Supports
         }
     }
 
+    /// <inheritdoc />
     /// <summary>
-    /// False-False to visible converter, order matters, only accept two condictions
+    /// False-False to visible converter, order matters, only accept two conditions
     /// </summary>
     public class FalseFalseToVisibleConverter : IMultiValueConverter
     {

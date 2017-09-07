@@ -657,7 +657,7 @@
                            HorizontalContentAlignment="Right" HorizontalAlignment="Left" Width="120" />
                     <Label Content="Create Date :" Margin="620,315,0,0" VerticalAlignment="Top" Height="26"
                            HorizontalContentAlignment="Right" HorizontalAlignment="Left" Width="120" />
-                    <Label Content="Expriy Date :" Margin="905,315,0,0" VerticalAlignment="Top" Height="26"
+                    <Label Content="Expiry Date :" Margin="905,315,0,0" VerticalAlignment="Top" Height="26"
                            HorizontalContentAlignment="Right" Width="120" HorizontalAlignment="Left" />
 
                     <supports:ClickSelectTextBox x:Name="TbMemberId" 

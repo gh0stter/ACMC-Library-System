@@ -24,6 +24,7 @@ using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace ACMC_Library_System.UI
 {
+    /// <inheritdoc />
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
@@ -427,7 +428,7 @@ namespace ACMC_Library_System.UI
             }
             catch (InvalidDeploymentException)
             {
-                currentInstalledVersion = "Unkown";
+                currentInstalledVersion = "Unknown";
             }
             Properties.Settings.Default.InstalledVersion = currentInstalledVersion;
             Properties.Settings.Default.Save();
@@ -542,7 +543,7 @@ namespace ACMC_Library_System.UI
             Activate();
         }
 
-        //Search buttom click event
+        //Search button click event
         private async void BtnSearch_Click(object sender, RoutedEventArgs e)
         {
             // local valuables 
@@ -1296,7 +1297,7 @@ namespace ACMC_Library_System.UI
             NotificationBar.Success("Member has been renewed.", NotificationFadeTimeInSecond);
         }
 
-        //Cancle Member editing
+        //Cancel Member editing
         private void BtnCancelEditingMember_Click(object sender, RoutedEventArgs e)
         {
             UnsavedMemberHandler();
@@ -1663,7 +1664,7 @@ namespace ACMC_Library_System.UI
                     {
                         var result = await NavigateDialog($"{memberInDb.DisplayNameTitle} Cannot borrow more items.{Environment.NewLine}" +
                                                           $"Reason: {memberInDb.UnableToBorrowItemReason + Environment.NewLine}" +
-                                                          "click Ok navigate to member details.");
+                                                          "click OK navigate to member details.");
                         if (result != MessageDialogResult.Affirmative)
                         {
                             return;
@@ -1806,7 +1807,7 @@ namespace ACMC_Library_System.UI
             SaveItemHandler();
         }
 
-        //Cancle item editing
+        //Cancel item editing
         private void BtnCancelEditingItem_Click(object sender, RoutedEventArgs e)
         {
             UnsavedItemHandler();

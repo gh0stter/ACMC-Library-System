@@ -105,7 +105,7 @@ namespace ACMC_Library_System.UI
                 }
                 catch (InvalidDeploymentException)
                 {
-                    version = "Unkown";
+                    version = "Unknown";
                 }
                 return version;
             }
@@ -176,7 +176,7 @@ namespace ACMC_Library_System.UI
             {
                 SetReadOnly(true);
                 Cursor = Cursors.Arrow;
-                await this.ShowMessageAsync("Sucess", "Connection Sucess.");
+                await this.ShowMessageAsync("Success", "Connection Success.");
             }
             else
             {
