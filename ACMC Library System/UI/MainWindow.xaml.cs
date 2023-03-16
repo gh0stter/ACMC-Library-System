@@ -1,4 +1,12 @@
-﻿using System;
+﻿using ACMC_Library_System.DbModels;
+using ACMC_Library_System.Supports;
+using DomainModels.DataModel;
+using DomainModels.ViewModel;
+using EntityFramework.Extensions;
+using MahApps.Metro.Controls.Dialogs;
+using NLog;
+using Octokit;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,23 +20,15 @@ using System.Transactions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using ACMC_Library_System.DbModels;
-using ACMC_Library_System.Supports;
-using DomainModels.DataModel;
-using DomainModels.ViewModel;
-using EntityFramework.Extensions;
-using MahApps.Metro.Controls.Dialogs;
-using NLog;
-using Octokit;
 using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace ACMC_Library_System.UI
 {
-    /// <inheritdoc />
-    /// <summary>
-    /// MainWindow.xaml 的交互逻辑
-    /// </summary>
-    public partial class MainWindow : INotifyPropertyChanged
+   /// <inheritdoc />
+   /// <summary>
+   /// MainWindow.xaml 的交互逻辑
+   /// </summary>
+   public partial class MainWindow : INotifyPropertyChanged
     {
         #region Private Properties
 

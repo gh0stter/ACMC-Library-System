@@ -33,7 +33,7 @@
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
             <!--General Styles-->
-            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MetroFlatButton}">
+            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MahApps.Styles.Button.Flat}">
                 <Setter Property="Background" Value="#D5D5D5"/>
                 <Setter Property="BorderThickness" Value="1"/>
                 <Style.Triggers>
@@ -127,7 +127,7 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
-            <Style x:Key="GridCellStyle" BasedOn="{StaticResource MetroDataGridCell}" TargetType="DataGridCell">
+            <Style x:Key="GridCellStyle" BasedOn="{StaticResource MahApps.Styles.DataGridCell}" TargetType="DataGridCell">
                 <Setter Property="TextBlock.TextAlignment" Value="Center" />
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsOverDued}" Value="True">
@@ -151,7 +151,7 @@
                     </MultiDataTrigger>
                 </Style.Triggers>
             </Style>
-            <Style x:Key="GridCellTextCenterStyle" BasedOn="{StaticResource MetroDataGridCell}" TargetType="DataGridCell">
+            <Style x:Key="GridCellTextCenterStyle" BasedOn="{StaticResource MahApps.Styles.DataGridCell}" TargetType="DataGridCell">
                 <Setter Property="TextBlock.TextAlignment" Value="Center" />
             </Style>
             <Style x:Key="MainNavTileStyle" TargetType="{x:Type metro:Tile}">
@@ -223,7 +223,7 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
-            <Style x:Key="DataGridHeaderColor" BasedOn="{StaticResource MetroDataGridColumnHeader}"
+            <Style x:Key="DataGridHeaderColor" BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}"
                    TargetType="{x:Type DataGridColumnHeader}">
                 <Setter Property="Background" Value="White" />
             </Style>
@@ -246,7 +246,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="17" Height="17" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}">
                         <Rectangle.OpacityMask>
-                            <VisualBrush Stretch="Fill" Visual="{iconPacks:PackIconMaterial Settings}" />
+                            <VisualBrush Stretch="Fill" Visual="{iconPacks:MaterialDesign Kind=Settings}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
                     <TextBlock Margin="5 0 0 0" VerticalAlignment="Center" Text="SETTINGS" />
@@ -316,7 +316,7 @@
                                 <Grid Height="150" Width="150"  MouseUp="NavigateMemberTabIconClick">
                                     <Rectangle Height="50" Width="50" Style="{StaticResource MainNavIconStyle}" VerticalAlignment="Top" Margin="0,30,0,0">
                                         <Rectangle.OpacityMask>
-                                            <VisualBrush Visual="{iconPacks:PackIconMaterial account}"/>
+                                            <VisualBrush Visual="{iconPacks:Material Kind=Account}"/>
                                         </Rectangle.OpacityMask>
                                     </Rectangle>
                                     <TextBlock VerticalAlignment="Bottom" 
@@ -334,7 +334,7 @@
                                 <Grid Height="150" Width="150">
                                     <Rectangle Height="50" Width="50" Style="{StaticResource MainNavIconStyle}" VerticalAlignment="Top" Margin="0,30,0,0">
                                         <Rectangle.OpacityMask>
-                                            <VisualBrush Visual="{iconPacks:PackIconModern book}"/>
+                                            <VisualBrush Visual="{iconPacks:Material Kind=Book}"/>
                                         </Rectangle.OpacityMask>
                                     </Rectangle>
                                     <TextBlock VerticalAlignment="Bottom" 
@@ -352,7 +352,7 @@
                                 <Grid Height="150" Width="150">
                                     <Rectangle Height="50" Width="50" Style="{StaticResource MainNavIconStyle}" VerticalAlignment="Top" Margin="0,30,0,0">
                                         <Rectangle.OpacityMask>
-                                            <VisualBrush Visual="{iconPacks:PackIconMaterial settings}"/>
+                                            <VisualBrush Visual="{iconPacks:MaterialDesign Kind=Settings}"/>
                                         </Rectangle.OpacityMask>
                                     </Rectangle>
                                     <TextBlock VerticalAlignment="Bottom" 
@@ -371,7 +371,7 @@
                                Fill="White"
                                Margin="5,2,0,0">
                             <Rectangle.OpacityMask>
-                                <VisualBrush Visual="{iconPacks:PackIconMaterial Archive}" />
+                                <VisualBrush Visual="{iconPacks:MaterialDesign Kind=Archive}" />
                             </Rectangle.OpacityMask>
                         </Rectangle>
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Items Should Return By Today</TextBlock>
@@ -383,7 +383,7 @@
                                    Style="{StaticResource RefreshIconStyle}"
                                    Cursor="Hand" Margin="0,2,5,1">
                             <Rectangle.OpacityMask>
-                                <VisualBrush Visual="{iconPacks:PackIconMaterial refresh}" />
+                                <VisualBrush Visual="{iconPacks:MaterialDesign Kind=Refresh}" />
                             </Rectangle.OpacityMask>
                         </Rectangle>
                     </Grid>
@@ -420,7 +420,7 @@
                                                        Style="{StaticResource GridIconStyle}"
                                                        Cursor="Hand" Margin="12.5,0">
                                                 <Rectangle.OpacityMask>
-                                                    <VisualBrush Visual="{iconPacks:PackIconMaterial AccountBoxOutline}" />
+                                                    <VisualBrush Visual="{iconPacks:Material Kind=AccountBoxOutline}" />
                                                 </Rectangle.OpacityMask>
                                             </Rectangle>
                                             <Rectangle Width="20" Height="20"
@@ -430,7 +430,7 @@
                                                        Style="{StaticResource GridIconStyle}"
                                                        Cursor="Hand" Margin="0,0,12.5,0">
                                                 <Rectangle.OpacityMask>
-                                                    <VisualBrush Visual="{iconPacks:PackIconMaterial NoteOutline}" />
+                                                    <VisualBrush Visual="{iconPacks:Material Kind=NoteOutline}" />
                                                 </Rectangle.OpacityMask>
                                             </Rectangle>
                                         </StackPanel>
@@ -447,7 +447,7 @@
                                Fill="White"
                                Margin="5,2,0,0">
                             <Rectangle.OpacityMask>
-                                <VisualBrush Visual="{iconPacks:PackIconMaterial History}" />
+                                <VisualBrush Visual="{iconPacks:Material Kind=History}" />
                             </Rectangle.OpacityMask>
                         </Rectangle>
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">History</TextBlock>
@@ -459,7 +459,7 @@
                                    Style="{StaticResource RefreshIconStyle}"
                                    Cursor="Hand" Margin="0,2,5,1">
                             <Rectangle.OpacityMask>
-                                <VisualBrush Visual="{iconPacks:PackIconMaterial refresh}" />
+                                <VisualBrush Visual="{iconPacks:Material Kind=Refresh}" />
                             </Rectangle.OpacityMask>
                         </Rectangle>
                     </Grid>
@@ -498,7 +498,7 @@
                                                        Style="{StaticResource GridIconStyle}"
                                                        Cursor="Hand" Margin="12.5,0">
                                                 <Rectangle.OpacityMask>
-                                                    <VisualBrush Visual="{iconPacks:PackIconMaterial AccountBoxOutline}" />
+                                                    <VisualBrush Visual="{iconPacks:Material Kind=AccountBoxOutline}" />
                                                 </Rectangle.OpacityMask>
                                             </Rectangle>
                                             <Rectangle Width="20" Height="20"
@@ -508,7 +508,7 @@
                                                        Style="{StaticResource GridIconStyle}"
                                                        Cursor="Hand" Margin="0,0,12.5,0">
                                                 <Rectangle.OpacityMask>
-                                                    <VisualBrush Visual="{iconPacks:PackIconMaterial NoteOutline}" />
+                                                    <VisualBrush Visual="{iconPacks:Material Kind=NoteOutline}" />
                                                 </Rectangle.OpacityMask>
                                             </Rectangle>
                                         </StackPanel>
@@ -540,7 +540,7 @@
                                Style="{StaticResource FunctionIconStyle}"
                                Cursor="Hand">
                         <Rectangle.OpacityMask>
-                            <VisualBrush Visual="{iconPacks:PackIconMaterial refresh}" />
+                            <VisualBrush Visual="{iconPacks:Material Kind=refresh}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
                     <StackPanel x:Name="SpNoMemberDataMask" Orientation="Horizontal" Margin="10,10,642,0"
@@ -550,7 +550,7 @@
                     </StackPanel>
                     <DataGrid x:Name="DgMemberGrid" IsReadOnly="True" AutoGenerateColumns="False"
                               Margin="10,35,0,10" SelectionMode="Single"
-                              Style="{StaticResource AzureDataGrid}"
+                              Style="{StaticResource MahApps.Styles.DataGrid.Azure}"
                               ItemsSource="{Binding MemberList, Mode=OneWay}"
                               HorizontalContentAlignment="Stretch" ColumnWidth="*"
                               HorizontalAlignment="Left" Width="430"
@@ -591,7 +591,7 @@
                             </MultiBinding>
                         </Rectangle.Visibility>
                         <Rectangle.OpacityMask>
-                            <VisualBrush Visual="{iconPacks:PackIconMaterial DeleteForever}" />
+                            <VisualBrush Visual="{iconPacks:Material Kind=DeleteForever}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
                     <Button x:Name="BtnSelectImg" 
@@ -612,7 +612,7 @@
                                Style="{StaticResource FunctionIconStyle}"
                                Cursor="Hand">
                         <Rectangle.OpacityMask>
-                            <VisualBrush Visual="{iconPacks:PackIconMaterial AccountPlus}" />
+                            <VisualBrush Visual="{iconPacks:Material Kind=AccountPlus}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
                     <Rectangle Margin="478,7,0,0" Stroke="#FFC9C1C1" HorizontalAlignment="Left"
@@ -623,7 +623,7 @@
                                Style="{StaticResource FunctionIconStyle}"
                                Cursor="Hand">
                         <Rectangle.OpacityMask>
-                            <VisualBrush Visual="{iconPacks:PackIconMaterial AccountEdit}" />
+                            <VisualBrush Visual="{iconPacks:Material Kind=AccountEdit}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
                     <ToggleButton x:Name="ToggleMemberEditMode" Margin="503,7,0,0" ToolTip="Edit This Member" Width="40"
@@ -802,7 +802,7 @@
                                                        Style="{StaticResource GridIconStyle}"
                                                        Cursor="Hand" Margin="5,0">
                                                     <Rectangle.OpacityMask>
-                                                        <VisualBrush Visual="{iconPacks:PackIconMaterial NoteOutline}" />
+                                                        <VisualBrush Visual="{iconPacks:Material Kind=NoteOutline}" />
                                                     </Rectangle.OpacityMask>
                                                 </Rectangle>
                                                 <Rectangle Width="24" Height="20"
@@ -812,7 +812,7 @@
                                                        Style="{StaticResource GridIconStyle}"
                                                        Cursor="Hand" Margin="0,0,5,0">
                                                     <Rectangle.OpacityMask>
-                                                        <VisualBrush Visual="{iconPacks:PackIconMaterial Restore}" />
+                                                        <VisualBrush Visual="{iconPacks:Material Kind=Restore}" />
                                                     </Rectangle.OpacityMask>
                                                 </Rectangle>
                                                 <Rectangle Width="20" Height="20"
@@ -822,7 +822,7 @@
                                                        Style="{StaticResource GridIconStyle}"
                                                        Cursor="Hand" Margin="0,0,5,0">
                                                     <Rectangle.OpacityMask>
-                                                        <VisualBrush Visual="{iconPacks:PackIconMaterial CheckboxMarkedCircleOutline}" />
+                                                        <VisualBrush Visual="{iconPacks:Material Kind=CheckboxMarkedCircleOutline}" />
                                                     </Rectangle.OpacityMask>
                                                 </Rectangle>
                                             </StackPanel>
@@ -895,7 +895,7 @@
                                Style="{StaticResource FunctionIconStyle}"
                                Cursor="Hand">
                         <Rectangle.OpacityMask>
-                            <VisualBrush Visual="{iconPacks:PackIconMaterial refresh}" />
+                            <VisualBrush Visual="{iconPacks:Material Kind=refresh}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
                     <StackPanel x:Name="SpNoItemDataMask" Orientation="Horizontal" Margin="10,10,642,0"
@@ -906,7 +906,7 @@
                     <DataGrid x:Name="DgItemGrid" IsReadOnly="True" AutoGenerateColumns="False"
                               Margin="10,35,0,10" SelectionMode="Single"
                               ItemsSource="{Binding ItemList, Mode=OneWay}"
-                              Style="{StaticResource AzureDataGrid}"
+                              Style="{StaticResource MahApps.Styles.DataGrid.Azure}"
                               HorizontalContentAlignment="Stretch" ColumnWidth="*" HorizontalAlignment="Left"
                               Width="430"
                               BorderThickness="1" IsSynchronizedWithCurrentItem="True"
@@ -929,7 +929,7 @@
                                MouseLeftButtonUp="AddItemIconClick" Style="{StaticResource FunctionIconStyle}"
                                Cursor="Hand">
                         <Rectangle.OpacityMask>
-                            <VisualBrush Visual="{iconPacks:PackIconMaterial NotePlusOutline}" />
+                            <VisualBrush Visual="{iconPacks:Material Kind=NotePlusOutline}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
                     <Rectangle Margin="473,7,0,0" Stroke="#FFC9C1C1" HorizontalAlignment="Left"
@@ -942,7 +942,7 @@
                                Style="{StaticResource FunctionIconStyle}"
                                Cursor="Hand">
                         <Rectangle.OpacityMask>
-                            <VisualBrush Visual="{iconPacks:PackIconMaterial PencilBoxOutline}" />
+                            <VisualBrush Visual="{iconPacks:Material Kind=PencilBoxOutline}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
                     <ToggleButton x:Name="ToggleItemEditMode" Margin="499,7,0,0" ToolTip="Edit This Item" Width="40"
